@@ -6,7 +6,9 @@
 #include <move_base_msgs/MoveBaseAction.h>
 #include <visualization_msgs/Marker.h>
 #include <visualization_msgs/MarkerArray.h>
-//123TESTTESTTEST
+//123TESTTESTTEST cool man
+
+//appelsøina
 class Route
 {
 private:
