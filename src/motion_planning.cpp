@@ -65,10 +65,10 @@ void insertCoord(int (*array)[2], int room_length, int room_width, int numexhi)
     }
 }
 
-void sortCoord(int (*array)[2], int startpos, )
+/*void sortCoord(int (*array)[2], int startpos, )
 {
     
-}
+} */
 
 int main(int argc, char *argv[])
 {
@@ -77,17 +77,12 @@ int main(int argc, char *argv[])
 
     ros::Publisher motion_planning_pub = nh1.advertise<geometry_msgs::Twist>("motion_planning", 1);
 
-    int coordarray[][2] = {};
+  
     roomType room;
     room = insertRoom();
-
-
-
-
-
-
-
-
+    int coordarray[room.num_exhibits][2] = {};
+    insertCoord(coordarray, room.room_length, room.room_width, room.num_exhibits);
+    
 
     return 0;
 }
