@@ -12,6 +12,9 @@ find_package(catkin REQUIRED COMPONENTS
  rospy
  std_msgs
  turtlesim
+
+ message_generation
+ geometry_msgs
  )
 
 ## System dependencies are found with CMake's conventions
@@ -48,11 +51,11 @@ find_package(catkin REQUIRED COMPONENTS
 ##   * add every package in MSG_DEP_SET to generate_messages(DEPENDENCIES ...)
 
 ## Generate messages in the 'msg' folder
-# add_message_files(
-#   FILES
-#   Message1.msg
-#   Message2.msg
-# )
+ add_message_files(
+   FILES
+   my_msg.msg
+   #   Message2.msg
+)
 
 ## Generate services in the 'srv' folder
 # add_service_files(
@@ -69,10 +72,11 @@ find_package(catkin REQUIRED COMPONENTS
 # )
 
 ## Generate added messages and services with any dependencies listed here
-# generate_messages(
-#   DEPENDENCIES
-#   std_msgs  # Or other packages containing msgs
-# )
+ generate_messages(
+   DEPENDENCIES
+   geometry_msgs
+   #std_msgs  # Or other packages containing msgs
+ )
 
 ################################################
 ## Declare ROS dynamic reconfigure parameters ##
@@ -108,6 +112,7 @@ catkin_package(
 #  LIBRARIES turtlesim_games
 #  CATKIN_DEPENDS other_catkin_pkg
 #  DEPENDS system_lib
+CATKIN_DEPENDS geometry_msgs roscpp std_msgs message_runtime
 )
 
 ###########
@@ -135,22 +140,32 @@ ${catkin_INCLUDE_DIRS}
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
 add_executable(${PROJECT_NAME}_motion_planning src/motion_planning.cpp)
-
+add_executable(${PROJECT_NAME}_test_publisher src/test_publisher.cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
 ## target back to the shorter version for ease of user use
 ## e.g. "rosrun someones_pkg node" instead of "rosrun someones_pkg someones_pkg_node"
 set_target_properties(${PROJECT_NAME}_motion_planning PROPERTIES OUTPUT_NAME motion_planning PREFIX "")
+set_target_properties(${PROJECT_NAME}_test_publisher PROPERTIES OUTPUT_NAME test_publisher PREFIX "")
+
 
 ## Add cmake target dependencies of the executable
 ## same as for the library above
 # add_dependencies(${PROJECT_NAME}_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 ## Specify libraries to link a library or executable target against
+
+##Motion planning executable
 target_link_libraries(${PROJECT_NAME}_motion_planning
    ${catkin_LIBRARIES}
 )
+
+##Motion planning executable
+target_link_libraries(${PROJECT_NAME}_test_publisher
+   ${catkin_LIBRARIES}
+)
+
 #############
 ## Install ##
 #############
@@ -167,7 +182,9 @@ target_link_libraries(${PROJECT_NAME}_motion_planning
 
 ## Mark executables for installation
 ## See http://docs.ros.org/melodic/api/catkin/html/howto/format1/building_executables.html
-install(TARGETS ${PROJECT_NAME}_motion_planning
+install(TARGETS
+ ${PROJECT_NAME}_motion_planning
+ ${PROJECT_NAME}_test_publisher
    RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
  )
 
