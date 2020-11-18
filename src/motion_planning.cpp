@@ -1,86 +1,58 @@
-#include <ros/ros.h>
-#include <geometry_msgs/Twist.h>
-#include <iostream>
+#include "ros/ros.h"
+#include "std_msgs/String.h"
 
-geometry_msgs::Twist motion_planning_msg;
-
-
-struct roomType
+/**
+ * This tutorial demonstrates simple receipt of messages over the ROS system.
+ */
+void chatterCallback(const std_msgs::String::ConstPtr& msg)
 {
-    int room_length;
-    int room_width;
-    int num_exhibits;
-};
-
-roomType insertRoom()
-{
-    roomType newRoomType;
-    std::cout << "Welcome operator! \n You are currently operating the Museum X-300 scanner robot. \n Please input the room length and width in meters to continue. \n";
-    std::cout << "Room length:";
-    std::cin >> newRoomType.room_length;
-    while(newRoomType.room_length < 0)
-    {
-        std::cout << "Incorrect value, please try again \n Room length:";
-        std::cin >> newRoomType.room_length;
-    }
-    std::cout << "Room width:";
-    std::cin >> newRoomType.room_width;
-    while(newRoomType.room_width < 0)
-    {
-        std::cout << "Incorrect value, please try again \n Room width:";
-        std::cin >> newRoomType.room_width;
-    }
-    std::cout << "The room dimensions are: Length: " << newRoomType.room_length << "m Width: " << newRoomType.room_width << "m. \n";
-    std::cout << "Please input the number of exhibitions present in the room:";
-    std::cin >> newRoomType.num_exhibits;
-    return newRoomType;
+  ROS_INFO("I heard: [%s]", msg->data.c_str());
 }
 
-void insertCoord(int (*array)[2], int room_length, int room_width, int numexhi)
+int main(int argc, char **argv)
 {
-    int x, y;
-    std::cout << "The selected room is " << room_length << " meters long and " << room_width << " meters wide.";
-    for(int i=0; i<numexhi;i++)
-    {
-        std::cout << "Please input the length of the x-coordinate in cm for the " << i << "th exhibit:";
-        std::cin >> x;
-        array[i][0] = x;
-        while(x < 0)
-        {
-            std::cout << "Incorrect value, please try again \n Length of x-coordinate in cm for the " << i << "th exhibit:";
-            std::cin >> x;
-            array[i][0] = x;
-        }
-        std::cout << "Please input the length of the y-coordinate in cm for the " << i << "th exhibit:";
-        std::cin >> y;
-        array[i][1] = y;
-        while(y < 0)
-        {
-            std::cout << "Incorrect value, please try again \n Length of y-coordinate in cm for the " << i << "th exhibit:";
-            std::cin >> y;
-            array[i][1] = y;
-        }
-    }
-}
+  /**
+   * The ros::init() function needs to see argc and argv so that it can perform
+   * any ROS arguments and name remapping that were provided at the command line.
+   * For programmatic remappings you can use a different version of init() which takes
+   * remappings directly, but for most command-line programs, passing argc and argv is
+   * the easiest way to do it.  The third argument to init() is the name of the node.
+   *
+   * You must call one of the versions of ros::init() before using any other
+   * part of the ROS system.
+   */
+  ros::init(argc, argv, "motion_planning");
 
-/*void sortCoord(int (*array)[2], int startpos, )
-{
-    
-} */
+  /**
+   * NodeHandle is the main access point to communications with the ROS system.
+   * The first NodeHandle constructed will fully initialize this node, and the last
+   * NodeHandle destructed will close down the node.
+   */
+  ros::NodeHandle n;
 
-int main(int argc, char *argv[])
-{
-    ros::init(argc, argv, "motion_planning");
-    ros::NodeHandle nh1;
+  /**
+   * The subscribe() call is how you tell ROS that you want to receive messages
+   * on a given topic.  This invokes a call to the ROS
+   * master node, which keeps a registry of who is publishing and who
+   * is subscribing.  Messages are passed to a callback function, here
+   * called chatterCallback.  subscribe() returns a Subscriber object that you
+   * must hold on to until you want to unsubscribe.  When all copies of the Subscriber
+   * object go out of scope, this callback will automatically be unsubscribed from
+   * this topic.
+   *
+   * The second parameter to the subscribe() function is the size of the message
+   * queue.  If messages are arriving faster than they are being processed, this
+   * is the number of messages that will be buffered up before beginning to throw
+   * away the oldest ones.
+   */
+  ros::Subscriber sub = n.subscribe("chatter", 1000, chatterCallback);
 
-    ros::Publisher motion_planning_pub = nh1.advertise<geometry_msgs::Twist>("motion_planning", 1);
+  /**
+   * ros::spin() will enter a loop, pumping callbacks.  With this version, all
+   * callbacks will be called from within this thread (the main one).  ros::spin()
+   * will exit when Ctrl-C is pressed, or the node is shutdown by the master.
+   */
+  ros::spin();
 
-  
-    roomType room;
-    room = insertRoom();
-    int coordarray[room.num_exhibits][2] = {};
-    insertCoord(coordarray, room.room_length, room.room_width, room.num_exhibits);
-    
-
-    return 0;
+  return 0;
 }

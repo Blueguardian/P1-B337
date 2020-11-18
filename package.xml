@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>ROBP1_RIGTIG</name>
+  <name>robp1_rigtig</name>
   <version>0.0.0</version>
-  <description>The ROBP1_RIGTIG package</description>
+  <description>The robp1_rigtig package</description>
 
   <!-- One maintainer tag required, multiple allowed, one person per tag -->
   <!-- Example:  -->
@@ -48,8 +48,16 @@
   <!--   <test_depend>gtest</test_depend> -->
   <!-- Use doc_depend for packages you need only for building documentation: -->
   <!--   <doc_depend>doxygen</doc_depend> -->
-  <buildtool_depend>catkin</buildtool_depend>
 
+
+  <!-- Nedenstå to linjer bruges ved .msg filer -->
+    <build_depend>message_generation</build_depend>    
+    <exec_depend>message_runtime</exec_depend>         
+
+    <buildtool_depend>catkin</buildtool_depend>
+
+
+ 
 
   <!-- The export tag contains other, unspecified, tags -->
   <export>
