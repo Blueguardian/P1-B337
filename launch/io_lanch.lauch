@@ -1,0 +1,5 @@
+<launch>
+    <node name="user_interface" pkg="x_300_master" type="user_input" />
+    ros::Duration(2.0).sleep();
+    <node name="listener" pkg="x_300_master" type="listener_test" />
+</launch>

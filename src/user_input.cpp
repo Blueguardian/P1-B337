@@ -98,8 +98,8 @@ int main(int argc, char *argv[])
     ros::init(argc, argv, "user_input");
     ros::NodeHandle nh1;
 
-    ros::Publisher user_inputx_pub = nh1.advertise<std_msgs::Float32>("user_inputx", 1);
-    ros::Publisher user_inputy_pub = nh1.advertise<std_msgs::Float32>("user_inputy", 1);
+    ros::Publisher user_input_pub = nh1.advertise<::x_300_master::coord>("user_input", 1);
+ 
 
   
     roomType room;
@@ -120,16 +120,15 @@ int main(int argc, char *argv[])
     }
     while(ros::ok())
     {
-        std_msgs::Float32 x;
+        ::x_300_master::coord coord;
         std_msgs::Float32 y;
         double x_begincoord = coordarray[0][0];
         double y_begincoord = coordarray[0][1];
 
-        x.data = x_begincoord;
-        y.data = y_begincoord;
+        coord.coordx = x_begincoord;
+        coord.coordy = y_begincoord;
 
-        user_inputx_pub.publish(x);
-        user_inputy_pub.publish(y);
+        user_input_pub.publish(coord);
 
         loop.sleep();
 

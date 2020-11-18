@@ -4,6 +4,16 @@
 
 typedef actionlib::SimpleActionClient<move_base_msgs::MoveBaseAction> MoveBaseClient;
 
+void move_to_coord(move_base_msgs::MoveBaseAction ac("", true), const ::x_300_master::coord::ConstPtr& msg)
+{
+  move_base_msgs::MoveBaseGoal goal;
+  goal.target_pose.header.stamp = ros::Time::now();
+  goal.target_pose.header.frame_id = "base_link";
+
+  goal.target_pose.pose.position.x = msg->x;
+  goal.target_pose.pose.position.y = msgy->y;
+}
+
 int main(int argc, char** argv){
   ros::init(argc, argv, "simple_navigation_goals");
 
@@ -15,14 +25,13 @@ int main(int argc, char** argv){
     ROS_INFO("Waiting for the move_base action server to come up");
   }
     
-  move_base_msgs::MoveBaseGoal goal;
+  
 
   //we'll send a goal to the robot to move 1 meter forward
-  goal.target_pose.header.frame_id = "base_link";
-  goal.target_pose.header.stamp = ros::Time::now();+
+  
+  
 
-  goal.target_pose.pose.position.x = 1.0;
-  goal.target_pose.pose.orientation.w = 1.0;
+
 
   ROS_INFO("Sending goal");
   ac.sendGoal(goal);

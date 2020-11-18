@@ -4,18 +4,20 @@
 #include <stdlib.h>
 #include <time.h>
 
-double coordxCallback(const std_msgs::Int8::ConstPtr& msgx)
+struct coordset
 {
-   ROS_INFO(("x-coord received: ", msgx->data))
-   double xcoord = msg->data;
-   return xcoord;
-}
+   double x;
+   double y;
+};
 
-double coordxCallback(const std_msgs::Int8::ConstPtr& msgy)
+double coordCallback(const ::x_300_master::coord::ConstPtr& msg)
 {
-   ROS_INFO(("y-coord received: ", msgy->data))
-   double ycoord = msg->data;
-   return ycoord;
+   coordset coordset;
+   ROS_INFO(("x-coord received: ", msg->coordx))
+   ROS_INFO(("y-coord received: ", msg->coordy))
+   double coordset.x = msg->x;
+   double coordset.y = msg->y;
+   return coordset;
 }
 
 int main(int argc, char** argv)
@@ -23,8 +25,8 @@ int main(int argc, char** argv)
     ros::init(argc, argv, "listener_test");
     ros::NodeHandle n;
 
-    ros::Subscriber user_input_x = n.subscribe("user_inputx", 1, coordxCallback);
-    ros::Subscriber user_input_y = n.subscribe("user_inputy", 1, xoordyCallback);
+    ros::Subscriber user_input = n.subscribe("user_input", 1, coordCallback);
+
 
     ros::spin();
 

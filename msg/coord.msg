@@ -1,1 +1,2 @@
-float32 coord
+float32 coordx
+float32 coordy
