@@ -1,6 +1,6 @@
 #include "ros/ros.h"
-#include "std_msgs/String.h"
-
+//#include "std_msgs/String.h"
+#include <std_msgs/Int8.h>
 #include <sstream>
 
 /**
@@ -44,7 +44,7 @@ int main(int argc, char **argv)
    * than we can send them, the number here specifies how many messages to
    * buffer up before throwing some away.
    */
-  ros::Publisher chatter_pub = n.advertise<std_msgs::String>("chatter", 1000);
+  ros::Publisher chatter_pub = n.advertise<std_msgs::Int8>("chatter", 1000);
 
   ros::Rate loop_rate(10);
 
@@ -55,31 +55,18 @@ int main(int argc, char **argv)
   int count = 0;
   while (ros::ok())
   {
-    /**
-     * This is a message object. You stuff it with data, and then publish it.
-     */
-    std_msgs::String msg;
+  std_msgs::Int8 msg;
+  int data = 99;
+   
+  std::cout<< "WOOOOW" <<std::endl;  
+  msg.data = data;            
+  ROS_INFO("%d", msg.data);   
+  chatter_pub.publish(msg);   
 
-    std::stringstream ss;
-    ss << "hello world " << count;
-    msg.data = ss.str();
-
-    ROS_INFO("%s", msg.data.c_str());
-
-    /**
-     * The publish() function is how you send messages. The parameter
-     * is the message object. The type of this object must agree with the type
-     * given as a template parameter to the advertise<>() call, as was done
-     * in the constructor above.
-     */
-    chatter_pub.publish(msg);
-
-    ros::spinOnce();
-
-    loop_rate.sleep();
-    ++count;
-  }
-
-
-  return 0;
+  loop_rate.sleep();  
+  
+  
+  ros::spin();
+ }
+return 0;
 }
