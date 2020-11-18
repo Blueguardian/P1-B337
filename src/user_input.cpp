@@ -3,8 +3,8 @@
 #include <iostream>
 #include <stdlib.h>
 #include <time.h>
+#include <std_msgs/Float32.h>
 
-geometry_msgs::Twist user_input_msg;
 
 
 struct roomType
@@ -95,11 +95,11 @@ void sortCoord(double (*array)[2], int startpos, int itera)
 
 int main(int argc, char *argv[])
 {
-    ros::init(argc, argv, "motion_planning");
+    ros::init(argc, argv, "user_input");
     ros::NodeHandle nh1;
 
-    ros::Publisher user_inputx_pub = nh1.advertise<geometry_msgs::Twist>("user_inputx", 1);
-    ros::Publisher user_inputy_pub = nh1.advertise<geometry_msgs::Twist>("user_inputy", 1);
+    ros::Publisher user_inputx_pub = nh1.advertise<std_msgs::Float32>("user_inputx", 1);
+    ros::Publisher user_inputy_pub = nh1.advertise<std_msgs::Float32>("user_inputy", 1);
 
   
     roomType room;
@@ -118,7 +118,25 @@ int main(int argc, char *argv[])
     {
             std::cout << "Sorted coordset: [" << coordarray[i][0] << ", " << coordarray[i][1] << "] \n";
     }
+    while(ros::ok())
+    {
+        std_msgs::Float32 x;
+        std_msgs::Float32 y;
+        double x_begincoord = coordarray[0][0];
+        double y_begincoord = coordarray[0][1];
 
+        x.data = x_begincoord;
+        y.data = y_begincoord;
+
+        user_inputx_pub.publish(x);
+        user_inputy_pub.publish(y);
+
+        loop.sleep();
+
+        ros::spinOnce();
+
+
+    }
 
     return 0;
 }
