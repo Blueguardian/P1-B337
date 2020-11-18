@@ -4,20 +4,19 @@
 #include <stdlib.h>
 #include <time.h>
 
+coordset coordset;
+
 struct coordset
 {
    double x;
    double y;
-};
+} coordinateSet;
 
-double coordCallback(const ::x_300_master::coord::ConstPtr& msg)
+void coordCallback(const ::x_300_master::coord::ConstPtr& msg)
 {
-   coordset coordset;
    ROS_INFO(("x-coord received: ", msg->coordx))
    ROS_INFO(("y-coord received: ", msg->coordy))
-   double coordset.x = msg->x;
-   double coordset.y = msg->y;
-   return coordset;
+   coordinateSet.x = *msg;
 }
 
 int main(int argc, char** argv)
@@ -27,7 +26,8 @@ int main(int argc, char** argv)
 
     ros::Subscriber user_input = n.subscribe("user_input", 1, coordCallback);
 
-
+   ROS_INFO(("x-coordinate stored: ", coordinateSet.x));
+   ROS_INFO(("y-coordinate stored: ", coordinateSet.y));
     ros::spin();
 
     return 0;

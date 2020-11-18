@@ -5,7 +5,7 @@
 #include <time.h>
 #include <std_msgs/Float32.h>
 
-
+bool base_state;
 
 struct roomType
 {
@@ -36,6 +36,12 @@ roomType insertRoom()
     std::cout << "Please input the number of exhibitions present in the room:";
     std::cin >> newRoomType.num_exhibits;
     return newRoomType;
+}
+
+void base_state_get(const std_msgs::Bool::ConstPtr& msg)
+{
+    ROS_INFO("Base processing coordinates.. Moving..")
+    base_state = *msg;
 }
 
 double euclidianDist(double x1, double y1)
@@ -98,7 +104,7 @@ int main(int argc, char *argv[])
     ros::init(argc, argv, "user_input");
     ros::NodeHandle nh1;
 
-    ros::Publisher user_input_pub = nh1.advertise<::x_300_master::coord>("user_input", 1);
+    ros::Publisher user_input_pub = nh1.advertise<x_300_master::coord>("user_input", 1);
  
 
   
@@ -120,19 +126,32 @@ int main(int argc, char *argv[])
     }
     while(ros::ok())
     {
-        ::x_300_master::coord coord;
-        std_msgs::Float32 y;
-        double x_begincoord = coordarray[0][0];
-        double y_begincoord = coordarray[0][1];
+  
+        ros::Subscriber base_state = nh1.subscribe("base_state", 5, )
+        x_300_master::coord coord;
+//        double x_begincoord = coordarray[0][0];
+//        double y_begincoord = coordarray[0][1];
 
-        coord.coordx = x_begincoord;
-        coord.coordy = y_begincoord;
 
-        user_input_pub.publish(coord);
+//        coord.coordx = x_begincoord;
+//        coord.coordy = y_begincoord;
 
-        loop.sleep();
+        while(base_state == 0 && i != room.num_exhibits)
+            {
+                int i = 0;
+                double x_coord = coordarray[i][0];
+                double y_coord = coordarray[i][1];
 
-        ros::spinOnce();
+                coord.coordx = x_coord;
+                coord.coordy = y_coord;
+                i++;
+
+                user_input_pub.publish(coord);
+
+                loop.sleep();
+
+                ros::spinOnce();
+            }
 
 
     }
