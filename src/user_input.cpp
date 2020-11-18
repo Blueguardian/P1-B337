@@ -11,7 +11,7 @@ struct roomType
 {
     double room_length;
     double room_width;
-    double num_exhibits;
+    int num_exhibits;
 };
 
 roomType insertRoom()
@@ -83,7 +83,7 @@ void sortCoord(double (*array)[2], int startpos, int itera)
             if((euclidianDist(array[i][0], array[i][1])) > (euclidianDist(array[j][0], array[j][1])))
             {
                 temp1 = array[i][0];
-                temp2 = array[i][0]
+                temp2 = array[i][0];
                 array[i][0] = array[j][0];
                 array[i][1] = array[j][1];
                 array[j][0] = temp1;
