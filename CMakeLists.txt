@@ -12,6 +12,13 @@ find_package(catkin REQUIRED COMPONENTS
  rospy
  std_msgs
  turtlesim
+ tf
+ geometry_msgs
+ genmsg
+ image_transport
+ pcl_ros
+ sensor_msgs
+ std_srvs
  )
 
 ## System dependencies are found with CMake's conventions
@@ -143,6 +150,7 @@ add_executable(${PROJECT_NAME}_motion_planning src/motion_planning.cpp)
 ## e.g. "rosrun someones_pkg node" instead of "rosrun someones_pkg someones_pkg_node"
 set_target_properties(${PROJECT_NAME}_motion_planning PROPERTIES OUTPUT_NAME motion_planning PREFIX "")
 
+
 ## Add cmake target dependencies of the executable
 ## same as for the library above
 # add_dependencies(${PROJECT_NAME}_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
@@ -151,6 +159,7 @@ set_target_properties(${PROJECT_NAME}_motion_planning PROPERTIES OUTPUT_NAME mot
 target_link_libraries(${PROJECT_NAME}_motion_planning
    ${catkin_LIBRARIES}
 )
+
 #############
 ## Install ##
 #############
@@ -170,6 +179,7 @@ target_link_libraries(${PROJECT_NAME}_motion_planning
 install(TARGETS ${PROJECT_NAME}_motion_planning
    RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
  )
+
 
 ## Mark libraries for installation
 ## See http://docs.ros.org/melodic/api/catkin/html/howto/format1/building_libraries.html

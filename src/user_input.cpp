@@ -4,14 +4,14 @@
 #include <stdlib.h>
 #include <time.h>
 
-geometry_msgs::Twist motion_planning_msg;
+geometry_msgs::Twist user_input_msg;
 
 
 struct roomType
 {
-    int room_length;
-    int room_width;
-    int num_exhibits;
+    double room_length;
+    double room_width;
+    double num_exhibits;
 };
 
 roomType insertRoom()
@@ -38,51 +38,52 @@ roomType insertRoom()
     return newRoomType;
 }
 
-void insertCoord(int (*array)[2], int room_length, int room_width, int numexhi)
+void insertCoord(double (*array)[2], double room_length, double room_width, int numexhi)
 {
-    int x, y;
+    double x, y;
     std::cout << "The selected room is " << room_length << " meters long and " << room_width << " meters wide.";
     for(int i=0; i<numexhi;i++)
     {
-        std::cout << "Please input the length of the x-coordinate in cm for the " << i << "th exhibit:";
+        std::cout << "Please input the length of the x-coordinate in meters for the " << i << "th exhibit:";
         std::cin >> x;
         array[i][0] = x;
         while(x < 0)
         {
-            std::cout << "Incorrect value, please try again \n Length of x-coordinate in cm for the " << i << "th exhibit:";
+            std::cout << "Incorrect value, please try again \n Length of x-coordinate in meters for the " << i << "th exhibit:";
             std::cin >> x;
             array[i][0] = x;
         }
-        std::cout << "Please input the length of the y-coordinate in cm for the " << i << "th exhibit:";
+        std::cout << "Please input the length of the y-coordinate in meters for the " << i << "th exhibit:";
         std::cin >> y;
         array[i][1] = y;
         while(y < 0)
         {
-            std::cout << "Incorrect value, please try again \n Length of y-coordinate in cm for the " << i << "th exhibit:";
+            std::cout << "Incorrect value, please try again \n Length of y-coordinate in meters for the " << i << "th exhibit:";
             std::cin >> y;
             array[i][1] = y;
         }
     }
 }
 
-/*void sortCoord(int (*array)[2], int startpos, )
+int sortCoord(int (*array)[2], int startpos)
 {
-    
-} */
+
+} 
 
 int main(int argc, char *argv[])
 {
     ros::init(argc, argv, "motion_planning");
     ros::NodeHandle nh1;
 
-    ros::Publisher motion_planning_pub = nh1.advertise<geometry_msgs::Twist>("motion_planning", 1);
+    ros::Publisher user_inputx_pub = nh1.advertise<geometry_msgs::Twist>("user_inputx", 1);
+    ros::Publisher user_inputy_pub = nh1.advertise<geometry_msgs::Twist>("user_inputy", 1);
 
   
     roomType room;
     room = insertRoom();
     int coordarray[room.num_exhibits][2] = {};
     insertCoord(coordarray, room.room_length, room.room_width, room.num_exhibits);
-    
+
 
     return 0;
 }
