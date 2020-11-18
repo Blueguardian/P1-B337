@@ -139,6 +139,7 @@ int main(int argc, char *argv[])
         while(base_state == 0 && i != room.num_exhibits)
             {
                 int i = 0;
+                sortCoord(coordarray, i, room.num_exhibits);
                 double x_coord = coordarray[i][0];
                 double y_coord = coordarray[i][1];
 
