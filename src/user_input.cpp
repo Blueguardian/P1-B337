@@ -38,6 +38,13 @@ roomType insertRoom()
     return newRoomType;
 }
 
+double euclidanDist(double x1, double y1)
+{
+    double dist = pow(x1, 2)+pow(y1, 2);
+    dist = sqrt(dist);
+    return dist;
+}
+
 void insertCoord(double (*array)[2], double room_length, double room_width, int numexhi)
 {
     double x, y;
@@ -65,9 +72,25 @@ void insertCoord(double (*array)[2], double room_length, double room_width, int 
     }
 }
 
-int sortCoord(int (*array)[2], int startpos)
+void sortCoord(double (*array)[2], int startpos, int itera)
 {
-
+    double temp1;
+    double temp2;
+    for(int i = startpos; i<itera; i++)
+    {
+        for(int j = i+1; j<itera; j++)
+        {
+            if((euclidianDist(array[i][0] array[i][1]) > euclidianDist(array[j][0], array[j][1]))
+            {
+                temp1 = array[i][0];
+                temp2 = array[i][0]
+                array[i][0] = array[j][0];
+                array[i][1] = array[j][1];
+                array[j][0] = temp1;
+                array[j][1] = temp2;
+            }
+        }
+    }
 } 
 
 int main(int argc, char *argv[])
@@ -83,6 +106,18 @@ int main(int argc, char *argv[])
     room = insertRoom();
     int coordarray[room.num_exhibits][2] = {};
     insertCoord(coordarray, room.room_length, room.room_width, room.num_exhibits);
+
+    for(i = 0; i < room.num_exhibits; i++)
+    {
+            std::cout << "Unsorted coordset: [" << coordarray[i][0] << ", " << coordarray[i][1] << "] \n";
+    }
+
+    sortCord(coordarray, 0, room.num_exhibits);
+
+    for(i = 0; i < room.num_exhibits; i++)
+    {
+            std::cout << "Sorted coordset: [" << coordarray[i][0] << ", " << coordarray[i][1] << "] \n";
+    }
 
 
     return 0;
