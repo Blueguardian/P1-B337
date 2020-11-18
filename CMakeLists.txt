@@ -57,8 +57,7 @@ find_package(catkin REQUIRED COMPONENTS
 ## Generate messages in the 'msg' folder
  add_message_files(
    FILES
-   x.msg
-   y.msg
+   coord.msg
  )
 
 ## Generate services in the 'srv' folder
@@ -153,6 +152,7 @@ add_executable(${PROJECT_NAME}_listener_test src/listener_test.cpp)
 ## e.g. "rosrun someones_pkg node" instead of "rosrun someones_pkg someones_pkg_node"
 set_target_properties(${PROJECT_NAME}_user_input PROPERTIES OUTPUT_NAME user_input PREFIX "")
 set_target_properties(${PROJECT_NAME}_master PROPERTIES OUTPUT_NAME master PREFIX "")
+set_target_properties(${PROJECT_NAME}_listener_test PROPERTIES OUTPUT_NAME listener_test PREFIX "")
 
 
 ## Add cmake target dependencies of the executable
