@@ -16,6 +16,8 @@ find_package(catkin REQUIRED COMPONENTS
  geometry_msgs
  genmsg
  image_transport
+ move_base_msgs
+ actionlib
  pcl_ros
  sensor_msgs
  std_srvs
