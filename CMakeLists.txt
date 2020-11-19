@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.0.2)
 project(x_300_master)
 
+
 ## Compile as C++11, supported in ROS Kinetic and newer
 add_compile_options(-std=c++11)
 
@@ -12,14 +13,18 @@ find_package(catkin REQUIRED COMPONENTS
  rospy
  std_msgs
  turtlesim
+
  tf
  geometry_msgs
  genmsg
+ move_base_msgs
+ actionlib
  image_transport
  pcl_ros
  sensor_msgs
  std_srvs
  )
+
 
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
@@ -141,6 +146,7 @@ ${catkin_INCLUDE_DIRS}
 ## Declare a C++ executable
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
+
 add_executable(${PROJECT_NAME}_user_input src/user_input.cpp)
 add_executable(${PROJECT_NAME}_master src/master.cpp)
 add_executable(${PROJECT_NAME}_listener_test src/listener_test.cpp)
@@ -150,9 +156,11 @@ add_executable(${PROJECT_NAME}_listener_test src/listener_test.cpp)
 ## The above recommended prefix causes long target names, the following renames the
 ## target back to the shorter version for ease of user use
 ## e.g. "rosrun someones_pkg node" instead of "rosrun someones_pkg someones_pkg_node"
+
 set_target_properties(${PROJECT_NAME}_user_input PROPERTIES OUTPUT_NAME user_input PREFIX "")
 set_target_properties(${PROJECT_NAME}_master PROPERTIES OUTPUT_NAME master PREFIX "")
 set_target_properties(${PROJECT_NAME}_listener_test PROPERTIES OUTPUT_NAME listener_test PREFIX "")
+
 
 
 ## Add cmake target dependencies of the executable
@@ -160,6 +168,7 @@ set_target_properties(${PROJECT_NAME}_listener_test PROPERTIES OUTPUT_NAME liste
 # add_dependencies(${PROJECT_NAME}_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 ## Specify libraries to link a library or executable target against
+
 target_link_libraries(${PROJECT_NAME}_user_input
    ${catkin_LIBRARIES}
 )
@@ -167,8 +176,7 @@ target_link_libraries(${PROJECT_NAME}_master
    ${catkin_LIBRARIES}
 )
 target_link_libraries(${PROJECT_NAME}_listener_test
-   ${catkin_LIBRARIES}
-)
+
 #############
 ## Install ##
 #############
@@ -185,6 +193,7 @@ target_link_libraries(${PROJECT_NAME}_listener_test
 
 ## Mark executables for installation
 ## See http://docs.ros.org/melodic/api/catkin/html/howto/format1/building_executables.html
+
 install(TARGETS ${PROJECT_NAME}_user_input
    RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
  )
@@ -192,6 +201,7 @@ install(TARGETS ${PROJECT_NAME}_user_input
    RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
  )
 install(TARGETS ${PROJECT_NAME}_listener_test
+
    RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
  )
 
