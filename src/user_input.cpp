@@ -16,32 +16,33 @@ struct roomType         //Creating a new datatype called roomType
 
 roomType insertRoom() //roomType function called insertRoom for user input.
 {
-    //The function asks the user to input the data for each variable to fill out the type. 
-    //It asks the user for input for each variable in the type roomType, and the function then
-    //fills out each variable with the users input.
+    //The function asks the user to input the value for each variable in roomType. 
+    //The function then checks if the input is valid, if not then it will tell the
+    //user that the input is valid, and let them try again, until the value is valid
+    //then fills out each variable with the users input.
 
-    //start of function
+    //beginning of function insertRoom()
 
     roomType newRoomType; //creating the roomType data type
     std::cout << "Welcome operator! \n You are currently operating the Museum X-300 scanner robot. \n Please input the room length and width in meters to continue. \n";
     std::cout << "Room length:";
-    std::cin >> newRoomType.room_length; //assigning the user input to the variable room_length.
-    while(newRoomType.room_length <= 0)
+    std::cin >> newRoomType.room_length; 
+    while(newRoomType.room_length <= 0) //validation check
     {
-        std::cout << "Incorrect value, please try again \n Room length:";
-        std::cin >> newRoomType.room_length;
+        std::cout << "Incorrect value, please try again \n Room length:"; 
+        std::cin >> newRoomType.room_length; 
     }
-    std::cout << "Room width:";
-    std::cin >> newRoomType.room_width;
-    while(newRoomType.room_width <= 0)
+    std::cout << "Room width:"; 
+    std::cin >> newRoomType.room_width; 
+    while(newRoomType.room_width <= 0) //validation check
     {
-        std::cout << "Incorrect value, please try again \n Room width:";
+        std::cout << "Incorrect value, please try again \n Room width:"; 
         std::cin >> newRoomType.room_width;
     }
     std::cout << "The room dimensions are: Length: " << newRoomType.room_length << "m Width: " << newRoomType.room_width << "m. \n";
     std::cout << "Please input the number of exhibitions present in the room:";
     std::cin >> newRoomType.num_exhibits;
-    while(newRoomType.num_exhibits <= 0)
+    while(newRoomType.num_exhibits <= 0) //validation check
     {
         ROS_INFO("There must be at least one exhibit, and the exhibit number cannot be negative! Please try again! \n Please input the number of exhibitions present in the room: ");
         std::cin >> newRoomType.num_exhibits;
@@ -49,21 +50,33 @@ roomType insertRoom() //roomType function called insertRoom for user input.
     return newRoomType;
 }
 
-void base_state_get(const std_msgs::Bool::ConstPtr& msg)
+void base_state_get(const std_msgs::Bool::ConstPtr& msg) //Callback function for base_state
 {
+    //The callback function is called when a messege is received from the base_state subscriber.
+    //This callback function sends out a messege telling the user that the base is still moving
+    //and assign a pointer to the global variable base_state to be able to use the variable later.
+
+    // beginning of function
+
     ROS_INFO("Base processing coordinates.. Moving..")
     base_state = *msg;
 }
 
-double euclidianDist(double x1, double y1, double refx, double refy)
+double euclidianDist(double x1, double y1, double refx, double refy) //Distance measuring function used for comparisson
 {
+
+    //This function takes in two coordinates of type double (x1 and y1) and calculates the distance from a point of
+    //reference (refx and refy) and returns the euclidian distance between these.
+
+    //beginning of function
+
     double refdist = pow(refx, 2)+pow(refy, 2)
     double dist = pow(x1, 2)+pow(y1, 2);
     dist = sqrt(refdist-dist);
     return dist;
 }
 
-void insertCoord(double (*array)[2], double room_length, double room_width, int numexhi)
+void insertCoord(double (*array)[2], double room_length, double room_width, int numexhi) //User input function for the coordinates for each exhibit.
 {
     double x, y;
     std::cout << "The selected room is " << room_length << " meters long and " << room_width << " meters wide.";
