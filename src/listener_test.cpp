@@ -4,13 +4,17 @@
 #include <stdlib.h>
 #include <time.h>
 
-x_300_master::coord coordinateSet;
+double xcoord;
+double ycoord;
+
+//No explanation needed here, since this is only for testing and may be omitted when testing turns over to master.cpp
 
 void coordCallback(const x_300_master::coord::ConstPtr& msg)
 {
    ROS_INFO(("x-coord received: ", msg->coordx));
    ROS_INFO(("y-coord received: ", msg->coordy));
-   coordinateSet = *msg;
+   xcoord = msg.coordx;
+   ycoord = msg.coordy;
 }
 
 int main(int argc, char** argv)
@@ -20,9 +24,9 @@ int main(int argc, char** argv)
 
     ros::Subscriber user_input = n.subscribe("user_input", 1, coordCallback);
 
-   ROS_INFO(("x-coordinate stored: ", coordinateSet.x));
-   ROS_INFO(("y-coordinate stored: ", coordinateSet.y));
-   ros::spin();
+   ROS_INFO(("x-coordinate stored: ", xcoord));
+   ROS_INFO(("y-coordinate stored: ", ycoord));
+   ros::spinOnce();
 
     return 0;
 }

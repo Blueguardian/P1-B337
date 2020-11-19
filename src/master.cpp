@@ -40,7 +40,7 @@ ROS_INFO("y-coordinate stored: ", coordinateSet.y);
 
 ROS_INFO("Sending goal"); //Printing out a fitting messege:
 
-while(ros::ok()) //While != ros::Shutdown(); or the user has Ctrl+C out of the program.
+while(ros::ok()) //while(!= ros::Shutdown(); or the user has Ctrl+C out of the program.)
 {
   ros::Publisher base_state_pub = nh2.advertise<std_msgs::Bool>("base_state", 5); //Creating a publisher for publishing the state of the MoveBaseClient
   base_state = ac.getState();

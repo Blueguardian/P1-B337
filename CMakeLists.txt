@@ -178,7 +178,8 @@ target_link_libraries(${PROJECT_NAME}_master
    ${catkin_LIBRARIES}
 )
 target_link_libraries(${PROJECT_NAME}_listener_test
-
+   ${catkin_LIBRARIES}
+)
 #############
 ## Install ##
 #############
