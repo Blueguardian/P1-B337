@@ -6,7 +6,7 @@
 
 x_300_master::coord coordinateSet;
 
-void coordCallback(const ::x_300_master::coord::ConstPtr& msg)
+void coordCallback(const x_300_master::coord::ConstPtr& msg)
 {
    ROS_INFO(("x-coord received: ", msg->coordx));
    ROS_INFO(("y-coord received: ", msg->coordy));

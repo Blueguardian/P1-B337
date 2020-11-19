@@ -5,7 +5,7 @@
 #include <time.h>
 #include <std_msgs/Float32.h>
 
-bool base_state;
+bool base_state; //Global variable to store data from the master function call.
 
 struct roomType         //Creating a new datatype called roomType
 {
@@ -55,10 +55,11 @@ void base_state_get(const std_msgs::Bool::ConstPtr& msg)
     base_state = *msg;
 }
 
-double euclidianDist(double x1, double y1)
+double euclidianDist(double x1, double y1, double refx, double refy)
 {
+    double refdist = pow(refx, 2)+pow(refy, 2)
     double dist = pow(x1, 2)+pow(y1, 2);
-    dist = sqrt(dist);
+    dist = sqrt(refdist-dist);
     return dist;
 }
 
@@ -71,7 +72,7 @@ void insertCoord(double (*array)[2], double room_length, double room_width, int 
         std::cout << "Please input the length of the x-coordinate in meters for the " << i << "th exhibit:";
         std::cin >> x;
         array[i][0] = x;
-        while(x < 0)
+        while(x < -1*(room_length/2) && x > room_length/2)
         {
             std::cout << "Incorrect value, please try again \n Length of x-coordinate in meters for the " << i << "th exhibit:";
             std::cin >> x;
@@ -80,7 +81,7 @@ void insertCoord(double (*array)[2], double room_length, double room_width, int 
         std::cout << "Please input the length of the y-coordinate in meters for the " << i << "th exhibit:";
         std::cin >> y;
         array[i][1] = y;
-        while(y < 0)
+        while(y < -1*(room_width/2) && y > room_width/2)
         {
             std::cout << "Incorrect value, please try again \n Length of y-coordinate in meters for the " << i << "th exhibit:";
             std::cin >> y;
@@ -89,7 +90,7 @@ void insertCoord(double (*array)[2], double room_length, double room_width, int 
     }
 }
 
-void sortCoord(double (*array)[2], int startpos, int itera)
+void sortCoord(double (*array)[2], int startpos, int itera, double refx, double refy)
 {
     double temp1;
     double temp2;
@@ -97,7 +98,7 @@ void sortCoord(double (*array)[2], int startpos, int itera)
     {
         for(int j = i+1; j<itera; j++)
         {
-            if((euclidianDist(array[i][0], array[i][1])) > (euclidianDist(array[j][0], array[j][1])))
+            if((euclidianDist(array[i][0], array[i][1], refx, refy) > (euclidianDist(array[j][0], array[j][1], refx, refy)))
             {
                 temp1 = array[i][0];
                 temp2 = array[i][0];
@@ -127,7 +128,7 @@ int main(int argc, char *argv[])
             std::cout << "Unsorted coordset: [" << coordarray[i][0] << ", " << coordarray[i][1] << "] \n";
     }
 
-    sortCoord(coordarray, 0, room.num_exhibits);
+    sortCoord(coordarray, 0, room.num_exhibits, 0, 0);
 
     for(int i = 0; i < room.num_exhibits; i++)
     {
@@ -135,9 +136,9 @@ int main(int argc, char *argv[])
     }
     while(ros::ok())
     {
-  
-        ros::Subscriber base_state = nh1.subscribe("base_state", 5, )
         x_300_master::coord coord;
+        ros::Subscriber base_state = nh1.subscribe("base_state", 5, base_state_get)
+        
 //        double x_begincoord = coordarray[0][0];
 //        double y_begincoord = coordarray[0][1];
 
@@ -145,22 +146,35 @@ int main(int argc, char *argv[])
 //        coord.coordx = x_begincoord;
 //        coord.coordy = y_begincoord;
 
-        while(base_state.Data == 0 && i != room.num_exhibits)
-            {
-                int i = 0;
-                sortCoord(coordarray, i, room.num_exhibits);
-                double x_coord = coordarray[i][0];
-                double y_coord = coordarray[i][1];
+        double x_coord = coordarray[0][0];
+        double y_coord = coordarray[0][1];
 
-                coord.coordx = x_coord;
-                coord.coordy = y_coord;
-                i++;
+        coord.coordx = x_coord;
+        coord.coordy = y_coord;
 
-                user_input_pub.publish(coord);
+        user_input_pub.publish(coord);
+        int i = 1;
 
-                loop.sleep();
+        while(i != room.num_exhibits)
+        {   
 
-                ros::spinOnce();
+            while(base_state.Data == 0)
+                {
+
+                    sortCoord(coordarray, i, room.num_exhibits, x_coord, y_coord);
+                    double x_coord = coordarray[i][0];
+                    double y_coord = coordarray[i][1];
+
+                    coord.coordx = x_coord;
+                    coord.coordy = y_coord;
+                    i++;
+
+                    user_input_pub.publish(coord);
+
+                    loop.sleep();
+
+                    ros::spinOnce();
+                }
             }
 
 
