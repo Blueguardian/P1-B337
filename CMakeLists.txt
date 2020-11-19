@@ -1,5 +1,6 @@
 cmake_minimum_required(VERSION 3.0.2)
-project(Movement)
+project(x_300_master)
+
 
 ## Compile as C++11, supported in ROS Kinetic and newer
 add_compile_options(-std=c++11)
@@ -12,9 +13,18 @@ find_package(catkin REQUIRED COMPONENTS
  rospy
  std_msgs
  turtlesim
- geometry_msgs 
- move_base_msgs 
- actionlib)
+
+ tf
+ geometry_msgs
+ genmsg
+ move_base_msgs
+ actionlib
+ image_transport
+ pcl_ros
+ sensor_msgs
+ std_srvs
+ )
+
 
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
@@ -50,11 +60,10 @@ find_package(catkin REQUIRED COMPONENTS
 ##   * add every package in MSG_DEP_SET to generate_messages(DEPENDENCIES ...)
 
 ## Generate messages in the 'msg' folder
-# add_message_files(
-#   FILES
-#   Message1.msg
-#   Message2.msg
-# )
+ add_message_files(
+   FILES
+   coord.msg
+ )
 
 ## Generate services in the 'srv' folder
 # add_service_files(
@@ -71,10 +80,10 @@ find_package(catkin REQUIRED COMPONENTS
 # )
 
 ## Generate added messages and services with any dependencies listed here
-# generate_messages(
-#   DEPENDENCIES
-#   std_msgs  # Or other packages containing msgs
-# )
+ generate_messages(
+      DEPENDENCIES
+      std_msgs  # Or other packages containing msgs
+ )
 
 ################################################
 ## Declare ROS dynamic reconfigure parameters ##
@@ -108,8 +117,9 @@ find_package(catkin REQUIRED COMPONENTS
 catkin_package(
 #  INCLUDE_DIRS include
 #  LIBRARIES turtlesim_games
-#  CATKIN_DEPENDS other_catkin_pkg
+  CATKIN_DEPENDS message_runtime
 #  DEPENDS system_lib
+  
 )
 
 ###########
@@ -136,8 +146,10 @@ ${catkin_INCLUDE_DIRS}
 ## Declare a C++ executable
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
-add_executable(${PROJECT_NAME}_User_input src/User_input.cpp)
 
+add_executable(${PROJECT_NAME}_user_input src/user_input.cpp)
+add_executable(${PROJECT_NAME}_master src/master.cpp)
+add_executable(${PROJECT_NAME}_listener_test src/listener_test.cpp)
 
 
 ## Rename C++ executable without prefix
@@ -145,7 +157,9 @@ add_executable(${PROJECT_NAME}_User_input src/User_input.cpp)
 ## target back to the shorter version for ease of user use
 ## e.g. "rosrun someones_pkg node" instead of "rosrun someones_pkg someones_pkg_node"
 
-set_target_properties(${PROJECT_NAME}_User_input PROPERTIES OUTPUT_NAME User_input PREFIX "")
+set_target_properties(${PROJECT_NAME}_user_input PROPERTIES OUTPUT_NAME user_input PREFIX "")
+set_target_properties(${PROJECT_NAME}_master PROPERTIES OUTPUT_NAME master PREFIX "")
+set_target_properties(${PROJECT_NAME}_listener_test PROPERTIES OUTPUT_NAME listener_test PREFIX "")
 
 
 
@@ -155,11 +169,14 @@ set_target_properties(${PROJECT_NAME}_User_input PROPERTIES OUTPUT_NAME User_inp
 
 ## Specify libraries to link a library or executable target against
 
-target_link_libraries(${PROJECT_NAME}_User_input
-
-
+target_link_libraries(${PROJECT_NAME}_user_input
    ${catkin_LIBRARIES}
 )
+target_link_libraries(${PROJECT_NAME}_master
+   ${catkin_LIBRARIES}
+)
+target_link_libraries(${PROJECT_NAME}_listener_test
+
 #############
 ## Install ##
 #############
@@ -177,7 +194,13 @@ target_link_libraries(${PROJECT_NAME}_User_input
 ## Mark executables for installation
 ## See http://docs.ros.org/melodic/api/catkin/html/howto/format1/building_executables.html
 
-install(TARGETS ${PROJECT_NAME}_User_input
+install(TARGETS ${PROJECT_NAME}_user_input
+   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+ )
+ install(TARGETS ${PROJECT_NAME}_master
+   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+ )
+install(TARGETS ${PROJECT_NAME}_listener_test
 
    RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
  )
@@ -216,3 +239,4 @@ install(TARGETS ${PROJECT_NAME}_User_input
 
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
+
