@@ -4,19 +4,13 @@
 #include <stdlib.h>
 #include <time.h>
 
-coordset coordset;
-
-struct coordset
-{
-   double x;
-   double y;
-} coordinateSet;
+x_300_master::coord coordinateSet;
 
 void coordCallback(const ::x_300_master::coord::ConstPtr& msg)
 {
-   ROS_INFO(("x-coord received: ", msg->coordx))
-   ROS_INFO(("y-coord received: ", msg->coordy))
-   coordinateSet.x = *msg;
+   ROS_INFO(("x-coord received: ", msg->coordx));
+   ROS_INFO(("y-coord received: ", msg->coordy));
+   coordinateSet = *msg;
 }
 
 int main(int argc, char** argv)
@@ -28,7 +22,7 @@ int main(int argc, char** argv)
 
    ROS_INFO(("x-coordinate stored: ", coordinateSet.x));
    ROS_INFO(("y-coordinate stored: ", coordinateSet.y));
-    ros::spin();
+   ros::spin();
 
     return 0;
 }

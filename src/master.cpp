@@ -3,49 +3,49 @@
 #include <actionlib/client/simple_action_client.h>
 
 typedef actionlib::SimpleActionClient<move_base_msgs::MoveBaseAction> MoveBaseClient;
+x_300_master::coord coordinateSet;
 
 struct coordSet{
   double x;
   double y;
 } coordinateSet;
 
-void move_to_coord(const x_300_master::coord::ConstPtr& msg) //Printer beskeder om hvad der er modtaget af coordinater
+void move_to_coord(const x_300_master::coord::ConstPtr& msg) //Prints messeges containing the received coordinates
 {
-  ROS_INFO(("x-coordinate received: ", msg.x))
-  ROS_INFO(("y-coordinate received: ", msg.y))
-  coordinateSet = *msg;
+  ROS_INFO(("x-coordinate received: ", msg.x));
+  ROS_INFO(("y-coordinate received: ", msg.y));
+  coordinateSet = *msg; //Points to the messege content.
   }
 
 int main(int argc, char** argv){
-  ros::init(argc, argv, "simple_navigation_goals");
-  ros::NodeHandle nh2;
+  ros::init(argc, argv, "simple_navigation_goals"); //ros initialisation
+  ros::NodeHandle nh2; //Testing nodehandle naming convention
 
-  //Define a client to send goals to the move_base server.
-  move_base_msgs::MoveBaseAction ac("move_base", true);
+  move_base_msgs::MoveBaseAction ac("move_base", true); //Defining a client to send goals to the move_base server.
 
-  //wait for the action server to come up
-  while(!ac.waitForServer(ros::Duration(5.0))){
-    ROS_INFO("Waiting for the move_base action server to come up");
-  }
-  ros::Subscriber user_input = n.subscribe("user_input", 1, coordCallback);
   
-  move_base_msgs::MoveBaseGoal goal;
-  goal.target_pose.header.stamp = ros::Time::now();
-  goal.target_pose.header.frame_id = "base_link";
+  while(!ac.waitForServer(ros::Duration(5.0))){ //wait for the action server to come up
+    ROS_INFO("Waiting for the move_base action server to come up"); //Printing a fitting messege.
+  }
+  ros::Subscriber user_input = n.subscribe("user_input", 1, coordCallback); // Subscribes to the user_input topic and when it receives a messege it runs the callback function
+  
+  move_base_msgs::MoveBaseGoal goal; //Creates a new Goal of type MoveBaseGoal, for sending information to the move_base.
+  goal.target_pose.header.stamp = ros::Time::now(); //Giving the information a time stamp
+  goal.target_pose.header.frame_id = "base_link"; //Giving the information a frame to work with (Will in the future be frames from the sensor)
 
 //we'll send a goal to the robot from ther user input // Omitted until a loop for all coordinates have been implementet
- // goal.target_pose.pose.position.x = coordinateSet.x;
+// goal.target_pose.pose.position.x = coordinateSet.x;
 // goal.target_pose.pose.position.y = coordinateSet.y;
   
-ROS_INFO("x-coordinate stored: ", coordinateSet.x);
-ROS_INFO("y-coordinate stored: ", coordinateSet.y)
+ROS_INFO("x-coordinate stored: ", coordinateSet.x); //Printing out the messege content that we copied
+ROS_INFO("y-coordinate stored: ", coordinateSet.y);
 
 
-ROS_INFO("Sending goal");
+ROS_INFO("Sending goal"); //Printing out a fitting messege:
 
-while(ros::ok())
+while(ros::ok()) //While != ros::Shutdown(); or the user has Ctrl+C out of the program.
 {
-  ros::Publisher base_state_pub = nh2.advertise<std_msgs::Bool>("base_state", 5);
+  ros::Publisher base_state_pub = nh2.advertise<std_msgs::Bool>("base_state", 5); //Creating a publisher for publishing the state of the MoveBaseClient
 }
 //Omitted until coordinateSet is interchangeable over the subscriber.
 //ac.sendGoal(goal);
@@ -57,5 +57,5 @@ while(ros::ok())
 // else
 //  ROS_INFO("The base failed to move forward 1 meter for some reason");
 
-  return 0;
+ return 0; //Program run succesfully.
 }

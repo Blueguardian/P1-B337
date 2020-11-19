@@ -7,27 +7,33 @@
 
 bool base_state;
 
-struct roomType
+struct roomType         //Creating a new datatype called roomType
 {
-    double room_length;
-    double room_width;
-    int num_exhibits;
+    double room_length; //roomType variable called room_length of type double
+    double room_width;  //roomType variable called room_width of type double
+    int num_exhibits; //roomType variable called num_exhibits of type int
 };
 
-roomType insertRoom()
+roomType insertRoom() //roomType function called insertRoom for user input.
 {
-    roomType newRoomType;
+    //The function asks the user to input the data for each variable to fill out the type. 
+    //It asks the user for input for each variable in the type roomType, and the function then
+    //fills out each variable with the users input.
+
+    //start of function
+
+    roomType newRoomType; //creating the roomType data type
     std::cout << "Welcome operator! \n You are currently operating the Museum X-300 scanner robot. \n Please input the room length and width in meters to continue. \n";
     std::cout << "Room length:";
-    std::cin >> newRoomType.room_length;
-    while(newRoomType.room_length < 0)
+    std::cin >> newRoomType.room_length; //assigning the user input to the variable room_length.
+    while(newRoomType.room_length <= 0)
     {
         std::cout << "Incorrect value, please try again \n Room length:";
         std::cin >> newRoomType.room_length;
     }
     std::cout << "Room width:";
     std::cin >> newRoomType.room_width;
-    while(newRoomType.room_width < 0)
+    while(newRoomType.room_width <= 0)
     {
         std::cout << "Incorrect value, please try again \n Room width:";
         std::cin >> newRoomType.room_width;
@@ -35,6 +41,11 @@ roomType insertRoom()
     std::cout << "The room dimensions are: Length: " << newRoomType.room_length << "m Width: " << newRoomType.room_width << "m. \n";
     std::cout << "Please input the number of exhibitions present in the room:";
     std::cin >> newRoomType.num_exhibits;
+    while(newRoomType.num_exhibits <= 0)
+    {
+        ROS_INFO("There must be at least one exhibit, and the exhibit number cannot be negative! Please try again! \n Please input the number of exhibitions present in the room: ");
+        std::cin >> newRoomType.num_exhibits;
+    }
     return newRoomType;
 }
 
@@ -105,8 +116,6 @@ int main(int argc, char *argv[])
     ros::NodeHandle nh1;
 
     ros::Publisher user_input_pub = nh1.advertise<x_300_master::coord>("user_input", 1);
- 
-
   
     roomType room;
     room = insertRoom();
@@ -136,7 +145,7 @@ int main(int argc, char *argv[])
 //        coord.coordx = x_begincoord;
 //        coord.coordy = y_begincoord;
 
-        while(base_state == 0 && i != room.num_exhibits)
+        while(base_state.Data == 0 && i != room.num_exhibits)
             {
                 int i = 0;
                 sortCoord(coordarray, i, room.num_exhibits);
