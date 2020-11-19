@@ -178,7 +178,8 @@ target_link_libraries(${PROJECT_NAME}_master
    ${catkin_LIBRARIES}
 )
 target_link_libraries(${PROJECT_NAME}_listener_test
-
+${catkin_LIBRARIES}
+)
 #############
 ## Install ##
 #############
@@ -203,7 +204,6 @@ install(TARGETS ${PROJECT_NAME}_user_input
    RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
  )
 install(TARGETS ${PROJECT_NAME}_listener_test
-
    RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
  )
 

@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <std_msgs/Float32.h>
+#include <std_msgs/Bool.h>
 
 bool base_state; //Global variable to store data from the master function call.
 
@@ -23,7 +24,7 @@ roomType insertRoom() //roomType function called insertRoom for user input.
 
     //beginning of function insertRoom()
 
-    roomType newRoomType; //creating the roomType data type
+    roomType newRoomType; //creating the roomTy0pe data type
     std::cout << "Welcome operator! \n You are currently operating the Museum X-300 scanner robot. \n Please input the room length and width in meters to continue. \n";
     std::cout << "Room length:";
     std::cin >> newRoomType.room_length; 
@@ -58,8 +59,8 @@ void base_state_get(const std_msgs::Bool::ConstPtr& msg) //Callback function for
 
     // beginning of function
 
-    ROS_INFO("Base processing coordinates.. Moving..")
-    base_state = *msg;
+    ROS_INFO("Base processing coordinates.. Moving..");
+    base_state = msg->data;
 }
 
 double euclidianDist(double x1, double y1, double refx, double refy) //Distance measuring function used for comparisson
@@ -70,7 +71,7 @@ double euclidianDist(double x1, double y1, double refx, double refy) //Distance 
 
     //beginning of function
 
-    double refdist = pow(refx, 2)+pow(refy, 2)
+    double refdist = pow(refx, 2)+pow(refy, 2);
     double dist = pow(x1, 2)+pow(y1, 2);
     dist = sqrt(refdist-dist);
     return dist;
@@ -111,7 +112,7 @@ void sortCoord(double (*array)[2], int startpos, int itera, double refx, double 
     {
         for(int j = i+1; j<itera; j++)
         {
-            if((euclidianDist(array[i][0], array[i][1], refx, refy) > (euclidianDist(array[j][0], array[j][1], refx, refy)))
+            if((euclidianDist(array[i][0], array[i][1], refx, refy) > (euclidianDist(array[j][0], array[j][1], refx, refy))))
             {
                 temp1 = array[i][0];
                 temp2 = array[i][0];
@@ -135,6 +136,7 @@ int main(int argc, char *argv[])
     room = insertRoom();
     double coordarray[room.num_exhibits][2];
     insertCoord(coordarray, room.room_length, room.room_width, room.num_exhibits);
+    ros::Rate loop(10);
 
     for(int i = 0; i < room.num_exhibits; i++)
     {
@@ -149,8 +151,7 @@ int main(int argc, char *argv[])
     }
     while(ros::ok())
     {
-        x_300_master::coord coord;
-        ros::Subscriber base_state = nh1.subscribe("base_state", 5, base_state_get)
+        ros::Subscriber base_state = nh1.subscribe("base_state", 5, base_state_get);
         
 //        double x_begincoord = coordarray[0][0];
 //        double y_begincoord = coordarray[0][1];
@@ -162,8 +163,8 @@ int main(int argc, char *argv[])
         double x_coord = coordarray[0][0];
         double y_coord = coordarray[0][1];
 
-        coord.coordx = x_coord;
-        coord.coordy = y_coord;
+        user_input_pub.coordx = x_coord;
+        user_input_pub.coordy = y_coord;
 
         user_input_pub.publish(coord);
         int i = 1;
@@ -171,7 +172,7 @@ int main(int argc, char *argv[])
         while(i != room.num_exhibits)
         {   
 
-            while(base_state.Data == 0)
+            while(base_state == 0)
                 {
 
                     sortCoord(coordarray, i, room.num_exhibits, x_coord, y_coord);
