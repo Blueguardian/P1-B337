@@ -13,7 +13,6 @@ find_package(catkin REQUIRED COMPONENTS
  rospy
  std_msgs
  turtlesim
- x_300_master
  tf
  geometry_msgs
  genmsg
