@@ -13,7 +13,7 @@ find_package(catkin REQUIRED COMPONENTS
  rospy
  std_msgs
  turtlesim
-
+ x_300_master
  tf
  geometry_msgs
  genmsg
@@ -84,7 +84,8 @@ find_package(catkin REQUIRED COMPONENTS
 ## Generate added messages and services with any dependencies listed here
  generate_messages(
       DEPENDENCIES
-      std_msgs  # Or other packages containing msgs
+      std_msgs
+      action_lib_msgs # Or other packages containing msgs
  )
 
 ################################################

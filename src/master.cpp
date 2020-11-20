@@ -2,16 +2,20 @@
 #include <move_base_msgs/MoveBaseAction.h>
 #include <actionlib/client/simple_action_client.h>
 #include <std_msgs/Bool.h>
+#include <P1-B337/coord.h>
+#include <std_msgs/Float32.h>
 
 std_msgs::Bool base_state;
 typedef actionlib::SimpleActionClient<move_base_msgs::MoveBaseAction> MoveBaseClient;
-x_300_master::coord coordinateSet; //Global variable
+double coordx;
+double coordy;
 
-void move_to_coord(const x_300_master::coord::ConstPtr& msg) //Prints messeges containing the received coordinates
+void move_to_coord(const (P1-B337)::coord::ConstPtr& msg) //Prints messeges containing the received coordinates
 {
-  ROS_INFO(("x-coordinate received: ", msg.x));
-  ROS_INFO(("y-coordinate received: ", msg.y));
-  coordinateSet = *msg; //Points to the messege content.
+  ROS_INFO(("x-coordinate received: %f", msg.x));
+  ROS_INFO(("y-coordinate received: %f", msg.y));
+  coordx = msg.coordx; //Copies the msg content
+  coordy = msg.coordy; //Copies the msg content
   }
 
 int main(int argc, char** argv){
@@ -34,17 +38,29 @@ int main(int argc, char** argv){
 // goal.target_pose.pose.position.x = coordinateSet.x;
 // goal.target_pose.pose.position.y = coordinateSet.y;
   
-ROS_INFO("x-coordinate stored: ", coordinateSet.x); //Printing out the messege content that we copied
-ROS_INFO("y-coordinate stored: ", coordinateSet.y);
+ROS_INFO("x-coordinate stored: %f", coordx); //Printing out the messege content that we copied
+ROS_INFO("y-coordinate stored: %f", coordy);
 
+ros::Rate loop(10)
 
 ROS_INFO("Sending goal"); //Printing out a fitting messege:
 
 while(ros::ok()) //while(!= ros::Shutdown(); or the user has Ctrl+C out of the program.)
 {
   ros::Publisher base_state_pub = nh2.advertise<std_msgs::Bool>("base_state", 5); //Creating a publisher for publishing the state of the MoveBaseClient
-  base_state = ac.getState();
-  base_state_pub.Publish(base_state, 1)
+  if(ac.getState() != actionlib::SimpleClientGoalState::ACTIVE) //As long as the current goal is active, don't send new coordinates from user_input
+  {
+    base_state = 1; 
+    base_state_pub.Publish(base_state, 1) //Publish base_state
+  }
+  else
+  {
+    base_state = 0;
+    base_state_pub.Publish(baste_state, 1) //Publish base_state
+  }
+  
+
+  loop.rate(); 
 }
 //Omitted until coordinateSet is interchangeable over the subscriber.
 //ac.sendGoal(goal);
