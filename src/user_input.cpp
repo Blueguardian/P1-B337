@@ -4,9 +4,8 @@
 #include <stdlib.h>
 #include <time.h>
 #include <std_msgs/Bool.h>
-#include <x_300_master/coord.h>
 #include <std_msgs/Float32.h>
-#include <std_msgs/Bool.h>
+
 
 bool base_state; //Global variable to store data from the master function call.
 
@@ -144,8 +143,10 @@ int main(int argc, char *argv[]) //main function
     ros::init(argc, argv, "user_input"); //initializing ros
     ros::NodeHandle nh1; //creating a nodehandle for the node.
 
-    ros::Publisher user_input_pub = nh1.advertise<(x_300_master)::coord>("user_input", 1); //creating a publisher for the user_input to publish it later
-  
+    ros::Publisher publish_x = nh1.advertise<std_msgs::Float32>("user_input1", 1); //creating a publisher for the user_input to publish it later
+    ros::Publisher publish_y = nh1.advertise<std_msgs::Float32>("user_input2", 1); //creating a publisher for the user_input to publish it later
+
+
     roomType room; //creating a variable of type roomType
     room = insertRoom(); //asking the user for the dimensions of the room and the number of exhibits
     double coordarray[room.num_exhibits][2]; //defining an array of size  [room.num_exhibits][2] because it only moves in a 2 dimensional manner
@@ -177,10 +178,14 @@ int main(int argc, char *argv[]) //main function
         double x_coord = coordarray[0][0]; //assigning the first set of coordinates to variables
         double y_coord = coordarray[0][1];
 
-        user_input_pub.coordx = x_coord; //assigning the variables to the msg //Needs work
-        user_input_pub.coordy = y_coord;
+        std_msgs::Float32 msg_x;
+        std_msgs::Float32 msg_y;
 
-        user_input_pub.publish(coord); //Publish the first set of coordinates
+        msg_x.data = x_coord; 
+        msg_y.data = y_coord;
+
+        publish_x.publish(x_coord); //Publish the first coordinate
+        publish_y.publish(y_coord); //Publish the second coordinate
         int iter = 1; //create an iterator for the number of times the array needs to be sorted
 
         while(iter != room.num_exhibits) //While loop to keep looping until there are no more exhibits
@@ -189,15 +194,16 @@ int main(int argc, char *argv[]) //main function
             while(base_state == 0) //While loop that only runs when the robot is finished with it's current task //Needs work
                 {
 
-                    sortCoord(coordarray, i, room.num_exhibits, x_coord, y_coord); //Sorting the coordinate array again until all points have been processed
-                    double x_coord = coordarray[i][0]; //Assigning the coordinates to variables
-                    double y_coord = coordarray[i][1];
+                    sortCoord(coordarray, iter, room.num_exhibits, x_coord, y_coord); //Sorting the coordinate array again until all points have been processed
+                    double x_coord = coordarray[iter][0]; //Assigning the coordinates to variables
+                    double y_coord = coordarray[iter][1];
 
-                    coord.coordx = x_coord; //assigning the coordinates to the messege.
-                    coord.coordy = y_coord;
-                    i++; //increment the iterator to let the program know, that the coordinateset has been processed and needs no further processing
+                    msg_x.data = x_coord; //assigning the coordinates to the messege.
+                    msg_y.data = y_coord;
+                    iter++; //increment the iterator to let the program know, that the coordinateset has been processed and needs no further processing
 
-                    user_input_pub.publish(coord); //Publish the next set of coordinates.
+                    publish_x.publish(x_coord); //Publish the next first coordinate
+                    publish_y.publish(y_coord); //Publish the next second coordinate
 
                     loop.sleep(); //Sleep for 10 milliseconds before trying again
 

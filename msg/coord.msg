@@ -1,2 +1,0 @@
-float32 coordx
-float32 coordy
