@@ -3,23 +3,27 @@
 #include <iostream>
 #include <stdlib.h>
 #include <time.h>
-#include <std_msgs/Float32.h>
+#include <std_msgs/Int32.h>
 
 double xcoord;
 double ycoord;
 
 //No explanation needed here, since this is only for testing and may be omitted when testing turns over to master.cpp
 
-void coordCallback1(const std_msgs::Float32::ConstPtr& msg)
+void coordCallback1(const std_msgs::Int32::ConstPtr& msg)
 {
-   std::cout<<"x-coord received:"<<msg->data<<std::endl;
-   xcoord = msg->data;
+   xcoord = (double)msg->data;
+   xcoord = (xcoord/1000)
+   std::cout<<"x-coord received:"<<xcoord<<std::endl;
+
 }
 
-void coordCallback2(const std_msgs::Float32::ConstPtr& msg)
+void coordCallback2(const std_msgs::Int32::ConstPtr& msg)
 {
-   std::cout<<"y-coord received:"<<msg->data<<std::endl;
-   ycoord = msg->data;
+   ycoord = (double)msg->data;
+   ycoord = (ycoord/1000)
+   std::cout<<"y-coord received:"<<ycoord<<std::endl;
+   
 }
 
 int main(int argc, char** argv)

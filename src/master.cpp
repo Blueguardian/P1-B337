@@ -6,7 +6,7 @@
 #include <move_base_msgs/MoveBaseAction.h>
 #include <actionlib/client/simple_action_client.h>
 #include <std_msgs/Bool.h>
-#include <std_msgs/Float32.h>
+#include <std_msgs/Int32.h>
 
 std_msgs::Bool base_state;
 
@@ -14,16 +14,18 @@ typedef actionlib::SimpleActionClient<move_base_msgs::MoveBaseAction> MoveBaseCl
 double coordx;
 double coordy;
 
-void move_to_coord1(const std_msgs::Float32::ConstPtr& msg) //Prints messeges containing the received coordinates
+void move_to_coord1(const std_msgs::Int32::ConstPtr& msg) //Prints messeges containing the received coordinates
 {
-  std::cout<<"x-coordinate stored:"<<msg->data<<std::endl;
-  coordx = msg->data; //Copies the msg content
+   xcoord = (double)msg->data;
+   xcoord = (xcoord/1000)
+   std::cout<<"x-coord received:"<<xcoord<<std::endl;
   }
 
-  void move_to_coord2(const std_msgs::Float32::ConstPtr& msg) //Prints messeges containing the received coordinates
+  void move_to_coord2(const std_msgs::Int32::ConstPtr& msg) //Prints messeges containing the received coordinates
 {
-  std::cout<<"x-coordinate stored:"<<msg->data<<std::endl;
-  coordy = msg->data; //Copies the msg content
+   ycoord = (double)msg->data;
+   ycoord = (ycoord/1000)
+   std::cout<<"y-coord received:"<<ycoord<<std::endl;
   }
 
 int main(int argc, char** argv){
