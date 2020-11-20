@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0.2)
-project(x_300_master)
+project(P1-B337)
 
 
 ## Compile as C++11, supported in ROS Kinetic and newer
@@ -19,8 +19,6 @@ find_package(catkin REQUIRED COMPONENTS
  move_base_msgs
  actionlib
  image_transport
- move_base_msgs
- actionlib
  pcl_ros
  sensor_msgs
  std_srvs
@@ -142,9 +140,9 @@ ${catkin_INCLUDE_DIRS}
 ## Add cmake target dependencies of the library
 ## as an example, code may need to be generated before libraries
 ## either from message generation or dynamic reconfigure
-add_dependencies(user_input beginner_tutorials_generate_messages_cpp)
-add_dependencies(master beginner_tutorials_generate_messages_cpp)
-add_dependencies(listener_test beginner_tutorials_generate_messages_cpp)
+add_dependencies(${PROJECT_NAME}_user_input x_300_master_generate_messages_cpp)
+add_dependencies(${PROJECT_NAME}_master x_300_master_generate_messages_cpp)
+add_dependencies(${PROJECT_NAME}_listener_test x_300-master_generate_messages_cpp)
 
 ## Declare a C++ executable
 ## With catkin_make all packages are built within a single CMake context
