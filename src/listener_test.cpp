@@ -3,17 +3,20 @@
 #include <iostream>
 #include <stdlib.h>
 #include <time.h>
+#include <P1-B337/coord.h>
 #include <std_msgs/Float32.h>
 
-//#include <P1-B337/msg/coord.msg>
+double xcoord;
+double ycoord;
 
-x_300_master::coord coordinateSet;
+//No explanation needed here, since this is only for testing and may be omitted when testing turns over to master.cpp
 
-void coordCallback(const x_300_master::coord::ConstPtr& msg)
+void coordCallback(const (P1-B337)::coord::ConstPtr& msg)
 {
-   ROS_INFO(("x-coord received: ", msg->coordx));
-   ROS_INFO(("y-coord received: ", msg->coordy));
-   coordinateSet = *msg;
+   ROS_INFO(("x-coord received: %f", msg->coordx));
+   ROS_INFO(("y-coord received: %f", msg->coordy));
+   xcoord = msg.coordx;
+   ycoord = msg.coordy;
 }
 
 int main(int argc, char** argv)
@@ -23,9 +26,9 @@ int main(int argc, char** argv)
 
     ros::Subscriber user_input = n.subscribe("user_input", 1, coordCallback);
 
-   ROS_INFO(("x-coordinate stored: ", coordinateSet.x));
-   ROS_INFO(("y-coordinate stored: ", coordinateSet.y));
-   ros::spin();
+   ROS_INFO(("x-coordinate stored: %f", xcoord));
+   ROS_INFO(("y-coordinate stored: %f", ycoord));
+   ros::spinOnce();
 
     return 0;
 }
