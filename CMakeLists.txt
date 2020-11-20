@@ -140,9 +140,9 @@ ${catkin_INCLUDE_DIRS}
 ## Add cmake target dependencies of the library
 ## as an example, code may need to be generated before libraries
 ## either from message generation or dynamic reconfigure
-add_dependencies(${PROJECT_NAME}_user_input x_300_master_generate_messages_cpp)
-add_dependencies(${PROJECT_NAME}_master x_300_master_generate_messages_cpp)
-add_dependencies(${PROJECT_NAME}_listener_test x_300-master_generate_messages_cpp)
+add_dependencies(${PROJECT_NAME}_user_input P1-B337_generate_messages_cpp)
+add_dependencies(${PROJECT_NAME}_master P1-B337_generate_messages_cpp)
+add_dependencies(${PROJECT_NAME}_listener_test P1-B337_generate_messages_cpp)
 
 ## Declare a C++ executable
 ## With catkin_make all packages are built within a single CMake context
