@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <std_msgs/Bool.h>
-#include <P1-B337/coord.h>
+#include <x_300_master/coord.h>
 #include <std_msgs/Float32.h>
 #include <std_msgs/Bool.h>
 
@@ -144,7 +144,7 @@ int main(int argc, char *argv[]) //main function
     ros::init(argc, argv, "user_input"); //initializing ros
     ros::NodeHandle nh1; //creating a nodehandle for the node.
 
-    ros::Publisher user_input_pub = nh1.advertise<(P1-B337)::coord>("user_input", 1); //creating a publisher for the user_input to publish it later
+    ros::Publisher user_input_pub = nh1.advertise<(x_300_master)::coord>("user_input", 1); //creating a publisher for the user_input to publish it later
   
     roomType room; //creating a variable of type roomType
     room = insertRoom(); //asking the user for the dimensions of the room and the number of exhibits

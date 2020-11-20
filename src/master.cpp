@@ -2,7 +2,7 @@
 #include <move_base_msgs/MoveBaseAction.h>
 #include <actionlib/client/simple_action_client.h>
 #include <std_msgs/Bool.h>
-#include <P1-B337/coord.h>
+#include <x_300_master/coord.h>
 #include <std_msgs/Float32.h>
 
 std_msgs::Bool base_state;
@@ -11,7 +11,7 @@ typedef actionlib::SimpleActionClient<move_base_msgs::MoveBaseAction> MoveBaseCl
 double coordx;
 double coordy;
 
-void move_to_coord(const (P1-B337)::coord::ConstPtr& msg) //Prints messeges containing the received coordinates
+void move_to_coord(const (x_300_master)::coord::ConstPtr& msg) //Prints messeges containing the received coordinates
 {
   ROS_INFO(("x-coordinate received: %f", msg.x));
   ROS_INFO(("y-coordinate received: %f", msg.y));

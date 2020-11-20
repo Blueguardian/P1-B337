@@ -3,7 +3,7 @@
 #include <iostream>
 #include <stdlib.h>
 #include <time.h>
-#include <P1-B337/coord.h>
+#include <x_300_master/coord.h>
 #include <std_msgs/Float32.h>
 
 double xcoord;
@@ -11,7 +11,7 @@ double ycoord;
 
 //No explanation needed here, since this is only for testing and may be omitted when testing turns over to master.cpp
 
-void coordCallback(const (P1-B337)::coord::ConstPtr& msg)
+void coordCallback(const (x_300_master)::coord::ConstPtr& msg)
 {
    ROS_INFO(("x-coord received: %f", msg->coordx));
    ROS_INFO(("y-coord received: %f", msg->coordy));
