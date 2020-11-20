@@ -84,7 +84,6 @@ find_package(catkin REQUIRED COMPONENTS
  generate_messages(
       DEPENDENCIES
       std_msgs
-      action_lib_msgs # Or other packages containing msgs
  )
 
 ################################################
