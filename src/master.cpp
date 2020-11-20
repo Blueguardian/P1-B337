@@ -2,8 +2,12 @@
 #include <move_base_msgs/MoveBaseAction.h>
 #include <actionlib/client/simple_action_client.h>
 #include <std_msgs/Bool.h>
+#include <std_msgs/Float32.h>
+
+#include "P1-B337/coord.h"
 
 std_msgs::Bool base_state;
+
 typedef actionlib::SimpleActionClient<move_base_msgs::MoveBaseAction> MoveBaseClient;
 x_300_master::coord coordinateSet; //Global variable
 

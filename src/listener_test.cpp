@@ -3,6 +3,9 @@
 #include <iostream>
 #include <stdlib.h>
 #include <time.h>
+#include <std_msgs/Float32.h>
+
+//#include <P1-B337/msg/coord.msg>
 
 x_300_master::coord coordinateSet;
 
