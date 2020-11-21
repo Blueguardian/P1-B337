@@ -3,6 +3,8 @@
 #include <iostream>
 #include <stdlib.h>
 #include <time.h>
+#include <std_msgs/Bool.h>
+#include <x_300_/coord.h>
 #include <std_msgs/Float32.h>
 #include <std_msgs/Bool.h>
 
@@ -79,14 +81,19 @@ double euclidianDist(double x1, double y1, double refx, double refy) //Distance 
 
 void insertCoord(double (*array)[2], double room_length, double room_width, int numexhi) //User input function for the coordinates for each exhibit.
 {
+    //The function tells the user the size of the room and takes the number of exhibits
+    //and then asks the user to input the coordinates for each exhibit and checks if the coordinat is
+    //within range of the room. This function assumes that the robot is in the middle of the room.
+
+    //beginning of function
     double x, y;
     std::cout << "The selected room is " << room_length << " meters long and " << room_width << " meters wide.";
-    for(int i=0; i<numexhi;i++)
+    for(int i=0; i<numexhi;i++) //for each exhibit
     {
         std::cout << "Please input the length of the x-coordinate in meters for the " << i << "th exhibit:";
         std::cin >> x;
         array[i][0] = x;
-        while(x < -1*(room_length/2) && x > room_length/2)
+        while(x < -1*(room_length/2) && x > room_length/2) //validation check
         {
             std::cout << "Incorrect value, please try again \n Length of x-coordinate in meters for the " << i << "th exhibit:";
             std::cin >> x;
@@ -95,7 +102,7 @@ void insertCoord(double (*array)[2], double room_length, double room_width, int 
         std::cout << "Please input the length of the y-coordinate in meters for the " << i << "th exhibit:";
         std::cin >> y;
         array[i][1] = y;
-        while(y < -1*(room_width/2) && y > room_width/2)
+        while(y < -1*(room_width/2) && y > room_width/2) //validation check
         {
             std::cout << "Incorrect value, please try again \n Length of y-coordinate in meters for the " << i << "th exhibit:";
             std::cin >> y;
@@ -104,16 +111,27 @@ void insertCoord(double (*array)[2], double room_length, double room_width, int 
     }
 }
 
-void sortCoord(double (*array)[2], int startpos, int itera, double refx, double refy)
+void sortCoord(double (*array)[2], int startpos, int itera, double refx, double refy) //sorting function for the array from a point of reference
 {
+    //The function takes an array, a starting position, a number of iterations, since it ensures that the array does not get too big,
+    //and takes a set of coordinates for the point of reference, it then compares the array's coordinatesets by calling the euclidianDist() function
+    //to compare them by their euclidian distance. It then switches the sets if the former set is smaller than the latter.
+
+    //beginning of function
+
     double temp1;
     double temp2;
-    for(int i = startpos; i<itera; i++)
+    for(int i = startpos; i<itera; i++) //iterator for the first coordinateset
     {
-        for(int j = i+1; j<itera; j++)
+        for(int j = i+1; j<itera; j++) //iterator for the second coordinateset
         {
+<<<<<<< HEAD
             if((euclidianDist(array[i][0], array[i][1], refx, refy) > (euclidianDist(array[j][0], array[j][1], refx, refy))))
+=======
+            if((euclidianDist(array[i][0], array[i][1], refx, refy) > (euclidianDist(array[j][0], array[j][1], refx, refy)))) //comparison by euclidian distance
+>>>>>>> 32342dbc948048fbf7cab3ec0c60c65c291e7ccf
             {
+                //switches the places of the coordinateset if it's smaller.
                 temp1 = array[i][0];
                 temp2 = array[i][0];
                 array[i][0] = array[j][0];
@@ -125,33 +143,45 @@ void sortCoord(double (*array)[2], int startpos, int itera, double refx, double 
     }
 } 
 
-int main(int argc, char *argv[])
+int main(int argc, char *argv[]) //main function
 {
-    ros::init(argc, argv, "user_input");
-    ros::NodeHandle nh1;
+    ros::init(argc, argv, "user_input"); //initializing ros
+    ros::NodeHandle nh1; //creating a nodehandle for the node.
 
-    ros::Publisher user_input_pub = nh1.advertise<x_300_master::coord>("user_input", 1);
+    ros::Publisher user_input_pub = nh1.advertise<(P1-B337)::coord>("user_input", 1); //creating a publisher for the user_input to publish it later
   
+<<<<<<< HEAD
     roomType room;
     room = insertRoom();
     double coordarray[room.num_exhibits][2];
     insertCoord(coordarray, room.room_length, room.room_width, room.num_exhibits);
     ros::Rate loop(10);
+=======
+    roomType room; //creating a variable of type roomType
+    room = insertRoom(); //asking the user for the dimensions of the room and the number of exhibits
+    double coordarray[room.num_exhibits][2]; //defining an array of size  [room.num_exhibits][2] because it only moves in a 2 dimensional manner
+    insertCoord(coordarray, room.room_length, room.room_width, room.num_exhibits); //asks the user to input coordinates for each exhibit
+    ros::Rate loop(10); //creating a loop rate for pauses (10 milliseconds)
+>>>>>>> 32342dbc948048fbf7cab3ec0c60c65c291e7ccf
 
-    for(int i = 0; i < room.num_exhibits; i++)
+    for(int i = 0; i < room.num_exhibits; i++) //printing the unsorted array for testing purposes
     {
             std::cout << "Unsorted coordset: [" << coordarray[i][0] << ", " << coordarray[i][1] << "] \n";
     }
 
-    sortCoord(coordarray, 0, room.num_exhibits, 0, 0);
+    sortCoord(coordarray, 0, room.num_exhibits, 0, 0); //sorts the array the first time
 
-    for(int i = 0; i < room.num_exhibits; i++)
+    for(int i = 0; i < room.num_exhibits; i++) //printing the sorted array for testing purposes
     {
             std::cout << "Sorted coordset: [" << coordarray[i][0] << ", " << coordarray[i][1] << "] \n";
     }
-    while(ros::ok())
+    while(ros::ok()) //Starting the ros loop
     {
+<<<<<<< HEAD
         ros::Subscriber base_state = nh1.subscribe("base_state", 5, base_state_get);
+=======
+        ros::Subscriber base_state = nh1.subscribe("base_state", 5, base_state_get); //Creating a subscriber to get the current state of the move_base //Needs to be looked over
+>>>>>>> 32342dbc948048fbf7cab3ec0c60c65c291e7ccf
         
 //        double x_begincoord = coordarray[0][0];
 //        double y_begincoord = coordarray[0][1];
@@ -160,39 +190,47 @@ int main(int argc, char *argv[])
 //        coord.coordx = x_begincoord;
 //        coord.coordy = y_begincoord;
 
-        double x_coord = coordarray[0][0];
+        double x_coord = coordarray[0][0]; //assigning the first set of coordinates to variables
         double y_coord = coordarray[0][1];
 
+<<<<<<< HEAD
         user_input_pub.coordx = x_coord;
+=======
+        user_input_pub.coordx = x_coord; //assigning the variables to the msg //Needs work
+>>>>>>> 32342dbc948048fbf7cab3ec0c60c65c291e7ccf
         user_input_pub.coordy = y_coord;
 
-        user_input_pub.publish(coord);
-        int i = 1;
+        user_input_pub.publish(coord); //Publish the first set of coordinates
+        int iter = 1; //create an iterator for the number of times the array needs to be sorted
 
-        while(i != room.num_exhibits)
+        while(iter != room.num_exhibits) //While loop to keep looping until there are no more exhibits
         {   
 
+<<<<<<< HEAD
             while(base_state == 0)
+=======
+            while(base_state == 0) //While loop that only runs when the robot is finished with it's current task //Needs work
+>>>>>>> 32342dbc948048fbf7cab3ec0c60c65c291e7ccf
                 {
 
-                    sortCoord(coordarray, i, room.num_exhibits, x_coord, y_coord);
-                    double x_coord = coordarray[i][0];
+                    sortCoord(coordarray, i, room.num_exhibits, x_coord, y_coord); //Sorting the coordinate array again until all points have been processed
+                    double x_coord = coordarray[i][0]; //Assigning the coordinates to variables
                     double y_coord = coordarray[i][1];
 
-                    coord.coordx = x_coord;
+                    coord.coordx = x_coord; //assigning the coordinates to the messege.
                     coord.coordy = y_coord;
-                    i++;
+                    i++; //increment the iterator to let the program know, that the coordinateset has been processed and needs no further processing
 
-                    user_input_pub.publish(coord);
+                    user_input_pub.publish(coord); //Publish the next set of coordinates.
 
-                    loop.sleep();
+                    loop.sleep(); //Sleep for 10 milliseconds before trying again
 
-                    ros::spinOnce();
+                    ros::spinOnce(); //A little unclear on the function of this
                 }
-            }
+        }
 
 
     }
 
-    return 0;
+    return 0; //Program ran succesfully
 }

@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0.2)
-project(x_300_master)
+project(P1-B337)
 
 
 ## Compile as C++11, supported in ROS Kinetic and newer
@@ -13,15 +13,12 @@ find_package(catkin REQUIRED COMPONENTS
  rospy
  std_msgs
  turtlesim
-
  tf
  geometry_msgs
  genmsg
  move_base_msgs
  actionlib
  image_transport
- move_base_msgs
- actionlib
  pcl_ros
  sensor_msgs
  std_srvs
@@ -84,7 +81,7 @@ find_package(catkin REQUIRED COMPONENTS
 ## Generate added messages and services with any dependencies listed here
  generate_messages(
       DEPENDENCIES
-      std_msgs  # Or other packages containing msgs
+      std_msgs
  )
 
 ################################################
@@ -143,7 +140,9 @@ ${catkin_INCLUDE_DIRS}
 ## Add cmake target dependencies of the library
 ## as an example, code may need to be generated before libraries
 ## either from message generation or dynamic reconfigure
-# add_dependencies(${PROJECT_NAME} ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+add_dependencies(${PROJECT_NAME}_user_input P1-B337_generate_messages_cpp)
+add_dependencies(${PROJECT_NAME}_master P1-B337_generate_messages_cpp)
+add_dependencies(${PROJECT_NAME}_listener_test P1-B337_generate_messages_cpp)
 
 ## Declare a C++ executable
 ## With catkin_make all packages are built within a single CMake context
@@ -178,7 +177,11 @@ target_link_libraries(${PROJECT_NAME}_master
    ${catkin_LIBRARIES}
 )
 target_link_libraries(${PROJECT_NAME}_listener_test
+<<<<<<< HEAD
 ${catkin_LIBRARIES}
+=======
+   ${catkin_LIBRARIES}
+>>>>>>> 32342dbc948048fbf7cab3ec0c60c65c291e7ccf
 )
 #############
 ## Install ##
