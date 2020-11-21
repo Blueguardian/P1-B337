@@ -74,7 +74,7 @@ double euclidianDist(double x1, double y1, double refx, double refy) //Distance 
 
     double refdist = pow(refx, 2)+pow(refy, 2);
     double dist = pow(x1, 2)+pow(y1, 2);
-    dist = sqrt(refdist-dist);
+    dist = sqrt(dist-refdist);
     return dist;
 }
 

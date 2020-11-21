@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0.2)
-project(P1-B337)
+project(p1-b337)
 
 
 ## Compile as C++11, supported in ROS Kinetic and newer
@@ -16,7 +16,7 @@ find_package(catkin REQUIRED COMPONENTS
  tf
  geometry_msgs
  genmsg
- message_generation
+ #message_generation
  move_base_msgs
  actionlib
  image_transport
@@ -79,10 +79,10 @@ find_package(catkin REQUIRED COMPONENTS
 # )
 
 ## Generate added messages and services with any dependencies listed here
- generate_messages(
-      DEPENDENCIES
-      std_msgs
- )
+ #generate_messages(
+ #     DEPENDENCIES
+ #     std_msgs
+ #)
 
 ################################################
 ## Declare ROS dynamic reconfigure parameters ##

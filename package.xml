@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <package format="2">
 
-  <name>P1-B337</name>
+  <name>p1-b337</name>
   <version>0.0.0</version>
-  <description>The P1-B337 package</description>
+  <description>The p1-b337 package</description>
 
 
   <!-- One maintainer tag required, multiple allowed, one person per tag -->
@@ -59,7 +59,7 @@
   <!-- Use doc_depend for packages you need only for building documentation: -->
   <!--   <doc_depend>doxygen</doc_depend> -->
     <buildtool_depend>catkin</buildtool_depend>
-    <build_depend>message_generation</build_depend>  
+   <!--- <build_depend>message_generation</build_depend>  -->
     <exec_depend>message_runtime</exec_depend>         
 
 
