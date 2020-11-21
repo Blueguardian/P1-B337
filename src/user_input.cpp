@@ -4,7 +4,6 @@
 #include <stdlib.h>
 #include <time.h>
 #include <std_msgs/Bool.h>
-#include <x_300_/coord.h>
 #include <std_msgs/Float32.h>
 #include <std_msgs/Bool.h>
 
@@ -125,11 +124,7 @@ void sortCoord(double (*array)[2], int startpos, int itera, double refx, double 
     {
         for(int j = i+1; j<itera; j++) //iterator for the second coordinateset
         {
-<<<<<<< HEAD
             if((euclidianDist(array[i][0], array[i][1], refx, refy) > (euclidianDist(array[j][0], array[j][1], refx, refy))))
-=======
-            if((euclidianDist(array[i][0], array[i][1], refx, refy) > (euclidianDist(array[j][0], array[j][1], refx, refy)))) //comparison by euclidian distance
->>>>>>> 32342dbc948048fbf7cab3ec0c60c65c291e7ccf
             {
                 //switches the places of the coordinateset if it's smaller.
                 temp1 = array[i][0];
@@ -150,19 +145,11 @@ int main(int argc, char *argv[]) //main function
 
     ros::Publisher user_input_pub = nh1.advertise<(P1-B337)::coord>("user_input", 1); //creating a publisher for the user_input to publish it later
   
-<<<<<<< HEAD
-    roomType room;
-    room = insertRoom();
-    double coordarray[room.num_exhibits][2];
-    insertCoord(coordarray, room.room_length, room.room_width, room.num_exhibits);
-    ros::Rate loop(10);
-=======
     roomType room; //creating a variable of type roomType
     room = insertRoom(); //asking the user for the dimensions of the room and the number of exhibits
     double coordarray[room.num_exhibits][2]; //defining an array of size  [room.num_exhibits][2] because it only moves in a 2 dimensional manner
     insertCoord(coordarray, room.room_length, room.room_width, room.num_exhibits); //asks the user to input coordinates for each exhibit
     ros::Rate loop(10); //creating a loop rate for pauses (10 milliseconds)
->>>>>>> 32342dbc948048fbf7cab3ec0c60c65c291e7ccf
 
     for(int i = 0; i < room.num_exhibits; i++) //printing the unsorted array for testing purposes
     {
@@ -177,11 +164,7 @@ int main(int argc, char *argv[]) //main function
     }
     while(ros::ok()) //Starting the ros loop
     {
-<<<<<<< HEAD
-        ros::Subscriber base_state = nh1.subscribe("base_state", 5, base_state_get);
-=======
         ros::Subscriber base_state = nh1.subscribe("base_state", 5, base_state_get); //Creating a subscriber to get the current state of the move_base //Needs to be looked over
->>>>>>> 32342dbc948048fbf7cab3ec0c60c65c291e7ccf
         
 //        double x_begincoord = coordarray[0][0];
 //        double y_begincoord = coordarray[0][1];
@@ -193,11 +176,7 @@ int main(int argc, char *argv[]) //main function
         double x_coord = coordarray[0][0]; //assigning the first set of coordinates to variables
         double y_coord = coordarray[0][1];
 
-<<<<<<< HEAD
-        user_input_pub.coordx = x_coord;
-=======
         user_input_pub.coordx = x_coord; //assigning the variables to the msg //Needs work
->>>>>>> 32342dbc948048fbf7cab3ec0c60c65c291e7ccf
         user_input_pub.coordy = y_coord;
 
         user_input_pub.publish(coord); //Publish the first set of coordinates
@@ -206,11 +185,7 @@ int main(int argc, char *argv[]) //main function
         while(iter != room.num_exhibits) //While loop to keep looping until there are no more exhibits
         {   
 
-<<<<<<< HEAD
-            while(base_state == 0)
-=======
             while(base_state == 0) //While loop that only runs when the robot is finished with it's current task //Needs work
->>>>>>> 32342dbc948048fbf7cab3ec0c60c65c291e7ccf
                 {
 
                     sortCoord(coordarray, i, room.num_exhibits, x_coord, y_coord); //Sorting the coordinate array again until all points have been processed

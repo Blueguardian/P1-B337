@@ -2,7 +2,6 @@
 #include <move_base_msgs/MoveBaseAction.h>
 #include <actionlib/client/simple_action_client.h>
 #include <std_msgs/Bool.h>
-#include <P1-B337/coord.h>
 #include <std_msgs/Float32.h>
 
 std_msgs::Bool base_state;
