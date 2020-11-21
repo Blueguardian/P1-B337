@@ -7,6 +7,7 @@
 #include <std_msgs/Int32.h>
 
 
+
 bool base_state; //Global variable to store data from the master function call.
 
 struct roomType         //Creating a new datatype called roomType
@@ -124,7 +125,7 @@ void sortCoord(double (*array)[2], int startpos, int itera, double refx, double 
     {
         for(int j = i+1; j<itera; j++) //iterator for the second coordinateset
         {
-            if((euclidianDist(array[i][0], array[i][1], refx, refy) > (euclidianDist(array[j][0], array[j][1], refx, refy)))) //comparison by euclidian distance
+            if((euclidianDist(array[i][0], array[i][1], refx, refy) > (euclidianDist(array[j][0], array[j][1], refx, refy))))
             {
                 //switches the places of the coordinateset if it's smaller.
                 temp1 = array[i][0];

@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.0.2)
 project(p1-b337)
 
 
+
 ## Compile as C++11, supported in ROS Kinetic and newer
 add_compile_options(-std=c++11)
 
@@ -176,7 +177,8 @@ target_link_libraries(${PROJECT_NAME}_user_input
 #  ${catkin_LIBRARIES}
 #)
 target_link_libraries(${PROJECT_NAME}_listener_test
-   ${catkin_LIBRARIES}
+${catkin_LIBRARIES}
+
 )
 #############
 ## Install ##
@@ -194,7 +196,6 @@ target_link_libraries(${PROJECT_NAME}_listener_test
 
 ## Mark executables for installation
 ## See http://docs.ros.org/melodic/api/catkin/html/howto/format1/building_executables.html
-
 install(TARGETS
  ${PROJECT_NAME}_user_input
  ##${PROJECT_NAME}_master
