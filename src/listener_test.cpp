@@ -13,7 +13,7 @@ double ycoord;
 void coordCallback1(const std_msgs::Int32::ConstPtr& msg)
 {
    xcoord = (double)msg->data;
-   xcoord = (xcoord/1000)
+   xcoord = (xcoord/1000);
    std::cout<<"x-coord received:"<<xcoord<<std::endl;
 
 }
@@ -21,7 +21,7 @@ void coordCallback1(const std_msgs::Int32::ConstPtr& msg)
 void coordCallback2(const std_msgs::Int32::ConstPtr& msg)
 {
    ycoord = (double)msg->data;
-   ycoord = (ycoord/1000)
+   ycoord = (ycoord/1000);
    std::cout<<"y-coord received:"<<ycoord<<std::endl;
    
 }

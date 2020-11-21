@@ -8,7 +8,7 @@
 #include <std_msgs/Bool.h>
 #include <std_msgs/Int32.h>
 
-std_msgs::Bool base_state;
+bool base_state;
 
 typedef actionlib::SimpleActionClient<move_base_msgs::MoveBaseAction> MoveBaseClient;
 double coordx;
@@ -16,16 +16,14 @@ double coordy;
 
 void move_to_coord1(const std_msgs::Int32::ConstPtr& msg) //Prints messeges containing the received coordinates
 {
-   xcoord = (double)msg->data;
-   xcoord = (xcoord/1000)
-   std::cout<<"x-coord received:"<<xcoord<<std::endl;
+   coordx = (double)msg->data/1000;
+   std::cout<<"x-coord received:"<<coordx<<std::endl;
   }
 
   void move_to_coord2(const std_msgs::Int32::ConstPtr& msg) //Prints messeges containing the received coordinates
 {
-   ycoord = (double)msg->data;
-   ycoord = (ycoord/1000)
-   std::cout<<"y-coord received:"<<ycoord<<std::endl;
+   coordy = (double)msg->data;
+   std::cout<<"y-coord received:"<<coordy<<std::endl;
   }
 
 int main(int argc, char** argv){
@@ -53,19 +51,21 @@ std::cout<<"x-coordinate stored:"<<coordx<<std::endl;  //Printing out the messeg
 std::cout<<"y-coordinate stored:"<<coordy<<std::endl;
 
 ros::Rate loop(10);
-
+std_msgs::Bool msg_b;
 while(ros::ok()) //while(!= ros::Shutdown(); or the user has Ctrl+C out of the program.)
 {
   ros::Publisher base_state_pub = nh2.advertise<std_msgs::Bool>("base_state", 5); //Creating a publisher for publishing the state of the MoveBaseClient
   if(ac.getState() != actionlib::SimpleClientGoalState::ACTIVE) //As long as the current goal is active, don't send new coordinates from user_input
   {
     base_state = true; 
-    base_state_pub.Publish(base_state, 1) //Publish base_state
+    msg_b.data = base_state;
+    base_state_pub.publish(msg_b, 1) //Publish base_state
   }
   else
   {
     base_state = false;
-    base_state_pub.Publish(base_state, 1) //Publish base_state
+    msg_b.data = base_state;
+    base_state_pub.publish(msg_b, 1) //Publish base_state
   }
   
 
