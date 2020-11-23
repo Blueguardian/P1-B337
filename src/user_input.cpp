@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <std_msgs/Bool.h>
-#include <std_msgs/Int32.h>
+#include <std_msgs/Float32.h>
 
 
 
@@ -144,8 +144,8 @@ int main(int argc, char *argv[]) //main function
     ros::init(argc, argv, "user_input"); //initializing ros
     ros::NodeHandle nh1; //creating a nodehandle for the node.
 
-    ros::Publisher publish_x = nh1.advertise<std_msgs::Int32>("user_input1", 1); //creating a publisher for the user_input to publish it later
-    ros::Publisher publish_y = nh1.advertise<std_msgs::Int32>("user_input2", 1); //creating a publisher for the user_input to publish it later
+    ros::Publisher publish_x = nh1.advertise<std_msgs::Float32>("user_input1", 1); //creating a publisher for the user_input to publish it later
+    ros::Publisher publish_y = nh1.advertise<std_msgs::Float32>("user_input2", 1); //creating a publisher for the user_input to publish it later
 
 
     roomType room; //creating a variable of type roomType
@@ -179,14 +179,11 @@ int main(int argc, char *argv[]) //main function
         double x_coord = coordarray[0][0]; //assigning the first set of coordinates to variables
         double y_coord = coordarray[0][1];
 
-        int coordx_int = (int) x_coord*1000;
-        int coordy_int = (int) x_coord*1000;
+        std_msgs::Float32 msg_x;
+        std_msgs::Float32 msg_y;
 
-        std_msgs::Int32 msg_x;
-        std_msgs::Int32 msg_y;
-
-        msg_x.data = coordx_int; 
-        msg_y.data = coordy_int;
+        msg_x.data = y_coord; 
+        msg_y.data = x_coord;
 
         publish_x.publish(msg_x); //Publish the first coordinate
         publish_y.publish(msg_y); //Publish the second coordinate
@@ -205,8 +202,8 @@ int main(int argc, char *argv[]) //main function
                     int coordx_int = (int) x_coord*1000;
                     int coordy_int = (int) y_coord*1000;
 
-                    std_msgs::Int32 msg_x;
-                    std_msgs::Int32 msg_y;
+                    std_msgs::Float32 msg_x;
+                    std_msgs::Float32 msg_y;
 
                     msg_x.data = coordx_int; //assigning the coordinates to the messege.
                     msg_y.data = coordy_int;

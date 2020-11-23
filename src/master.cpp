@@ -6,7 +6,7 @@
 #include <move_base_msgs/MoveBaseAction.h>
 #include <actionlib/client/simple_action_client.h>
 #include <std_msgs/Bool.h>
-#include <std_msgs/Int32.h>
+#include <std_msgs/Float32.h>
 
 bool base_state;
 
@@ -14,15 +14,15 @@ typedef actionlib::SimpleActionClient<move_base_msgs::MoveBaseAction> MoveBaseCl
 double coordx;
 double coordy;
 
-void move_to_coord1(const std_msgs::Int32::ConstPtr& msg) //Prints messeges containing the received coordinates
+void move_to_coord1(const std_msgs::Float32::ConstPtr& msg) //Prints messeges containing the received coordinates
 {
-   coordx = (double)msg->data/1000;
+   coordx = msg->data;
    std::cout<<"x-coord received:"<<coordx<<std::endl;
   }
 
-  void move_to_coord2(const std_msgs::Int32::ConstPtr& msg) //Prints messeges containing the received coordinates
+  void move_to_coord2(const std_msgs::Float32::ConstPtr& msg) //Prints messeges containing the received coordinates
 {
-   coordy = (double)msg->data;
+   coordy = msg->data;
    std::cout<<"y-coord received:"<<coordy<<std::endl;
   }
 
