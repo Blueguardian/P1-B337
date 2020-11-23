@@ -195,7 +195,7 @@ int main(int argc, char *argv[]) //main function
         while(iter != room.num_exhibits) //While loop to keep looping until there are no more exhibits
         {   
 
-            while(base_state == 0) //While loop that only runs when the robot is finished with it's current task //Needs work
+            while(base_state == false) //While loop that only runs when the robot is finished with it's current task //Needs work
                 {
 
                     sortCoord(coordarray, iter, room.num_exhibits, x_coord, y_coord); //Sorting the coordinate array again until all points have been processed
