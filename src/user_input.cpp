@@ -93,7 +93,7 @@ void insertCoord(double (*array)[2], double room_length, double room_width, int 
         std::cout << "Please input the length of the x-coordinate in meters for the " << i << "th exhibit:";
         std::cin >> x;
         array[i][0] = x;
-        while(x > -1*(room_length/2) && x < room_length/2) //validation check
+        while(x < -1*(room_length/2) && x > room_length/2) //validation check
         {
             std::cout << "Incorrect value, please try again \n Length of x-coordinate in meters for the " << i << "th exhibit:";
             std::cin >> x;
@@ -102,7 +102,7 @@ void insertCoord(double (*array)[2], double room_length, double room_width, int 
         std::cout << "Please input the length of the y-coordinate in meters for the " << i << "th exhibit:";
         std::cin >> y;
         array[i][1] = y;
-        while(y > -1*(room_width/2) && y < room_width/2) //validation check
+        while(y < -1*(room_width/2) && y > room_width/2) //validation check
         {
             std::cout << "Incorrect value, please try again \n Length of y-coordinate in meters for the " << i << "th exhibit:";
             std::cin >> y;
@@ -150,8 +150,10 @@ int main(int argc, char *argv[]) //main function
 
     roomType room; //creating a variable of type roomType
     room = insertRoom(); //asking the user for the dimensions of the room and the number of exhibits
+
     double coordarray[room.num_exhibits][2]; //defining an array of size  [room.num_exhibits][2] because it only moves in a 2 dimensional manner
     insertCoord(coordarray, room.room_length, room.room_width, room.num_exhibits); //asks the user to input coordinates for each exhibit
+
     ros::Rate loop(50); //creating a loop rate for pauses (10 milliseconds)
 
     for(int i = 0; i < room.num_exhibits; i++) //printing the unsorted array for testing purposes
@@ -168,13 +170,6 @@ int main(int argc, char *argv[]) //main function
     while(ros::ok()) //Starting the ros loop
     {
         ros::Subscriber base_state = nh1.subscribe("base_state", 5, base_state_get); //Creating a subscriber to get the current state of the move_base //Needs to be looked over
-        
-//        double x_begincoord = coordarray[0][0];
-//        double y_begincoord = coordarray[0][1];
-
-
-//        coord.coordx = x_begincoord;
-//        coord.coordy = y_begincoord;
 
         double x_coord = coordarray[0][0]; //assigning the first set of coordinates to variables
         double y_coord = coordarray[0][1];
@@ -192,8 +187,8 @@ int main(int argc, char *argv[]) //main function
         while(iter != room.num_exhibits) //While loop to keep looping until there are no more exhibits
         {   
 
-          //  while(base_state == false) //While loop that only runs when the robot is finished with it's current task //Needs work
-           //     {
+           while(base_state == false) //While loop that only runs when the robot is finished with it's current task //Needs work
+               {
 
                     sortCoord(coordarray, iter, room.num_exhibits, x_coord, y_coord); //Sorting the coordinate array again until all points have been processed
                     double x_coord = coordarray[iter][0]; //Assigning the coordinates to variables
@@ -211,14 +206,12 @@ int main(int argc, char *argv[]) //main function
 
                     loop.sleep(); //Sleep for 10 milliseconds before trying again
 
-                    ros::spinOnce(); //A little unclear on the function of this
-             //   }
-                 return 0; //Program ran succesfully
+                }    
         }
 
 
     }
 
-
+    return 0; //Program ran succesfully
 }
 
