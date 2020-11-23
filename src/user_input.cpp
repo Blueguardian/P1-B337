@@ -152,7 +152,7 @@ int main(int argc, char *argv[]) //main function
     room = insertRoom(); //asking the user for the dimensions of the room and the number of exhibits
     double coordarray[room.num_exhibits][2]; //defining an array of size  [room.num_exhibits][2] because it only moves in a 2 dimensional manner
     insertCoord(coordarray, room.room_length, room.room_width, room.num_exhibits); //asks the user to input coordinates for each exhibit
-    ros::Rate loop(10); //creating a loop rate for pauses (10 milliseconds)
+    ros::Rate loop(50); //creating a loop rate for pauses (10 milliseconds)
 
     for(int i = 0; i < room.num_exhibits; i++) //printing the unsorted array for testing purposes
     {

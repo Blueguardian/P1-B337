@@ -30,7 +30,7 @@ int main(int argc, char** argv){
   ros::init(argc, argv, "simple_navigation_goals"); //ros initialisation
   ros::NodeHandle nh2; //Testing nodehandle naming convention
 
-  move_base_msgs::MoveBaseAction ac("move_base", true); //Defining a client to send goals to the move_base server.
+  MoveBaseClient ac("move_base", true); //Defining a client to send goals to the move_base server.
 
   
   while(!ac.waitForServer(ros::Duration(5.0))){ //wait for the action server to come up
@@ -50,22 +50,24 @@ int main(int argc, char** argv){
 std::cout<<"x-coordinate stored:"<<coordx<<std::endl;  //Printing out the messege content that we copied
 std::cout<<"y-coordinate stored:"<<coordy<<std::endl;
 
+ros::Publisher base_state_pub = nh2.advertise<std_msgs::Bool>("base_state", 5); //Creating a publisher for publishing the state of the MoveBaseClient
+
 ros::Rate loop(10);
 std_msgs::Bool msg_b;
 while(ros::ok()) //while(!= ros::Shutdown(); or the user has Ctrl+C out of the program.)
 {
-  ros::Publisher base_state_pub = nh2.advertise<std_msgs::Bool>("base_state", 5); //Creating a publisher for publishing the state of the MoveBaseClient
+  
   if(ac.getState() != actionlib::SimpleClientGoalState::ACTIVE) //As long as the current goal is active, don't send new coordinates from user_input
   {
     base_state = true; 
     msg_b.data = base_state;
-    base_state_pub.publish(msg_b, 1) //Publish base_state
+    base_state_pub.publish(msg_b); //Publish base_state
   }
   else
   {
     base_state = false;
     msg_b.data = base_state;
-    base_state_pub.publish(msg_b, 1) //Publish base_state
+    base_state_pub.publish(msg_b); //Publish base_state
   }
   
 

@@ -148,7 +148,7 @@ ${catkin_INCLUDE_DIRS}
 ## The recommended prefix ensures that target names across packages don't collide
 
 add_executable(${PROJECT_NAME}_user_input src/user_input.cpp)
-#add_executable(${PROJECT_NAME}_master src/master.cpp)
+add_executable(${PROJECT_NAME}_master src/master.cpp)
 add_executable(${PROJECT_NAME}_listener_test src/listener_test.cpp)
 
 
@@ -158,7 +158,7 @@ add_executable(${PROJECT_NAME}_listener_test src/listener_test.cpp)
 ## e.g. "rosrun someones_pkg node" instead of "rosrun someones_pkg someones_pkg_node"
 
 set_target_properties(${PROJECT_NAME}_user_input PROPERTIES OUTPUT_NAME user_input PREFIX "")
-#set_target_properties(${PROJECT_NAME}_master PROPERTIES OUTPUT_NAME master PREFIX "")
+set_target_properties(${PROJECT_NAME}_master PROPERTIES OUTPUT_NAME master PREFIX "")
 set_target_properties(${PROJECT_NAME}_listener_test PROPERTIES OUTPUT_NAME listener_test PREFIX "")
 
 
@@ -173,9 +173,9 @@ set_target_properties(${PROJECT_NAME}_listener_test PROPERTIES OUTPUT_NAME liste
 target_link_libraries(${PROJECT_NAME}_user_input
    ${catkin_LIBRARIES}
 )
-#target_link_libraries(${PROJECT_NAME}_master
-#  ${catkin_LIBRARIES}
-#)
+target_link_libraries(${PROJECT_NAME}_master
+  ${catkin_LIBRARIES}
+)
 target_link_libraries(${PROJECT_NAME}_listener_test
 ${catkin_LIBRARIES}
 
@@ -198,7 +198,7 @@ ${catkin_LIBRARIES}
 ## See http://docs.ros.org/melodic/api/catkin/html/howto/format1/building_executables.html
 install(TARGETS
  ${PROJECT_NAME}_user_input
- ##${PROJECT_NAME}_master
+ ${PROJECT_NAME}_master
  ${PROJECT_NAME}_listener_test
    RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
  )
