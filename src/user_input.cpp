@@ -93,7 +93,7 @@ void insertCoord(double (*array)[2], double room_length, double room_width, int 
         std::cout << "Please input the length of the x-coordinate in meters for the " << i << "th exhibit:";
         std::cin >> x;
         array[i][0] = x;
-        while(x < -1*(room_length/2) && x > room_length/2) //validation check
+        while(x > -1*(room_length/2) && x < room_length/2) //validation check
         {
             std::cout << "Incorrect value, please try again \n Length of x-coordinate in meters for the " << i << "th exhibit:";
             std::cin >> x;
@@ -102,7 +102,7 @@ void insertCoord(double (*array)[2], double room_length, double room_width, int 
         std::cout << "Please input the length of the y-coordinate in meters for the " << i << "th exhibit:";
         std::cin >> y;
         array[i][1] = y;
-        while(y < -1*(room_width/2) && y > room_width/2) //validation check
+        while(y > -1*(room_width/2) && y < room_width/2) //validation check
         {
             std::cout << "Incorrect value, please try again \n Length of y-coordinate in meters for the " << i << "th exhibit:";
             std::cin >> y;
