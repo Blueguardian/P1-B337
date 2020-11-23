@@ -176,7 +176,22 @@ int main(int argc, char *argv[]) //main function
 //        coord.coordx = x_begincoord;
 //        coord.coordy = y_begincoord;
 
-    int iter = 1;
+        double x_coord = coordarray[0][0]; //assigning the first set of coordinates to variables
+        double y_coord = coordarray[0][1];
+
+        int coordx_int = (int) x_coord*1000;
+        int coordy_int = (int) x_coord*1000;
+
+        std_msgs::Int32 msg_x;
+        std_msgs::Int32 msg_y;
+
+        msg_x.data = coordx_int; 
+        msg_y.data = coordy_int;
+
+        publish_x.publish(msg_x); //Publish the first coordinate
+        publish_y.publish(msg_y); //Publish the second coordinate
+        int iter = 1; //create an iterator for the number of times the array needs to be sorted
+
         while(iter != room.num_exhibits) //While loop to keep looping until there are no more exhibits
         {   
 
@@ -189,6 +204,9 @@ int main(int argc, char *argv[]) //main function
 
                     int coordx_int = (int) x_coord*1000;
                     int coordy_int = (int) y_coord*1000;
+
+                    std_msgs::Int32 msg_x;
+                    std_msgs::Int32 msg_y;
 
                     msg_x.data = coordx_int; //assigning the coordinates to the messege.
                     msg_y.data = coordy_int;
