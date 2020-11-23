@@ -199,14 +199,11 @@ int main(int argc, char *argv[]) //main function
                     double x_coord = coordarray[iter][0]; //Assigning the coordinates to variables
                     double y_coord = coordarray[iter][1];
 
-                    int coordx_int = (int) x_coord*1000;
-                    int coordy_int = (int) y_coord*1000;
-
                     std_msgs::Float32 msg_x;
                     std_msgs::Float32 msg_y;
 
-                    msg_x.data = coordx_int; //assigning the coordinates to the messege.
-                    msg_y.data = coordy_int;
+                    msg_x.data = x_coord; //assigning the coordinates to the messege.
+                    msg_y.data = y_coord;
                     iter++; //increment the iterator to let the program know, that the coordinateset has been processed and needs no further processing
 
                     publish_x.publish(msg_x); //Publish the next first coordinate
@@ -216,10 +213,11 @@ int main(int argc, char *argv[]) //main function
 
                     ros::spinOnce(); //A little unclear on the function of this
              //   }
+                 return 0; //Program ran succesfully
         }
 
 
     }
 
-    return 0; //Program ran succesfully
+
 }
