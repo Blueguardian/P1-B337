@@ -129,7 +129,7 @@ void sortCoord(double (*array)[2], int startpos, int itera, double refx, double 
             {
                 //switches the places of the coordinateset if it's smaller.
                 temp1 = array[i][0];
-                temp2 = array[i][0];
+                temp2 = array[i][1];
                 array[i][0] = array[j][0];
                 array[i][1] = array[j][1];
                 array[j][0] = temp1;
