@@ -24,29 +24,58 @@ MoveBaseClient ac("move_base", true);
 void move_to_coord1(const std_msgs::Float32::ConstPtr& msgx) //Prints messeges containing the received coordinates
 {
    coordx = msgx->data;
-   std::cout<<"x-coord received:"<<coordx<<std::endl;
+   std::cout<<"x-coord received:"<<coordx<<std::endl; //For testing and errorhandling
   }
 
   void move_to_coord2(const std_msgs::Float32::ConstPtr& msgy) //Prints messeges containing the received coordinates
 {
    coordy = msgy->data;
-   std::cout<<"y-coord received:"<<coordy<<std::endl;
+   std::cout<<"y-coord received:"<<coordy<<std::endl; //For testing and errorhandling
   }
 
 void _goal_reached_cb(const actionlib::SimpleClientGoalState& state, const move_base_msgs::MoveBaseResult::ConstPtr& result)
 {
   if(state == state.SUCCEEDED)
   {
-    base_state = 0;
+    ROS_INFO("The goal has succesfully been reached!");
+    base_state = false;
   }
   else if(state == state.ACTIVE)
   {
-    base_state = 1;
+    ROS_INFO("The robot is currently en route!");
+    base_state = true;
   }
   else if(state == state.ABORTED)
   {
-    base_state = 0;
+    ROS_INFO("The goal has been aborted!");
+    base_state = false;
   }
+  else if(state == state.LOST)
+  {
+    ROS_INFO("The goal has been lost!");
+    base_state = false;
+  }
+  else if(state == state.PENDING)
+  {
+    ROS_INFO("The goal is currently pending!");
+    base_state = true;
+  }
+  else if (state == state.REJECTED)
+  {
+    ROS_INFO("The goal has been rejected!");
+    base_state = false;
+  }
+  else if(state == state.RECALLED)
+  {
+    ROS_INFO("The goal has been recalled!");
+    base_state = false;
+  }
+  else
+  {
+    ROS_INFO("Something went wrong!");
+    base_state = false;
+  }
+  
   
 }
 
@@ -91,10 +120,11 @@ int main(int argc, char** argv){
 
   MoveBaseClient ac("move_base", true); //Defining a client to send goals to the move_base server.
 
-  
+  //This needs to run for the program to succesfully contact the move_base
+  //The movebase server needs the following to start: A static map or a running gmapping node, a functioning amcl setup, to be run
  /* while(!ac.waitForServer(ros::Duration(5.0))){ //wait for the action server to come up
     ROS_INFO("Waiting for the move_base action server to come up"); //Printing a fitting messege.
-  }*/
+  } */
   ros::Subscriber user_input123 = nh2.subscribe("user_input1", 1, move_to_coord1); // Subscribes to the user_input topic and when it receives a messege it runs the callback function
   ros::Subscriber user_input321 = nh2.subscribe("user_input2", 1, move_to_coord2); // Subscribes to the user_input topic and when it receives a messege it runs the callback function
 
@@ -121,31 +151,20 @@ while(ros::ok()) //while(!= ros::Shutdown(); or the user has Ctrl+C out of the p
   ros::Publisher base_state_pub = nh2.advertise<std_msgs::Bool>("base_state", 5); //Creating a publisher for publishing the state of the MoveBaseClient
   ros::Subscriber odom = nh2.subscribe<nav_msgs::Odometry>("/odom", 10, odom_callback);
 
+
+  std_msgs::Bool state_get;
+  state_get.data = base_state;
+
+  base_state_pub.publish(state_get);
+
   send_goal(goal);
 
   ac.waitForResult();
   std_msgs::Bool msg_b;
 
-  if(ac.getState() != actionlib::SimpleClientGoalState::ACTIVE) //As long as the current goal is active, don't send new coordinates from user_input
-  {
-    base_state = true; 
-    msg_b.data = base_state;
-    base_state_pub.publish(msg_b); //Publish base_state
-  }
-  else
-  {
-    base_state = false;
-    msg_b.data = base_state;
-    base_state_pub.publish(msg_b); //Publish base_state
-  }
-
   loop.sleep(); 
   ros::spin();
 }
-//Omitted until coordinateSet is interchangeable over the subscriber.
-//ac.sendGoal(goal);
-
-
 
  if(ac.getState() == actionlib::SimpleClientGoalState::SUCCEEDED)
    ROS_INFO("Hooray, the base moved 1 meter forward");
