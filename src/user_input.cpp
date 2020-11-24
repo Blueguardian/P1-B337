@@ -5,6 +5,8 @@
 #include <time.h>
 #include <std_msgs/Bool.h>
 #include <std_msgs/Float32.h>
+#include <tf/transform_listener.h>
+#include <std_msgs/Empty.h>
 
 
 
@@ -143,6 +145,13 @@ int main(int argc, char *argv[]) //main function
 {
     ros::init(argc, argv, "user_input"); //initializing ros
     ros::NodeHandle nh1; //creating a nodehandle for the node.
+
+    ros::Publisher reset_odom = nh1.advertise<std_msgs::Empty>("move_base/commands/reset_odometry", 1);
+    std_msgs::Empty odom_res;
+
+    reset_odom.publish(odom_res);
+
+    tf::TransformListener tf_transform;
 
     ros::Publisher publish_x = nh1.advertise<std_msgs::Float32>("user_input1", 1); //creating a publisher for the user_input to publish it later
     ros::Publisher publish_y = nh1.advertise<std_msgs::Float32>("user_input2", 1); //creating a publisher for the user_input to publish it later
