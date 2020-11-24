@@ -7,6 +7,7 @@
 #include <std_msgs/Float32.h>
 #include <tf/transform_listener.h>
 #include <std_msgs/Empty.h>
+#include <math.h>
 
 
 
@@ -25,6 +26,8 @@ roomType insertRoom() //roomType function called insertRoom for user input.
     //The function then checks if the input is valid, if not then it will tell the
     //user that the input is valid, and let them try again, until the value is valid
     //then fills out each variable with the users input.
+
+    //Room dimensions should be input from the comming map.yaml file
 
     //beginning of function insertRoom()
 
@@ -63,7 +66,14 @@ void base_state_get(const std_msgs::Bool::ConstPtr& msg) //Callback function for
 
     // beginning of function
 
+if (msg->data == 1) //If the current goal has not been reached, wait.
+{
     ROS_INFO("Base processing coordinates.. Moving..");
+}
+else //If the current goal has either succeded or failed, send new coordinates
+{
+    ROS_INFO("Current job finished.. processing new goal..");
+}
     base_state = msg->data;
 }
 
@@ -75,20 +85,20 @@ double euclidianDist(double x1, double y1, double refx, double refy) //Distance 
 
     //beginning of function
 
-    double refdist = pow(refx, 2)+pow(refy, 2);
-    double dist = pow(x1, 2)+pow(y1, 2);
-    dist = sqrt(dist-refdist);
+    double refdist = pow(refx, 2)+pow(refy, 2); //Reference distance calculation
+    double dist = pow(x1, 2)+pow(y1, 2); //Input distance calculation
+    dist = sqrt(dist-refdist); //calculation of distance between reference point and input point
     return dist;
 }
 
-void insertCoord(double (*array)[2], double room_length, double room_width, int numexhi) //User input function for the coordinates for each exhibit.
+void insertCoord(double (*array)[3], double room_length, double room_width, int numexhi) //User input function for the coordinates for each exhibit.
 {
     //The function tells the user the size of the room and takes the number of exhibits
     //and then asks the user to input the coordinates for each exhibit and checks if the coordinat is
     //within range of the room. This function assumes that the robot is in the middle of the room.
 
     //beginning of function
-    double x, y;
+    double x, y, z;
     std::cout << "The selected room is " << room_length << " meters long and " << room_width << " meters wide.";
     for(int i=0; i<numexhi;i++) //for each exhibit
     {
@@ -110,10 +120,20 @@ void insertCoord(double (*array)[2], double room_length, double room_width, int 
             std::cin >> y;
             array[i][1] = y;
         }
+        std::cout << "Please input the orientation of the front of the " << i << "th exhibit:";
+        std::cin >> z;
+        array[i][2] = z;
+        while(z > 2*M_PI && z < -2*M_PI)
+        {
+            std::cout << "Incorrect value, please try again \n Orientation of the" << i << "th exhibit: ";
+            std::cin >> z;
+            array[i][2] = z;
+        }
+
     }
 }
 
-void sortCoord(double (*array)[2], int startpos, int itera, double refx, double refy) //sorting function for the array from a point of reference
+void sortCoord(double (*array)[3], int startpos, int itera, double refx, double refy) //sorting function for the array from a point of reference
 {
     //The function takes an array, a starting position, a number of iterations, since it ensures that the array does not get too big,
     //and takes a set of coordinates for the point of reference, it then compares the array's coordinatesets by calling the euclidianDist() function
@@ -160,21 +180,21 @@ int main(int argc, char *argv[]) //main function
     roomType room; //creating a variable of type roomType
     room = insertRoom(); //asking the user for the dimensions of the room and the number of exhibits
 
-    double coordarray[room.num_exhibits][2]; //defining an array of size  [room.num_exhibits][2] because it only moves in a 2 dimensional manner
+    double coordarray[room.num_exhibits][3]; //defining an array of size  [room.num_exhibits][2] because it only moves in a 2 dimensional manner
     insertCoord(coordarray, room.room_length, room.room_width, room.num_exhibits); //asks the user to input coordinates for each exhibit
 
     ros::Rate loop(50); //creating a loop rate for pauses (10 milliseconds)
 
     for(int i = 0; i < room.num_exhibits; i++) //printing the unsorted array for testing purposes
     {
-            std::cout << "Unsorted coordset: [" << coordarray[i][0] << ", " << coordarray[i][1] << "] \n";
+            std::cout << "Unsorted coordset: [" << coordarray[i][0] << ", " << coordarray[i][1] << ", " << coordarray[i][2] << "] \n";
     }
 
     sortCoord(coordarray, 0, room.num_exhibits, 0, 0); //sorts the array the first time
 
     for(int i = 0; i < room.num_exhibits; i++) //printing the sorted array for testing purposes
     {
-            std::cout << "Sorted coordset: [" << coordarray[i][0] << ", " << coordarray[i][1] << "] \n";
+            std::cout << "Sorted coordset: [" << coordarray[i][0] << ", " << coordarray[i][1] << ", " << coordarray[i][2] << "] \n";
     }
     while(ros::ok()) //Starting the ros loop
     {
@@ -182,6 +202,11 @@ int main(int argc, char *argv[]) //main function
 
         double x_coord = coordarray[0][0]; //assigning the first set of coordinates to variables
         double y_coord = coordarray[0][1];
+
+        //This will later be used to take pictures from the sensor
+        double z_coord; //Unused for now
+
+        
 
         std_msgs::Float32 msg_x;
         std_msgs::Float32 msg_y;
@@ -202,6 +227,7 @@ int main(int argc, char *argv[]) //main function
                     sortCoord(coordarray, iter, room.num_exhibits, x_coord, y_coord); //Sorting the coordinate array again until all points have been processed
                     double x_coord = coordarray[iter][0]; //Assigning the coordinates to variables
                     double y_coord = coordarray[iter][1];
+                    double z_coord;
 
                     std_msgs::Float32 msg_x;
                     std_msgs::Float32 msg_y;
