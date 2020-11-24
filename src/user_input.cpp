@@ -120,10 +120,10 @@ void insertCoord(double (*array)[3], double room_length, double room_width, int 
             std::cin >> y;
             array[i][1] = y;
         }
-        std::cout << "Please input the orientation of the front of the " << i << "th exhibit:";
+        std::cout << "Please input the orientation of the front of the " << i << "th exhibit in degrees:";
         std::cin >> z;
         array[i][2] = z;
-        while(z > 2*M_PI && z < -2*M_PI)
+        while(z > 360 && z < 0)
         {
             std::cout << "Incorrect value, please try again \n Orientation of the" << i << "th exhibit: ";
             std::cin >> z;
@@ -175,6 +175,7 @@ int main(int argc, char *argv[]) //main function
 
     ros::Publisher publish_x = nh1.advertise<std_msgs::Float32>("user_input1", 1); //creating a publisher for the user_input to publish it later
     ros::Publisher publish_y = nh1.advertise<std_msgs::Float32>("user_input2", 1); //creating a publisher for the user_input to publish it later
+    ros::Publisher publish_z = nh1.advertise<std_msgs::Float32>("user_input3", 1); //creating a publisher for the user_input to publish it later
 
 
     roomType room; //creating a variable of type roomType
@@ -184,6 +185,14 @@ int main(int argc, char *argv[]) //main function
     insertCoord(coordarray, room.room_length, room.room_width, room.num_exhibits); //asks the user to input coordinates for each exhibit
 
     ros::Rate loop(50); //creating a loop rate for pauses (10 milliseconds)
+
+    for(int i = 0; i < room.num_exhibits; i++) //Converting degress to radians in all elements
+    {
+        double temp;
+        temp = coordarray[i][2];
+        temp = (M_PI/180)*temp;
+        coordarray[i][3] = temp;
+    }
 
     for(int i = 0; i < room.num_exhibits; i++) //printing the unsorted array for testing purposes
     {
@@ -200,22 +209,28 @@ int main(int argc, char *argv[]) //main function
     {
         ros::Subscriber base_state = nh1.subscribe("base_state", 5, base_state_get); //Creating a subscriber to get the current state of the move_base //Needs to be looked over
 
-        double x_coord = coordarray[0][0]; //assigning the first set of coordinates to variables
-        double y_coord = coordarray[0][1];
+        double z_coord = coordarray[0][2];
 
-        //This will later be used to take pictures from the sensor
-        double z_coord; //Unused for now
+        double x_begin = 0.01*cos(z_coord);
+        double y_begin = 0.01*sin(z_coord);
 
-        
+        double x_end = 1.5*cos(z_coord);
+        double y_end = 1.5*sin(z_coord);
+
+        double x_coord = (coordarray[0][0]-(x_end-x_begin)); //assigning the first set of coordinates to variables
+        double y_coord = (coordarray[0][1]-(y_end-y_begin));
 
         std_msgs::Float32 msg_x;
         std_msgs::Float32 msg_y;
+        std_msgs::Float32 msg_z;
 
         msg_x.data = y_coord; 
         msg_y.data = x_coord;
+        msg_z.data = z_coord;
 
         publish_x.publish(msg_x); //Publish the first coordinate
         publish_y.publish(msg_y); //Publish the second coordinate
+        publish_z.publish(msg_z);
         int iter = 1; //create an iterator for the number of times the array needs to be sorted
 
         while(iter != room.num_exhibits) //While loop to keep looping until there are no more exhibits
@@ -225,19 +240,30 @@ int main(int argc, char *argv[]) //main function
                {
 
                     sortCoord(coordarray, iter, room.num_exhibits, x_coord, y_coord); //Sorting the coordinate array again until all points have been processed
-                    double x_coord = coordarray[iter][0]; //Assigning the coordinates to variables
-                    double y_coord = coordarray[iter][1];
-                    double z_coord;
+
+                    double z_coord = coordarray[iter][2];
+
+                    double begin_x = 0.01*cos(z_coord);
+                    double begin_y = 0.01*sin(z_coord);
+
+                    double end_x = 1.5*cos(z_coord);
+                    double end_y = 1.5*sin(z_coord);
+                    double x_coord = (coordarray[iter][0]-(end_x-begin_x)); //Assigning the coordinates to variables
+                    double y_coord = (coordarray[iter][1]-(end_y-begin_y));
+                    
 
                     std_msgs::Float32 msg_x;
                     std_msgs::Float32 msg_y;
+                    std_msgs::Float32 msg_z;
 
                     msg_x.data = x_coord; //assigning the coordinates to the messege.
                     msg_y.data = y_coord;
+                    msg_z.data = z_coord;
                     iter++; //increment the iterator to let the program know, that the coordinateset has been processed and needs no further processing
 
                     publish_x.publish(msg_x); //Publish the next first coordinate
                     publish_y.publish(msg_y); //Publish the next second coordinate
+                    publish_z.publish(msg_z);
 
                     loop.sleep(); //Sleep for 10 milliseconds before trying again
 

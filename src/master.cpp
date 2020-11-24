@@ -18,6 +18,7 @@ bool base_state;
 typedef actionlib::SimpleActionClient<move_base_msgs::MoveBaseAction> MoveBaseClient;
 double coordx;
 double coordy;
+double coordz;
 MoveBaseClient ac("move_base", true);
 
 
@@ -32,7 +33,11 @@ void move_to_coord1(const std_msgs::Float32::ConstPtr& msgx) //Prints messeges c
    coordy = msgy->data;
    std::cout<<"y-coord received:"<<coordy<<std::endl; //For testing and errorhandling
   }
-
+  void move_to_coord3(const std_msgs::Float32::ConstPtr& msgz) //Prints messeges containing the received coordinates
+{
+   coordz = msgz->data;
+   std::cout<<"z-coord received:"<<coordz<<std::endl; //For testing and errorhandling
+  }
 void _goal_reached_cb(const actionlib::SimpleClientGoalState& state, const move_base_msgs::MoveBaseResult::ConstPtr& result)
 {
   if(state == state.SUCCEEDED)
@@ -127,9 +132,11 @@ int main(int argc, char** argv){
   } */
   ros::Subscriber user_input123 = nh2.subscribe("user_input1", 1, move_to_coord1); // Subscribes to the user_input topic and when it receives a messege it runs the callback function
   ros::Subscriber user_input321 = nh2.subscribe("user_input2", 1, move_to_coord2); // Subscribes to the user_input topic and when it receives a messege it runs the callback function
+  ros::Subscriber user_input213 = nh2.subscribe("user_input3", 1, move_to_coord3); // Subscribes to the user_input topic and when it receives a messege it runs the callback function
 
   std::cout<<"x-coordinate stored:"<<coordx<<std::endl;  //Printing out the messege content that we copied
   std::cout<<"y-coordinate stored:"<<coordy<<std::endl;
+  std::cout<<"z-coordinate stored:"<<coordz<<std::endl;
 
   ros::Rate loop(10);
 
@@ -139,6 +146,7 @@ while(ros::ok()) //while(!= ros::Shutdown(); or the user has Ctrl+C out of the p
 
   std::cout<<"x-coordinate stored:"<<coordx<<std::endl;  //Printing out the messege content that we copied
   std::cout<<"y-coordinate stored:"<<coordy<<std::endl;
+  std::cout<<"z-coordinate stored:"<<coordz<<std::endl;
 
   goal.header.stamp = ros::Time::now(); //Giving the information a time stamp
   goal.header.frame_id = "base_link"; //Giving the information a frame to work with (Will in the future be frames from the sensor)
@@ -146,7 +154,7 @@ while(ros::ok()) //while(!= ros::Shutdown(); or the user has Ctrl+C out of the p
   //we'll send a goal to the robot from ther user input // Omitted until a loop for all coordinates have been implementet
   goal.point.x = coordx;
   goal.point.y = coordy;
-  goal.point.z = 0;  
+  goal.point.z = coordz;  
 
   ros::Publisher base_state_pub = nh2.advertise<std_msgs::Bool>("base_state", 5); //Creating a publisher for publishing the state of the MoveBaseClient
   ros::Subscriber odom = nh2.subscribe<nav_msgs::Odometry>("/odom", 10, odom_callback);
@@ -160,7 +168,6 @@ while(ros::ok()) //while(!= ros::Shutdown(); or the user has Ctrl+C out of the p
   send_goal(goal);
 
   ac.waitForResult();
-  std_msgs::Bool msg_b;
 
   loop.sleep(); 
   ros::spin();
