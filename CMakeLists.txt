@@ -24,6 +24,8 @@ find_package(catkin REQUIRED COMPONENTS
  pcl_ros
  sensor_msgs
  std_srvs
+ image_transport
+ 
  )
 
 
@@ -149,8 +151,8 @@ ${catkin_INCLUDE_DIRS}
 
 add_executable(${PROJECT_NAME}_user_input src/user_input.cpp)
 add_executable(${PROJECT_NAME}_master src/master.cpp)
-add_executable(${PROJECT_NAME}_listener_test src/listener_test.cpp)
-
+add_executable(${PROJECT_NAME}_listener_test test_files/listener_test.cpp)
+add_executable(${PROJECT_NAME}_exhibit_recorder src/exhibit_recorder.cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -160,6 +162,7 @@ add_executable(${PROJECT_NAME}_listener_test src/listener_test.cpp)
 set_target_properties(${PROJECT_NAME}_user_input PROPERTIES OUTPUT_NAME user_input PREFIX "")
 set_target_properties(${PROJECT_NAME}_master PROPERTIES OUTPUT_NAME master PREFIX "")
 set_target_properties(${PROJECT_NAME}_listener_test PROPERTIES OUTPUT_NAME listener_test PREFIX "")
+set_target_properties(${PROJECT_NAME}_exhibit_recorder PROPERTIES OUTPUT_NAME exhibit_recorder PREFIX "")
 
 
 
@@ -177,6 +180,10 @@ target_link_libraries(${PROJECT_NAME}_master
   ${catkin_LIBRARIES}
 )
 target_link_libraries(${PROJECT_NAME}_listener_test
+${catkin_LIBRARIES}
+
+)
+target_link_libraries(${PROJECT_NAME}_exhibit_recorder
 ${catkin_LIBRARIES}
 
 )
@@ -200,12 +207,14 @@ install(TARGETS
  ${PROJECT_NAME}_user_input
  ${PROJECT_NAME}_master
  ${PROJECT_NAME}_listener_test
+ ${PROJECT_NAME}_exhibit_recorder
    RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
  )
 
-## Mark libraries for installation
-## See http://docs.ros.org/melodic/api/catkin/html/howto/format1/building_libraries.html
-# install(TARGETS ${PROJECT_NAME}
+## Mark libraries for target_link_libraries(${PROJECT_NAME}_listener_test
+${catkin_LIBRARIES}
+
+)OJECT_NAME}
 #   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
 #   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
 #   RUNTIME DESTINATION ${CATKIN_GLOBAL_BIN_DESTINATION}
