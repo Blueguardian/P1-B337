@@ -12,8 +12,10 @@ find_package(catkin REQUIRED COMPONENTS
  rospy
  std_msgs
  message_generation
- genmsg
- turtlesim
+ #genmsg
+ #turtlesim
+ sensor_msgs
+
  
 
  )
@@ -52,10 +54,10 @@ find_package(catkin REQUIRED COMPONENTS
 ##   * add every package in MSG_DEP_SET to generate_messages(DEPENDENCIES ...)
 
 ## Generate messages in the 'msg' folder
-add_message_files(FILES Num.msg)
+##add_message_files(FILES Num.msg)
 
 ## Generate services in the 'srv' folder
-add_service_files(FILES AddTwoInts.srv)
+##add_service_files(FILES AddTwoInts.srv)
 
 ## Generate actions in the 'action' folder
 # add_action_files(
@@ -65,11 +67,11 @@ add_service_files(FILES AddTwoInts.srv)
 # )
 
 ## Generate added messages and services with any dependencies listed here
-generate_messages(
-DEPENDENCIES
+#generate_messages(
+#DEPENDENCIES
 ##   geometry_msgs
-std_msgs  # Or other packages containing msgs
-)
+#std_msgs  # Or other packages containing msgs
+#)
 
 ################################################
 ## Declare ROS dynamic reconfigure parameters ##
@@ -106,7 +108,7 @@ catkin_package(
 #  CATKIN_DEPENDS other_catkin_pkg
 #  DEPENDS system_lib
 #CATKIN_DEPENDS geometry_msgs roscpp std_msgs message_runtime
-CATKIN_DEPENDS message_runtime
+#CATKIN_DEPENDS message_runtime
 
 )
 
@@ -134,15 +136,15 @@ ${catkin_INCLUDE_DIRS}
 ## Declare a C++ executable
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
-add_executable(${PROJECT_NAME}_motion_planning src/motion_planning.cpp)
-add_executable(${PROJECT_NAME}_test_publisher src/test_publisher.cpp)
+add_executable(${PROJECT_NAME}_pointCloud_msgs src/pointCloud_msgs.cpp)
+add_executable(${PROJECT_NAME}_scan_msgs src/scan_msgs.cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
 ## target back to the shorter version for ease of user use
 ## e.g. "rosrun someones_pkg node" instead of "rosrun someones_pkg someones_pkg_node"
-set_target_properties(${PROJECT_NAME}_motion_planning PROPERTIES OUTPUT_NAME motion_planning PREFIX "")
-set_target_properties(${PROJECT_NAME}_test_publisher PROPERTIES OUTPUT_NAME test_publisher PREFIX "")
+set_target_properties(${PROJECT_NAME}_pointCloud_msgs PROPERTIES OUTPUT_NAME pointCloud_msgs PREFIX "")
+set_target_properties(${PROJECT_NAME}_scan_msgs PROPERTIES OUTPUT_NAME scan_msgs PREFIX "")
 
 
 ## Add cmake target dependencies of the executable
@@ -152,12 +154,12 @@ set_target_properties(${PROJECT_NAME}_test_publisher PROPERTIES OUTPUT_NAME test
 ## Specify libraries to link a library or executable target against
 
 ##Motion planning executable
-target_link_libraries(${PROJECT_NAME}_motion_planning
+target_link_libraries(${PROJECT_NAME}_pointCloud_msgs
    ${catkin_LIBRARIES}
 )
 
 ##Motion planning executable
-target_link_libraries(${PROJECT_NAME}_test_publisher
+target_link_libraries(${PROJECT_NAME}_scan_msgs
    ${catkin_LIBRARIES}
 )
 
@@ -178,8 +180,8 @@ target_link_libraries(${PROJECT_NAME}_test_publisher
 ## Mark executables for installation
 ## See http://docs.ros.org/melodic/api/catkin/html/howto/format1/building_executables.html
 install(TARGETS
- ${PROJECT_NAME}_motion_planning
- ${PROJECT_NAME}_test_publisher
+ ${PROJECT_NAME}_pointCloud_msgs
+ ${PROJECT_NAME}_scan_msgs
    RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
  )
 
