@@ -20,7 +20,7 @@ struct roomType         //Creating a new datatype called roomType
     int num_exhibits; //roomType variable called num_exhibits of type int
 };
 
-roomType insertRoom() //roomType function called insertRoom for user input.
+roomType insertRoom(double roomLength, double roomwidth) //roomType function called insertRoom for user input.
 {
     //The function asks the user to input the value for each variable in roomType. 
     //The function then checks if the input is valid, if not then it will tell the
@@ -32,22 +32,22 @@ roomType insertRoom() //roomType function called insertRoom for user input.
     //beginning of function insertRoom()
 
     roomType newRoomType; //creating the roomTy0pe data type
-    std::cout << "Welcome operator! \n You are currently operating the Museum X-300 scanner robot. \n Please input the room length and width in meters to continue. \n";
-    std::cout << "Room length:";
-    std::cin >> newRoomType.room_length; 
-    while(newRoomType.room_length <= 0) //validation check
-    {
-        std::cout << "Incorrect value, please try again \n Room length:"; 
-        std::cin >> newRoomType.room_length; 
-    }
-    std::cout << "Room width:"; 
-    std::cin >> newRoomType.room_width; 
-    while(newRoomType.room_width <= 0) //validation check
-    {
-        std::cout << "Incorrect value, please try again \n Room width:"; 
-        std::cin >> newRoomType.room_width;
-    }
-    std::cout << "The room dimensions are: Length: " << newRoomType.room_length << "m Width: " << newRoomType.room_width << "m. \n";
+    std::cout << "Welcome operator! \n You are currently operating the Museum X-300 scanner robot. \n The current room has been scanned. \n"; // Please input the room length and width in meters to continue. \n";
+   // std::cout << "Room length:";
+   // std::cin >> newRoomType.room_length; 
+   // while(newRoomType.room_length <= 0) //validation check
+   // {
+   //     std::cout << "Incorrect value, please try again \n Room length:"; 
+   //     std::cin >> newRoomType.room_length; 
+   // }
+   // std::cout << "Room width:"; 
+   // std::cin >> newRoomType.room_width; 
+   // while(newRoomType.room_width <= 0) //validation check
+   // {
+   //     std::cout << "Incorrect value, please try again \n Room width:"; 
+   //     std::cin >> newRoomType.room_width;
+   // }
+    std::cout << "The room dimensions are: Length: " << roomLength << "m Width: " << roomwidth << "m. \n";
     std::cout << "Please input the number of exhibitions present in the room:";
     std::cin >> newRoomType.num_exhibits;
     while(newRoomType.num_exhibits <= 0) //validation check
@@ -85,9 +85,9 @@ double euclidianDist(double x1, double y1, double refx, double refy) //Distance 
 
     //beginning of function
 
-    double refdist = pow(refx, 2)+pow(refy, 2); //Reference distance calculation
-    double dist = pow(x1, 2)+pow(y1, 2); //Input distance calculation
-    dist = sqrt(dist-refdist); //calculation of distance between reference point and input point
+    double distx = pow(refx, 2)-pow(x1, 2); //Reference distance calculation
+    double disty = pow(refy, 2)-pow(y1, 2); //Input distance calculation
+    double dist = sqrt(distx+disty); //calculation of distance between reference point and input point
     return dist;
 }
 
@@ -136,7 +136,7 @@ void insertCoord(double (*array)[3], double room_length, double room_width, int 
 void sortCoord(double (*array)[3], int startpos, int itera, double refx, double refy) //sorting function for the array from a point of reference
 {
     //The function takes an array, a starting position, a number of iterations, since it ensures that the array does not get too big,
-    //and takes a set of coordinates for the point of reference, it then compares the array's coordinatesets by calling the euclidianDist() function
+    //and takes a set of coordinates for the point of reference, It then compares the array's coordinatesets by calling the euclidianDist() function
     //to compare them by their euclidian distance. It then switches the sets if the former set is smaller than the latter.
 
     //beginning of function
@@ -181,9 +181,12 @@ int main(int argc, char *argv[]) //main function
     ros::Publisher publish_y = nh1.advertise<std_msgs::Float32>("user_input2", 1); //creating a publisher for the user_input to publish it later
     ros::Publisher publish_z = nh1.advertise<std_msgs::Float32>("user_input3", 1); //creating a publisher for the user_input to publish it later
 
+    double roomwidth = 64.9*20;
+    double roomlength = 101.8*20;
+
 
     roomType room; //creating a variable of type roomType
-    room = insertRoom(); //asking the user for the dimensions of the room and the number of exhibits
+    room = insertRoom(roomlength, roomwidth); //asking the user for the dimensions of the room and the number of exhibits
 
     double coordarray[room.num_exhibits][3]; //defining an array of size  [room.num_exhibits][2] because it only moves in a 2 dimensional manner
     insertCoord(coordarray, room.room_length, room.room_width, room.num_exhibits); //asks the user to input coordinates for each exhibit
