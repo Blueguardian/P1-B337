@@ -24,10 +24,10 @@ find_package(catkin REQUIRED COMPONENTS
  pcl_ros
  sensor_msgs
  std_srvs
- image_transport
- 
+ cv_bridge
  )
 
+ find_package(OpenCV 3 REQUIRED)
 
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
@@ -117,7 +117,8 @@ find_package(catkin REQUIRED COMPONENTS
 ## CATKIN_DEPENDS: catkin_packages dependent projects also need
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
-#  INCLUDE_DIRS include
+  INCLUDE_DIRS
+  ${OpenCV_INCLUDE_DIRS}
 #  LIBRARIES turtlesim_games
   CATKIN_DEPENDS message_runtime
 #  DEPENDS system_lib
@@ -184,9 +185,9 @@ ${catkin_LIBRARIES}
 
 )
 target_link_libraries(${PROJECT_NAME}_exhibit_recorder
-${catkin_LIBRARIES}
-
+${catkin_LIBRARIES} ${OpenCV_LIBS}
 )
+
 #############
 ## Install ##
 #############
@@ -212,9 +213,7 @@ install(TARGETS
  )
 
 ## Mark libraries for target_link_libraries(${PROJECT_NAME}_listener_test
-${catkin_LIBRARIES}
 
-)OJECT_NAME}
 #   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
 #   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
 #   RUNTIME DESTINATION ${CATKIN_GLOBAL_BIN_DESTINATION}
