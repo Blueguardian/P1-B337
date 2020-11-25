@@ -143,6 +143,7 @@ void sortCoord(double (*array)[3], int startpos, int itera, double refx, double 
 
     double temp1;
     double temp2;
+    double temp3;
     for(int i = startpos; i<itera; i++) //iterator for the first coordinateset
     {
         for(int j = i+1; j<itera; j++) //iterator for the second coordinateset
@@ -152,10 +153,13 @@ void sortCoord(double (*array)[3], int startpos, int itera, double refx, double 
                 //switches the places of the coordinateset if it's smaller.
                 temp1 = array[i][0];
                 temp2 = array[i][1];
+                temp3 = array[i][2];
                 array[i][0] = array[j][0];
                 array[i][1] = array[j][1];
+                array[i][2] = array[j][2];
                 array[j][0] = temp1;
                 array[j][1] = temp2;
+                array[j][2] = temp3;
             }
         }
     }
@@ -211,14 +215,11 @@ int main(int argc, char *argv[]) //main function
 
         double z_coord = coordarray[0][2];
 
-        double x_begin = 0.01*cos(z_coord);
-        double y_begin = 0.01*sin(z_coord);
+        double x_dif = 1.5*cos(z_coord);
+        double y_dif = 1.5*sin(z_coord);
 
-        double x_end = 1.5*cos(z_coord);
-        double y_end = 1.5*sin(z_coord);
-
-        double x_coord = (coordarray[0][0]-(x_end-x_begin)); //assigning the first set of coordinates to variables
-        double y_coord = (coordarray[0][1]-(y_end-y_begin));
+        double x_coord = (coordarray[0][0]-x_dif); //assigning the first set of coordinates to variables
+        double y_coord = (coordarray[0][1]-y_dif);
 
         std_msgs::Float32 msg_x;
         std_msgs::Float32 msg_y;
@@ -243,13 +244,10 @@ int main(int argc, char *argv[]) //main function
 
                     double z_coord = coordarray[iter][2];
 
-                    double begin_x = 0.01*cos(z_coord);
-                    double begin_y = 0.01*sin(z_coord);
-
-                    double end_x = 1.5*cos(z_coord);
-                    double end_y = 1.5*sin(z_coord);
-                    double x_coord = (coordarray[iter][0]-(end_x-begin_x)); //Assigning the coordinates to variables
-                    double y_coord = (coordarray[iter][1]-(end_y-begin_y));
+                    double dif_x = 1.5*cos(z_coord);
+                    double dif_y = 1.5*sin(z_coord);
+                    double x_coord = (coordarray[iter][0]-dif_x); //Assigning the coordinates to variables
+                    double y_coord = (coordarray[iter][1]-dif_y);
                     
 
                     std_msgs::Float32 msg_x;

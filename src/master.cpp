@@ -113,8 +113,10 @@ void send_goal(const geometry_msgs::PointStamped& goal_point)
 {
   move_base_msgs::MoveBaseGoal goal;
   goal.target_pose.header.frame_id = goal_point.header.frame_id;
-  goal.target_pose.pose.position = goal_point.point;
-  goal.target_pose.pose.orientation.w = 1.0;
+  goal.target_pose.pose.position.x = goal_point.point.x;
+  goal.target_pose.pose.position.y = goal_point.point.y;
+  goal.target_pose.pose.position.z = 1;
+  goal.target_pose.pose.orientation.w = goal_point.point.z;
   ac.sendGoal(goal, boost::bind(&_goal_reached_cb, _1, _2));
   std::cout << "Sending goal.." << std::endl;
 }
