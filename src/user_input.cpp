@@ -58,6 +58,23 @@ roomType insertRoom(double roomLength, double roomwidth) //roomType function cal
     return newRoomType;
 }
 
+double rob_facing_angle(double angle)
+{
+
+    //This function takes the angle orientation of the particular object and converts it into
+    //an angle that would points directly towards the exhibition.
+    int oppositeangle = 0;
+
+    if(angle>=0 && angle<=M_PI){ //If this is true, the angle of the exhibitions would be added to Pi, to face it with a positive angle
+    oppositeangle = angle+M_PI;
+    }
+    else if(angle>M_PI && angle<(2*M_PI)){ //If this is true, the angle of the exhibitions would be added to Pi, to face it with a positive angle
+    oppositeangle = angle-M_PI;
+    } 
+
+    return oppositeangle;
+}
+
 void base_state_get(const std_msgs::Bool::ConstPtr& msg) //Callback function for base_state
 {
     //The callback function is called when a messege is received from the base_state subscriber.
@@ -230,7 +247,7 @@ int main(int argc, char *argv[]) //main function
 
         msg_x.data = y_coord; 
         msg_y.data = x_coord;
-        msg_z.data = z_coord;
+        msg_z.data = rob_facing_angle(z_coord);
 
         publish_x.publish(msg_x); //Publish the first coordinate
         publish_y.publish(msg_y); //Publish the second coordinate
@@ -259,7 +276,7 @@ int main(int argc, char *argv[]) //main function
 
                     msg_x.data = x_coord; //assigning the coordinates to the messege.
                     msg_y.data = y_coord;
-                    msg_z.data = z_coord;
+                    msg_z.data = rob_facing_angle(z_coord);
                     iter++; //increment the iterator to let the program know, that the coordinateset has been processed and needs no further processing
 
                     publish_x.publish(msg_x); //Publish the next first coordinate

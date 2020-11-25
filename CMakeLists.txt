@@ -182,7 +182,6 @@ target_link_libraries(${PROJECT_NAME}_master
 )
 target_link_libraries(${PROJECT_NAME}_listener_test
 ${catkin_LIBRARIES}
-
 )
 target_link_libraries(${PROJECT_NAME}_exhibit_recorder
 ${catkin_LIBRARIES} ${OpenCV_LIBS}
