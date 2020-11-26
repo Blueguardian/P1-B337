@@ -149,8 +149,7 @@ add_executable(tf_listener src/tf_listener.cpp)
 ## e.g. "rosrun someones_pkg node" instead of "rosrun someones_pkg someones_pkg_node"
 set_target_properties(${PROJECT_NAME}_pointCloud_msgs PROPERTIES OUTPUT_NAME pointCloud_msgs PREFIX "")
 set_target_properties(${PROJECT_NAME}_scan_msgs PROPERTIES OUTPUT_NAME scan_msgs PREFIX "")
-target_link_libraries(tf_broadcaster ${catkin_LIBRARIES})
-target_link_libraries(tf_listener ${catkin_LIBRARIES})
+
 
 ## Add cmake target dependencies of the executable
 ## same as for the library above
@@ -167,7 +166,8 @@ target_link_libraries(${PROJECT_NAME}_pointCloud_msgs
 target_link_libraries(${PROJECT_NAME}_scan_msgs
    ${catkin_LIBRARIES}
 )
-
+target_link_libraries(tf_broadcaster ${catkin_LIBRARIES})
+target_link_libraries(tf_listener ${catkin_LIBRARIES})
 #############
 ## Install ##
 #############
