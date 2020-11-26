@@ -102,8 +102,8 @@ double euclidianDist(double x1, double y1, double refx, double refy) //Distance 
 
     //beginning of function
 
-    double distx = pow(refx, 2)-pow(x1, 2); //Reference distance calculation
-    double disty = pow(refy, 2)-pow(y1, 2); //Input distance calculation
+    double distx = pow(x1-refx, 2); //Reference distance calculation
+    double disty = pow(y1-refy, 2); //Input distance calculation
     double dist = sqrt(distx+disty); //calculation of distance between reference point and input point
     return dist;
 }
@@ -122,7 +122,7 @@ void insertCoord(double (*array)[3], double room_length, double room_width, int 
         std::cout << "Please input the length of the x-coordinate in meters for the " << i << "th exhibit:";
         std::cin >> x;
         array[i][0] = x;
-        while(x < -1*(room_length/2) && x > room_length/2) //validation check
+        while(x < -1*(room_length/2) || x > room_length/2) //validation check
         {
             std::cout << "Incorrect value, please try again \n Length of x-coordinate in meters for the " << i << "th exhibit:";
             std::cin >> x;
@@ -131,7 +131,7 @@ void insertCoord(double (*array)[3], double room_length, double room_width, int 
         std::cout << "Please input the length of the y-coordinate in meters for the " << i << "th exhibit:";
         std::cin >> y;
         array[i][1] = y;
-        while(y < -1*(room_width/2) && y > room_width/2) //validation check
+        while(y < -1*(room_width/2) || y > room_width/2) //validation check
         {
             std::cout << "Incorrect value, please try again \n Length of y-coordinate in meters for the " << i << "th exhibit:";
             std::cin >> y;
@@ -140,7 +140,7 @@ void insertCoord(double (*array)[3], double room_length, double room_width, int 
         std::cout << "Please input the orientation of the front of the " << i << "th exhibit in degrees:";
         std::cin >> z;
         array[i][2] = z;
-        while(z > 360 && z < 0)
+        while(z > 360 || z < 0)
         {
             std::cout << "Incorrect value, please try again \n Orientation of the" << i << "th exhibit: ";
             std::cin >> z;
