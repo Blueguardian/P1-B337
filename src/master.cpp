@@ -1,6 +1,5 @@
 #include <algorithm>
 #include <ros/ros.h>
-#include <geometry_msgs/Twist.h>
 #include <geometry_msgs/PointStamped.h>
 #include <geometry_msgs/PoseStamped.h>
 #include <actionlib/client/simple_client_goal_state.h>

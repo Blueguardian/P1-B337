@@ -18,7 +18,6 @@ struct point
     double z;
 };
 
-
 struct roomType //Creating a new datatype called roomType
 {
     double room_length; 
@@ -164,7 +163,7 @@ double rob_facing_angle(double angle)
     //an angle that would points directly towards the exhibition.
 
     //beginning of the function
-    
+
     int oppositeangle = 0;
 
     if(angle>=0 && angle<=M_PI) //If this is true, the angle of the exhibitions would be added to Pi, to face it with a positive angle
