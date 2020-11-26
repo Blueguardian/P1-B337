@@ -27,7 +27,7 @@ void coordCallback2(const std_msgs::Float32::ConstPtr& msgy)
 
 void coordCallback3(const std_msgs::Float32::ConstPtr& msgz)
 {
-   xcoord = msgz->data;
+   zcoord = msgz->data;
    std::cout<<"z-coord received:"<<zcoord<<std::endl;
 
 }

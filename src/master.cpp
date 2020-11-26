@@ -21,24 +21,68 @@ double coordx;
 double coordy;
 double coordz;
 MoveBaseClient ac("move_base", true);
+void move_to_coord1(const std_msgs::Float32::ConstPtr& msgx); //Prints messeges containing the received coordinates
+void move_to_coord2(const std_msgs::Float32::ConstPtr& msgy); //Prints messeges containing the received coordinates
+void move_to_coord3(const std_msgs::Float32::ConstPtr& msgz); //Prints messeges containing the received coordinates
+void _goal_reached_cb(const actionlib::SimpleClientGoalState& state, const move_base_msgs::MoveBaseResult::ConstPtr& result);
+void odom_callback(const nav_msgs::Odometry::ConstPtr& odom_msg); //Odometry callback function
+void send_goal(const geometry_msgs::PointStamped& goal_point); //Send goal to move_base server
 
 
-void move_to_coord1(const std_msgs::Float32::ConstPtr& msgx) //Prints messeges containing the received coordinates
-{
-   coordx = msgx->data;
-   std::cout<<"x-coord received:"<<coordx<<std::endl; //For testing and errorhandling
-  }
+int main(int argc, char** argv){
+  ros::init(argc, argv, "master"); //ros initialisation
+  ros::NodeHandle nh2; //Testing nodehandle naming convention
 
-  void move_to_coord2(const std_msgs::Float32::ConstPtr& msgy) //Prints messeges containing the received coordinates
-{
-   coordy = msgy->data;
-   std::cout<<"y-coord received:"<<coordy<<std::endl; //For testing and errorhandling
+  MoveBaseClient ac("move_base", true); //Defining a client to send goals to the move_base server.
+
+  //This needs to run for the program to succesfully contact the move_base
+  //The movebase server needs the following to start: A static map or a running gmapping node, a functioning amcl setup, to be run
+ /* while(!ac.waitForServer(ros::Duration(5.0))){ //wait for the action server to come up
+    ROS_INFO("Waiting for the move_base action server to come up"); //Printing a fitting messege.
+  } */
+  ros::Subscriber user_input123 = nh2.subscribe("user_input1", 1, move_to_coord1); // Subscribes to the user_input topic and when it receives a messege it runs the callback function
+  ros::Subscriber user_input321 = nh2.subscribe("user_input2", 1, move_to_coord2); // Subscribes to the user_input topic and when it receives a messege it runs the callback function
+  ros::Subscriber user_input213 = nh2.subscribe("user_input3", 1, move_to_coord3); // Subscribes to the user_input topic and when it receives a messege it runs the callback function
+  ros::Publisher base_state_pub = nh2.advertise<std_msgs::Bool>("base_state", 5); //Creating a publisher for publishing the state of the MoveBaseClient
+  ros::Subscriber odom = nh2.subscribe<nav_msgs::Odometry>("/odom", 10, odom_callback);
+
+  std::cout<<"x-coordinate stored:"<<coordx<<std::endl;  //Printing out the messege content that we copied
+  std::cout<<"y-coordinate stored:"<<coordy<<std::endl;
+  std::cout<<"z-coordinate stored:"<<coordz<<std::endl;
+
+  ros::Rate loop(10);
+
+while(ros::ok()) //while(!= ros::Shutdown(); or the user has Ctrl+C out of the program.)
+  {
+  geometry_msgs::PointStamped goal; //Creates a new Goal of type MoveBaseGoal, for sending information to the move_base.
+
+  std::cout<<"x-coordinate stored:"<<coordx<<std::endl;  //Printing out the messege content that we copied
+  std::cout<<"y-coordinate stored:"<<coordy<<std::endl;
+  std::cout<<"z-coordinate stored:"<<coordz<<std::endl;
+
+  goal.header.stamp = ros::Time::now(); //Giving the information a time stamp
+  goal.header.frame_id = "base_link"; //Giving the information a frame to work with (Will in the future be frames from the sensor)
+
+  //we'll send a goal to the robot from ther user input // Omitted until a loop for all coordinates have been implementet
+  goal.point.x = coordx;
+  goal.point.y = coordy;
+  goal.point.z = coordz;  
+
+  std_msgs::Bool state_get;
+  state_get.data = base_state;
+
+  base_state_pub.publish(state_get);
+
+  send_goal(goal);
+
+  ac.waitForResult();
+
+  loop.sleep(); 
+  ros::spin();
   }
-  void move_to_coord3(const std_msgs::Float32::ConstPtr& msgz) //Prints messeges containing the received coordinates
-{
-   coordz = msgz->data;
-   std::cout<<"z-coord received:"<<coordz<<std::endl; //For testing and errorhandling
-  }
+ return 0; //Program run succesfully.
+}
+
 void _goal_reached_cb(const actionlib::SimpleClientGoalState& state, const move_base_msgs::MoveBaseResult::ConstPtr& result)
 {
   if(state == state.SUCCEEDED)
@@ -85,7 +129,25 @@ void _goal_reached_cb(const actionlib::SimpleClientGoalState& state, const move_
   
 }
 
-void odom_callback(const nav_msgs::Odometry::ConstPtr& odom_msg) //Odometry callback function
+void move_to_coord1(const std_msgs::Float32::ConstPtr& msgx)
+{
+   coordx = msgx->data;
+   std::cout<<"x-coord received:"<<coordx<<std::endl; //For testing and errorhandling
+}
+
+void move_to_coord2(const std_msgs::Float32::ConstPtr& msgy)
+{
+   coordy = msgy->data;
+   std::cout<<"y-coord received:"<<coordy<<std::endl; //For testing and errorhandling
+}
+
+void move_to_coord3(const std_msgs::Float32::ConstPtr& msgz)
+{
+   coordz = msgz->data;
+   std::cout<<"z-coord received:"<<coordz<<std::endl; //For testing and errorhandling
+}
+
+void odom_callback(const nav_msgs::Odometry::ConstPtr& odom_msg)
 {
 /*    nav_msgs::Odometry odom;
 
@@ -120,66 +182,4 @@ void send_goal(const geometry_msgs::PointStamped& goal_point)
   goal.target_pose.pose.orientation.w = goal_point.point.z;
   ac.sendGoal(goal, boost::bind(&_goal_reached_cb, _1, _2));
   std::cout << "Sending goal.." << std::endl;
-}
-
-int main(int argc, char** argv){
-  ros::init(argc, argv, "master"); //ros initialisation
-  ros::NodeHandle nh2; //Testing nodehandle naming convention
-
-  MoveBaseClient ac("move_base", true); //Defining a client to send goals to the move_base server.
-
-  //This needs to run for the program to succesfully contact the move_base
-  //The movebase server needs the following to start: A static map or a running gmapping node, a functioning amcl setup, to be run
- /* while(!ac.waitForServer(ros::Duration(5.0))){ //wait for the action server to come up
-    ROS_INFO("Waiting for the move_base action server to come up"); //Printing a fitting messege.
-  } */
-  ros::Subscriber user_input123 = nh2.subscribe("user_input1", 1, move_to_coord1); // Subscribes to the user_input topic and when it receives a messege it runs the callback function
-  ros::Subscriber user_input321 = nh2.subscribe("user_input2", 1, move_to_coord2); // Subscribes to the user_input topic and when it receives a messege it runs the callback function
-  ros::Subscriber user_input213 = nh2.subscribe("user_input3", 1, move_to_coord3); // Subscribes to the user_input topic and when it receives a messege it runs the callback function
-
-  std::cout<<"x-coordinate stored:"<<coordx<<std::endl;  //Printing out the messege content that we copied
-  std::cout<<"y-coordinate stored:"<<coordy<<std::endl;
-  std::cout<<"z-coordinate stored:"<<coordz<<std::endl;
-
-  ros::Rate loop(10);
-
-while(ros::ok()) //while(!= ros::Shutdown(); or the user has Ctrl+C out of the program.)
-  {
-  geometry_msgs::PointStamped goal; //Creates a new Goal of type MoveBaseGoal, for sending information to the move_base.
-
-  std::cout<<"x-coordinate stored:"<<coordx<<std::endl;  //Printing out the messege content that we copied
-  std::cout<<"y-coordinate stored:"<<coordy<<std::endl;
-  std::cout<<"z-coordinate stored:"<<coordz<<std::endl;
-
-  goal.header.stamp = ros::Time::now(); //Giving the information a time stamp
-  goal.header.frame_id = "base_link"; //Giving the information a frame to work with (Will in the future be frames from the sensor)
-
-  //we'll send a goal to the robot from ther user input // Omitted until a loop for all coordinates have been implementet
-  goal.point.x = coordx;
-  goal.point.y = coordy;
-  goal.point.z = coordz;  
-
-  ros::Publisher base_state_pub = nh2.advertise<std_msgs::Bool>("base_state", 5); //Creating a publisher for publishing the state of the MoveBaseClient
-  ros::Subscriber odom = nh2.subscribe<nav_msgs::Odometry>("/odom", 10, odom_callback);
-
-
-  std_msgs::Bool state_get;
-  state_get.data = base_state;
-
-  base_state_pub.publish(state_get);
-
-  send_goal(goal);
-
-  ac.waitForResult();
-
-  loop.sleep(); 
-  ros::spin();
-}
-
- if(ac.getState() == actionlib::SimpleClientGoalState::SUCCEEDED)
-   ROS_INFO("Hooray, the base moved 1 meter forward");
- else
-  ROS_INFO("The base failed to move forward 1 meter for some reason");
-
- return 0; //Program run succesfully.
 }
