@@ -218,24 +218,24 @@ void insertCoord(point (*array), double room_length, double room_width, int nume
     double x, y, z;
     while(i < numexhi && i < 2)
     {
-        std::cout << "Please input the length of the x-coordinate in meters for the " << i << "st exhibit. \n";
+        std::cout << "Please input the length of the x-coordinate in meters for the " << i << "st exhibit: ";
         std::cin >> x;
         while(x < -1*(room_length/2) || x > room_length/2)
         {
-            std::cout << "Incorrect value, please try again \n Length of x-coordinate in meters for the " << i << "st exhibit:";
+            std::cout << "Incorrect value, please try again \n Length of x-coordinate in meters for the " << i << "st exhibit: ";
             std::cin >> x;
             array[i].x = x;
         }
-        std::cout << "Please input the length of the y-coordinate in meters for the " << i << "st exhibit:";
+        std::cout << "Please input the length of the y-coordinate in meters for the " << i << "st exhibit: ";
         std::cin >> y;
         array[i].y = y;
         while(y < -1*(room_width/2) || y > room_width/2) //validation check
         {
-            std::cout << "Incorrect value, please try again \n Length of y-coordinate in meters for the " << i << "st exhibit:";
+            std::cout << "Incorrect value, please try again \n Length of y-coordinate in meters for the " << i << "st exhibit: ";
             std::cin >> y;
             array[i].y = y;
         }
-        std::cout << "Please input the orientation of the front of the " << i << "st exhibit in degrees:";
+        std::cout << "Please input the orientation of the front of the " << i << "st exhibit in degrees: ";
         std::cin >> z;
         array[i].z = z;
         while(z > 360 || z < 0)
@@ -247,24 +247,24 @@ void insertCoord(point (*array), double room_length, double room_width, int nume
         i++;
         while(i < numexhi && i < 3)
         {
-            std::cout << "Please input the length of the x-coordinate in meters for the " << i << "nd exhibit. \n";
+            std::cout << "Please input the length of the x-coordinate in meters for the " << i << "nd exhibit: ";
             std::cin >> x;
             while(x < -1*(room_length/2) || x > room_length/2)
             {
-                std::cout << "Incorrect value, please try again \n Length of x-coordinate in meters for the " << i << "nd exhibit:";
+                std::cout << "Incorrect value, please try again \n Length of x-coordinate in meters for the " << i << "nd exhibit: ";
                 std::cin >> x;
                 array[i].x = x;
             }
-            std::cout << "Please input the length of the y-coordinate in meters for the " << i << "nd exhibit:";
+            std::cout << "Please input the length of the y-coordinate in meters for the " << i << "nd exhibit: ";
             std::cin >> y;
             array[i].y = y;
             while(y < -1*(room_width/2) || y > room_width/2) //validation check
             {
-                std::cout << "Incorrect value, please try again \n Length of y-coordinate in meters for the " << i << "nd exhibit:";
+                std::cout << "Incorrect value, please try again \n Length of y-coordinate in meters for the " << i << "nd exhibit: ";
                 std::cin >> y;
                 array[i].y = y;
             }
-            std::cout << "Please input the orientation of the front of the " << i << "nd exhibit in degrees:";
+            std::cout << "Please input the orientation of the front of the " << i << "nd exhibit in degrees: ";
             std::cin >> z;
             array[i].z = z;
             while(z > 360 || z < 0)
@@ -276,24 +276,24 @@ void insertCoord(point (*array), double room_length, double room_width, int nume
             i++;
             while(i < numexhi && i < 4)
             {
-                std::cout << "Please input the length of the x-coordinate in meters for the " << i << "rd exhibit. \n";
+                std::cout << "Please input the length of the x-coordinate in meters for the " << i << "rd exhibit: ";
                 std::cin >> x;
                 while(x < -1*(room_length/2) || x > room_length/2)
                 {
-                    std::cout << "Incorrect value, please try again \n Length of x-coordinate in meters for the " << i << "rd exhibit:";
+                    std::cout << "Incorrect value, please try again \n Length of x-coordinate in meters for the " << i << "rd exhibit: ";
                     std::cin >> x;
                     array[i].x = x;
                 }
-                std::cout << "Please input the length of the y-coordinate in meters for the " << i << "rd exhibit:";
+                std::cout << "Please input the length of the y-coordinate in meters for the " << i << "rd exhibit: ";
                 std::cin >> y;
                 array[i].y = y;
                 while(y < -1*(room_width/2) || y > room_width/2) //validation check
                 {
-                    std::cout << "Incorrect value, please try again \n Length of y-coordinate in meters for the " << i << "rd exhibit:";
+                    std::cout << "Incorrect value, please try again \n Length of y-coordinate in meters for the " << i << "rd exhibit: ";
                     std::cin >> y;
                     array[i].y = y;
                 }
-                std::cout << "Please input the orientation of the front of the " << i << "rd exhibit in degrees:";
+                std::cout << "Please input the orientation of the front of the " << i << "rd exhibit in degrees: ";
                 std::cin >> z;
                 array[i].z = z;
                 while(z > 360 || z < 0)
@@ -307,25 +307,25 @@ void insertCoord(point (*array), double room_length, double room_width, int nume
                 {
                     for(i; i<numexhi;i++) //for each exhibit
                     {
-                        std::cout << "Please input the length of the x-coordinate in meters for the " << i << "th exhibit:";
+                        std::cout << "Please input the length of the x-coordinate in meters for the " << i << "th exhibit: ";
                         std::cin >> x;
                         array[i].x = x;
                         while(x < -1*(room_length/2) || x > room_length/2) //validation check
                         {
-                            std::cout << "Incorrect value, please try again \n Length of x-coordinate in meters for the " << i << "th exhibit:";
+                            std::cout << "Incorrect value, please try again \n Length of x-coordinate in meters for the " << i << "th exhibit: ";
                             std::cin >> x;
                             array[i].x = x;
                         }
-                        std::cout << "Please input the length of the y-coordinate in meters for the " << i << "th exhibit:";
+                        std::cout << "Please input the length of the y-coordinate in meters for the " << i << "th exhibit: ";
                         std::cin >> y;
                         array[i].y = y;
                         while(y < -1*(room_width/2) || y > room_width/2) //validation check
                         {
-                            std::cout << "Incorrect value, please try again \n Length of y-coordinate in meters for the " << i << "th exhibit:";
+                            std::cout << "Incorrect value, please try again \n Length of y-coordinate in meters for the " << i << "th exhibit: ";
                             std::cin >> y;
                             array[i].y = y;
                         }
-                        std::cout << "Please input the orientation of the front of the " << i << "th exhibit in degrees:";
+                        std::cout << "Please input the orientation of the front of the " << i << "th exhibit in degrees: ";
                         std::cin >> z;
                         array[i].z = z;
                         while(z > 360 || z < 0)
