@@ -25,6 +25,7 @@ find_package(catkin REQUIRED COMPONENTS
  sensor_msgs
  std_srvs
  cv_bridge
+ visualization_msgs
  )
 
  find_package(OpenCV 3 REQUIRED)
