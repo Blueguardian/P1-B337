@@ -28,10 +28,10 @@ MoveBaseClient ac("move_base", true);
 void move_to_coord1(const std_msgs::Float32::ConstPtr& msgx); //Prints messeges containing the received coordinates
 void move_to_coord2(const std_msgs::Float32::ConstPtr& msgy); //Prints messeges containing the received coordinates
 void move_to_coord3(const std_msgs::Float32::ConstPtr& msgz); //Prints messeges containing the received coordinates
-void _goal_reached_cb(const actionlib::SimpleClientGoalState& state, const move_base_msgs::MoveBaseResult::ConstPtr& result);
+void _goal_reached_cb(const actionlib::SimpleClientGoalState& state, const move_base_msgs::MoveBaseResult::ConstPtr& result); //Goal has been reached
 void odom_callback(const nav_msgs::Odometry::ConstPtr& odom_msg); //Odometry callback function
 void send_goal(const geometry_msgs::PointStamped& goal_point); //Send goal to move_base server
-void send_markers(move_base_msgs::MoveBaseGoal goal);
+void send_markers(move_base_msgs::MoveBaseGoal goal); //Send markers to the visualization software
 
 
 int main(int argc, char** argv){

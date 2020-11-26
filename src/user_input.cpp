@@ -162,6 +162,9 @@ double rob_facing_angle(double angle)
 {
     //This function takes the angle orientation of the particular object and converts it into
     //an angle that would points directly towards the exhibition.
+
+    //beginning of the function
+    
     int oppositeangle = 0;
 
     if(angle>=0 && angle<=M_PI) //If this is true, the angle of the exhibitions would be added to Pi, to face it with a positive angle
@@ -214,13 +217,14 @@ void insertCoord(point (*array), double room_length, double room_width, int nume
     //within range of the room. This function assumes that the robot is in the middle of the room.
 
     //beginning of function
+
     int i=1;
     double x, y, z;
     while(i < numexhi && i < 2)
     {
         std::cout << "Please input the length of the x-coordinate in meters for the " << i << "st exhibit: ";
         std::cin >> x;
-        while(x < -1*(room_length/2) || x > room_length/2)
+        while(x < -1*(room_length/2) || x > room_length/2) //validation check
         {
             std::cout << "Incorrect value, please try again \n Length of x-coordinate in meters for the " << i << "st exhibit: ";
             std::cin >> x;
@@ -238,7 +242,7 @@ void insertCoord(point (*array), double room_length, double room_width, int nume
         std::cout << "Please input the orientation of the front of the " << i << "st exhibit in degrees: ";
         std::cin >> z;
         array[i].z = z;
-        while(z > 360 || z < 0)
+        while(z > 360 || z < 0) //validation check
         {
             std::cout << "Incorrect value, please try again \n Orientation of the" << i << "st exhibit: ";
             std::cin >> z;
@@ -249,7 +253,7 @@ void insertCoord(point (*array), double room_length, double room_width, int nume
         {
             std::cout << "Please input the length of the x-coordinate in meters for the " << i << "nd exhibit: ";
             std::cin >> x;
-            while(x < -1*(room_length/2) || x > room_length/2)
+            while(x < -1*(room_length/2) || x > room_length/2) //validation check
             {
                 std::cout << "Incorrect value, please try again \n Length of x-coordinate in meters for the " << i << "nd exhibit: ";
                 std::cin >> x;
@@ -267,7 +271,7 @@ void insertCoord(point (*array), double room_length, double room_width, int nume
             std::cout << "Please input the orientation of the front of the " << i << "nd exhibit in degrees: ";
             std::cin >> z;
             array[i].z = z;
-            while(z > 360 || z < 0)
+            while(z > 360 || z < 0) //validation check
             {
                 std::cout << "Incorrect value, please try again \n Orientation of the" << i << "nd exhibit: ";
                 std::cin >> z;
@@ -278,7 +282,7 @@ void insertCoord(point (*array), double room_length, double room_width, int nume
             {
                 std::cout << "Please input the length of the x-coordinate in meters for the " << i << "rd exhibit: ";
                 std::cin >> x;
-                while(x < -1*(room_length/2) || x > room_length/2)
+                while(x < -1*(room_length/2) || x > room_length/2) //validation check
                 {
                     std::cout << "Incorrect value, please try again \n Length of x-coordinate in meters for the " << i << "rd exhibit: ";
                     std::cin >> x;
@@ -296,7 +300,7 @@ void insertCoord(point (*array), double room_length, double room_width, int nume
                 std::cout << "Please input the orientation of the front of the " << i << "rd exhibit in degrees: ";
                 std::cin >> z;
                 array[i].z = z;
-                while(z > 360 || z < 0)
+                while(z > 360 || z < 0) //validation check
                 {
                     std::cout << "Incorrect value, please try again \n Orientation of the" << i << "rd exhibit: ";
                     std::cin >> z;
@@ -305,7 +309,7 @@ void insertCoord(point (*array), double room_length, double room_width, int nume
                 i++;
                 while(i < numexhi)
                 {
-                    for(i; i<numexhi;i++) //for each exhibit
+                    for(i; i<numexhi;i++) //for the rest of the exhibits
                     {
                         std::cout << "Please input the length of the x-coordinate in meters for the " << i << "th exhibit: ";
                         std::cin >> x;
