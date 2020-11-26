@@ -1,0 +1,19 @@
+<launch>
+   <arg name="map_file" value="maps/gmapping_01.yaml"></arg> 
+   <node pkg="map_server" type="map_server" name="map_server" args="$(arg map_file)"> 
+   <include file="$(find move_base)/launch/move_base.launch" />
+   <include file="$(find turtlebot_bringup)/launch/3dsensor.launch">
+   <arg name="rgb_processing" value="true" />
+   <arg name="depth_registration" value="false" />
+   <arg name="depth_processing" value="false" />
+   <arg name="scan_topic" value="/scan" /> 
+
+   <!--<include file="$(find turtlebot_navigation)/launch/gmapping_demo.launch" />/-->
+
+   <node name="$(anon rviz)" pkg="rviz" type="rviz" args="-d $(find p1-b337)/config/museum.rviz"/>
+   <node pkg="p1-b337" type="master" name="master" output="screen"></node>
+   ros::Duration(2.0).sleep();
+   <node pkg="p1-b337" type="exhibit_recorder" name="exhibit_recorder" output="screen"></node>
+   ros::Duration(2.0).sleep();
+   <node pkg="p1-b337" type="user_input" name="user_interface"></node>
+</launch> 
