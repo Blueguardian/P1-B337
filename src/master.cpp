@@ -15,6 +15,7 @@
 #include <visualization_msgs/MarkerArray.h>
 
 
+
 bool base_state;
 ros::Publisher marker_pub;
 ros::Publisher take_picture;
