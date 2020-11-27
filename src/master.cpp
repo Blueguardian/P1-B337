@@ -68,7 +68,7 @@ while(ros::ok()) //while(!= ros::Shutdown(); or the user has Ctrl+C out of the p
   std::cout<<"z-coordinate stored:"<<coordz<<std::endl;
 
   goal.header.stamp = ros::Time::now(); //Giving the information a time stamp
-  goal.header.frame_id = "base_link"; //Giving the information a frame to work with (Will in the future be frames from the sensor)
+  goal.header.frame_id = "/odom"; //OBS: Was changed from "base_link". //Giving the information a frame to work with (Will in the future be frames from the sensor)
 
   //we'll send a goal to the robot from ther user input 
   goal.point.x = coordx;
