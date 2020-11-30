@@ -1,5 +1,4 @@
 <launch>
-   <master auto="start"/>
    <!--<include file="$(find turtlebot_navigation)/launch/gmapping_demo.launch" />/-->
    <node pkg="p1-b337" type="master" name="master" output="screen"></node>
    ros::Duration(2.0).sleep();
@@ -7,6 +6,7 @@
    ros::Duration(2.0).sleep();
    <node pkg="p1-b337" type="user_input" name="user_interface"> output="screen"</node>
    <node pkg="tf" type="static_transform_publisher" name="base_link_broadcaster" args="0 0 0 0 0 0 odom base_link 100"></node>
+   <node pkg="tf" type="static_transform_publisher" name="odom_broadcaster" args="0 0 0 0 0 0 map odom 100"></node>
    <node name="rviz" pkg="rviz" type="rviz" args="-d $(find p1-b337)/config/museum.rviz"></node>
    <!--<arg name="map_file" value="p1-b337/map/gmapping_01.yaml"></arg>-->
    <node name="map_server" pkg="map_server" type="map_server" args="$(find p1-b337)/map/gmapping_01.yaml"/>
