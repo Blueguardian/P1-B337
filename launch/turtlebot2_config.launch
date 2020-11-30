@@ -1,4 +1,4 @@
-<launch>  
+<launch>
    <include file="$(find turtlebot_bringup)/launch/minimal.launch"></include><!--Unsure if this is needed-->
    <include file="$(find turtlebot_bringup)/launch/3dsensor.launch"></include>
    <arg name="rgb_processing" value="true"/>
