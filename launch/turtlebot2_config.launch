@@ -13,4 +13,5 @@
    <rosparam file="$(find p1-b337)/param/local_costmap_param.yaml" command="load"/>
    <rosparam file="$(find p1-b337)/param/global_costmap_param.yaml" command="load"/>
    <rosparam file="$(find p1-b337)/param/trajectory_planner.yaml" command="load"/>
+   <node pkg="tf" type="static_transform_publisher" name="base_link_broadcaster" args="0 0 0 0 0 0 odom base_link 100"></node>
 </launch>

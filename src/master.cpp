@@ -217,7 +217,7 @@ void send_goal(const geometry_msgs::PointStamped& goal_point)
     visualization_msgs::Marker marker;
     visualization_msgs::MarkerArray marker_array;
     marker.header.stamp = ros::Time::now();
-    marker.ns = "target_point";
+    marker.ns = "target_point";0
     marker.type = visualization_msgs::Marker::ARROW;
     marker.action = visualization_msgs::Marker::ADD;
     marker.scale.x = 1.0;
