@@ -6,7 +6,7 @@
    <arg name="depth_processing" value="false"/>
    <arg name="scan_topic" value="/scan"/>
   <!-- <include file="$(find move_base)/launch/move_base.launch" output="screen"></include> --> <!--Unsure if it needs the screen or if this makes things more complicated-->
-   <node pkg="$(find move_base)" type="move_base" name="move_base"></node>
+   <!--<node pkg="$(find move_base)" type="move_base" name="move_base"></node>-->
    <param name="controller_frequency" value="10.0"/>
    <rosparam file="$(find p1-b337)/param/costmap_common_param.yaml" command="load" ns="global_costmap"/>
    <rosparam file="$(find p1-b337)/param/costmap_common_param.yaml" command="load" ns="local_costmap"/>
