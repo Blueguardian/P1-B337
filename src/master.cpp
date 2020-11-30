@@ -14,7 +14,7 @@
 #include <visualization_msgs/Marker.h>
 #include <visualization_msgs/MarkerArray.h>
 
-
+ros::NodeHandle* ptrnh;
 
 bool base_state = 0;
 bool base_fail;
@@ -35,6 +35,7 @@ void send_markers(move_base_msgs::MoveBaseGoal goal); //Send markers to the visu
 int main(int argc, char** argv){
   ros::init(argc, argv, "master"); //ros initialisation
   ros::NodeHandle nh2; //Testing nodehandle naming convention
+  ptrnh = &nh2;
 
   MoveBaseClient ac("move_base", true); //Defining a client to send goals to the move_base server.
 
@@ -205,19 +206,19 @@ void send_goal(const geometry_msgs::PointStamped& goal_point)
   goal.target_pose.pose.position.z = 1;
   goal.target_pose.pose.orientation.w = goal_point.point.z;
   ac.sendGoal(goal, boost::bind(&_goal_reached_cb, _1, _2));
- // send_markers(goal);
+  send_markers(goal);
   std::cout << "Sending goal.." << std::endl;
   ac.waitForResult();
 }
 
-/* void send_markers(move_base_msgs::MoveBaseGoal goal)
+ void send_markers(move_base_msgs::MoveBaseGoal goal)
 {
     ros::Publisher marker_pub;
-    marker_pub = nh2.advertise<visualization_msgs::MarkerArray>("busroute_markers", 1);
+    marker_pub = ptrnh->advertise<visualization_msgs::MarkerArray>("busroute_markers", 1);
     visualization_msgs::Marker marker;
     visualization_msgs::MarkerArray marker_array;
     marker.header.stamp = ros::Time::now();
-    marker.ns = "target_point";0
+    marker.ns = "target_point";
     marker.type = visualization_msgs::Marker::ARROW;
     marker.action = visualization_msgs::Marker::ADD;
     marker.scale.x = 1.0;
@@ -239,4 +240,4 @@ void send_goal(const geometry_msgs::PointStamped& goal_point)
     marker_array.markers.push_back(marker);
     marker_pub.publish(marker_array);
     }
-    */
+    
