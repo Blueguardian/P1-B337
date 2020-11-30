@@ -1,5 +1,7 @@
 cmake_minimum_required(VERSION 3.0.2)
-project(robp1_rigtig)
+project(p1-b337)
+
+
 
 ## Compile as C++11, supported in ROS Kinetic and newer
 add_compile_options(-std=c++11)
@@ -11,16 +13,22 @@ find_package(catkin REQUIRED COMPONENTS
  roscpp
  rospy
  std_msgs
- message_generation
- #genmsg
- #turtlesim
- sensor_msgs
- geometry_msgs
+ turtlesim
  tf
-
- 
-
+ geometry_msgs
+ genmsg
+ #message_generation
+ move_base_msgs
+ actionlib
+ image_transport
+ pcl_ros
+ sensor_msgs
+ std_srvs
+ cv_bridge
+ visualization_msgs
  )
+
+ find_package(OpenCV 3 REQUIRED)
 
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
@@ -105,9 +113,10 @@ find_package(catkin REQUIRED COMPONENTS
 ## CATKIN_DEPENDS: catkin_packages dependent projects also need
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
-#  INCLUDE_DIRS include
+  INCLUDE_DIRS
+  ${OpenCV_INCLUDE_DIRS}
 #  LIBRARIES turtlesim_games
-#  CATKIN_DEPENDS other_catkin_pkg
+  CATKIN_DEPENDS message_runtime
 #  DEPENDS system_lib
 #CATKIN_DEPENDS geometry_msgs roscpp std_msgs message_runtime
 #CATKIN_DEPENDS message_runtime
@@ -121,7 +130,7 @@ catkin_package(
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
 include_directories(
-# include
+#include
 ${catkin_INCLUDE_DIRS}
 )
 
@@ -133,41 +142,68 @@ ${catkin_INCLUDE_DIRS}
 ## Add cmake target dependencies of the library
 ## as an example, code may need to be generated before libraries
 ## either from message generation or dynamic reconfigure
-# add_dependencies(${PROJECT_NAME} ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+
 
 ## Declare a C++ executable
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
+
 add_executable(${PROJECT_NAME}_pointCloud_msgs src/pointCloud_msgs.cpp)
 add_executable(${PROJECT_NAME}_scan_msgs src/scan_msgs.cpp)
-add_executable(tf_broadcaster src/tf_broadcaster.cpp)
-add_executable(tf_listener src/tf_listener.cpp)
+add_executable(${PORJECT_NAME}tf_broadcaster src/tf_broadcaster.cpp)
+add_executable(${PROJECT_NAME}tf_listener src/tf_listener.cpp)
+add_executable(${PROJECT_NAME}_user_input src/user_input.cpp)
+add_executable(${PROJECT_NAME}_master src/master.cpp)
+add_executable(${PROJECT_NAME}_listener_test test_files/listener_test.cpp)
+add_executable(${PROJECT_NAME}_exhibit_recorder src/exhibit_recorder.cpp)
+
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
 ## target back to the shorter version for ease of user use
 ## e.g. "rosrun someones_pkg node" instead of "rosrun someones_pkg someones_pkg_node"
+
 set_target_properties(${PROJECT_NAME}_pointCloud_msgs PROPERTIES OUTPUT_NAME pointCloud_msgs PREFIX "")
 set_target_properties(${PROJECT_NAME}_scan_msgs PROPERTIES OUTPUT_NAME scan_msgs PREFIX "")
+set_target_properties(${PROJECT_NAME}_user_input PROPERTIES OUTPUT_NAME user_input PREFIX "")
+set_target_properties(${PROJECT_NAME}_master PROPERTIES OUTPUT_NAME master PREFIX "")
+set_target_properties(${PROJECT_NAME}_listener_test PROPERTIES OUTPUT_NAME listener_test PREFIX "")
+set_target_properties(${PROJECT_NAME}_exhibit_recorder PROPERTIES OUTPUT_NAME exhibit_recorder PREFIX "")
 
 
 ## Add cmake target dependencies of the executable
 ## same as for the library above
-# add_dependencies(${PROJECT_NAME}_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+## add_dependencies(${PROJECT_NAME}_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+
 
 ## Specify libraries to link a library or executable target against
+
 
 ##Motion planning executable
 target_link_libraries(${PROJECT_NAME}_pointCloud_msgs
    ${catkin_LIBRARIES}
 )
-
-##Motion planning executable
 target_link_libraries(${PROJECT_NAME}_scan_msgs
    ${catkin_LIBRARIES}
 )
-target_link_libraries(tf_broadcaster ${catkin_LIBRARIES})
-target_link_libraries(tf_listener ${catkin_LIBRARIES})
+target_link_libraries(${PROJECT_NAME}_user_input
+   ${catkin_LIBRARIES}
+)
+target_link_libraries(${PROJECT_NAME}_master
+  ${catkin_LIBRARIES}
+)
+target_link_libraries(${PROJECT_NAME}_listener_test
+${catkin_LIBRARIES}
+)
+target_link_libraries(${PROJECT_NAME}_exhibit_recorder
+${catkin_LIBRARIES} ${OpenCV_LIBS}
+)
+target_link_libraries(${PROJECT_NAME}tf_broadcaster
+${catkin_LIBRARIES}
+)
+target_link_libraries(${PROJECT_NAME}tf_listener
+${catkin_LIBRARIES}
+)
 #############
 ## Install ##
 #############
@@ -187,14 +223,17 @@ target_link_libraries(tf_listener ${catkin_LIBRARIES})
 install(TARGETS
  ${PROJECT_NAME}_pointCloud_msgs
  ${PROJECT_NAME}_scan_msgs
- tf_broadcaster
- tf_listener
+ ${PROJECT_NAME}_tf_broadcaster
+ ${PROJECT_NAME}_tf_listener
+ ${PROJECT_NAME}_user_input
+ ${PROJECT_NAME}_master
+ ${PROJECT_NAME}_listener_test
+ ${PROJECT_NAME}_exhibit_recorder
    RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
  )
 
-## Mark libraries for installation
-## See http://docs.ros.org/melodic/api/catkin/html/howto/format1/building_libraries.html
-# install(TARGETS ${PROJECT_NAME}
+## Mark libraries for target_link_libraries(${PROJECT_NAME}_listener_test
+
 #   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
 #   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
 #   RUNTIME DESTINATION ${CATKIN_GLOBAL_BIN_DESTINATION}
@@ -226,3 +265,4 @@ install(TARGETS
 
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
+

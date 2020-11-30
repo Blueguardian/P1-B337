@@ -1,0 +1,15 @@
+<launch>  
+   <include file="$(find turtlebot_bringup)/launch/minimal.lanuch"/> <!--Unsure if this is needed-->
+   <include file="$(find turtlebot_bringup)/launch/3dsensor.launch">
+   <arg name="rgb_processing" value="true" />
+   <arg name="depth_registration" value="false" />
+   <arg name="depth_processing" value="false" />
+   <arg name="scan_topic" value="/scan" />
+   <include file="$(find move_base)/launch/move_base.launch" output="screen"> <!--Unsure if it needs the screen or if this makes things more complicated-->
+   <param name="controller_frequency" value="10.0"/>
+   <rosparam file="$(find p1-b337)/params/costmap_common_param.yaml" command="load" ns="global_costmap" />
+   <rosparam file="$(find p1-b337)/params/costmap_common_param.yaml" command="load" ns="local_costmap" />
+   <rosparam file="$(find p1-b337)/params/local_costmap_param.yaml" command="load" />
+   <rosparam file="$(find p1-b337)/params/global_costmap_param.yaml" command="load" />
+   <rosparam file="$(find p1-b337)/params/trajectory_planner.yaml" command="load" />
+</lanuch>
