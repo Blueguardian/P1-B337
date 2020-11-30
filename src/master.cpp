@@ -49,7 +49,7 @@ int main(int argc, char** argv){
   ros::Subscriber user_input213 = nh2.subscribe("user_input3", 1, move_to_coord3); // Subscribes to the user_input topic and when it receives a messege it runs the callback function
   ros::Publisher base_state_pub = nh2.advertise<std_msgs::Bool>("base_state", 5); //Creating a publisher for publishing the state of the MoveBaseClient
   ros::Subscriber odom = nh2.subscribe<nav_msgs::Odometry>("/odom", 10, odom_callback);
-  ros::Publisher take_picture = nh2.advertise<std_msgs::Bool>("take_picture", 1);
+  
   
   
 
@@ -80,14 +80,6 @@ while(ros::ok()) //while(!= ros::Shutdown(); or the user has Ctrl+C out of the p
   goal.point.y = coordy;
   goal.point.z = coordz;  
 
-  if(base_state == false && base_fail == false)
-  {
-    std_msgs::Bool msg;
-    msg.data = true;
-    take_picture.publish(msg);
-  }
-
-
   send_goal(goal);
 
 
@@ -103,9 +95,12 @@ void _goal_reached_cb(const actionlib::SimpleClientGoalState& state, const move_
   if(state == state.SUCCEEDED)
   {
     ROS_INFO("The goal has succesfully been reached!");
+    ros::Publisher take_picture = ptrnh->advertise<std_msgs::Bool>("take_picture", 1);
     base_state = false;
     base_fail = false;
-
+    std_msgs::Bool msg;
+    msg.data = true;
+    take_picture.publish(msg);
   }
   else if(state == state.ACTIVE)
   {
@@ -199,6 +194,7 @@ void odom_callback(const nav_msgs::Odometry::ConstPtr& odom_msg)
 void send_goal(const geometry_msgs::PointStamped& goal_point)
 {
   MoveBaseClient ac("move_base", true);
+  ros::Publisher take_picture = ptrnh->advertise<std_msgs::Bool>("take_picture", 1);
   move_base_msgs::MoveBaseGoal goal;
   goal.target_pose.header.frame_id = goal_point.header.frame_id;
   goal.target_pose.pose.position.x = goal_point.point.x;
@@ -209,6 +205,7 @@ void send_goal(const geometry_msgs::PointStamped& goal_point)
   send_markers(goal);
   std::cout << "Sending goal.." << std::endl;
   ac.waitForResult();
+  
 }
 
  void send_markers(move_base_msgs::MoveBaseGoal goal)
