@@ -150,8 +150,8 @@ ${catkin_INCLUDE_DIRS}
 
 add_executable(${PROJECT_NAME}_pointCloud_msgs src/pointCloud_msgs.cpp)
 add_executable(${PROJECT_NAME}_scan_msgs src/scan_msgs.cpp)
-add_executable(${PORJECT_NAME}tf_broadcaster src/tf_broadcaster.cpp)
-add_executable(${PROJECT_NAME}tf_listener src/tf_listener.cpp)
+#add_executable(${PORJECT_NAME}_tf_output src/tf_output.cpp)
+#add_executable(${PROJECT_NAME}_tf_listener src/tf_listener.cpp)
 add_executable(${PROJECT_NAME}_user_input src/user_input.cpp)
 add_executable(${PROJECT_NAME}_master src/master.cpp)
 add_executable(${PROJECT_NAME}_listener_test test_files/listener_test.cpp)
@@ -169,6 +169,9 @@ set_target_properties(${PROJECT_NAME}_user_input PROPERTIES OUTPUT_NAME user_inp
 set_target_properties(${PROJECT_NAME}_master PROPERTIES OUTPUT_NAME master PREFIX "")
 set_target_properties(${PROJECT_NAME}_listener_test PROPERTIES OUTPUT_NAME listener_test PREFIX "")
 set_target_properties(${PROJECT_NAME}_exhibit_recorder PROPERTIES OUTPUT_NAME exhibit_recorder PREFIX "")
+#set_target_properties(${PROJECT_NAME}_tf_output PROPERTIES OUTPUT_NAME tf_output PREFIX "")
+#set_target_properties(${PROJECT_NAME}_tf_listener PROPERTIES OUTPUT_NAME tf_listener PREFIX "")
+
 
 
 ## Add cmake target dependencies of the executable
@@ -198,12 +201,12 @@ ${catkin_LIBRARIES}
 target_link_libraries(${PROJECT_NAME}_exhibit_recorder
 ${catkin_LIBRARIES} ${OpenCV_LIBS}
 )
-target_link_libraries(${PROJECT_NAME}tf_broadcaster
-${catkin_LIBRARIES}
-)
-target_link_libraries(${PROJECT_NAME}tf_listener
-${catkin_LIBRARIES}
-)
+#target_link_libraries(${PROJECT_NAME}_tf_output
+#${catkin_LIBRARIES}
+#)
+#target_link_libraries(${PROJECT_NAME}_tf_listener
+#${catkin_LIBRARIES}
+#)
 #############
 ## Install ##
 #############
@@ -223,8 +226,8 @@ ${catkin_LIBRARIES}
 install(TARGETS
  ${PROJECT_NAME}_pointCloud_msgs
  ${PROJECT_NAME}_scan_msgs
- ${PROJECT_NAME}_tf_broadcaster
- ${PROJECT_NAME}_tf_listener
+ #${PROJECT_NAME}_tf_output
+ #${PROJECT_NAME}_tf_listener
  ${PROJECT_NAME}_user_input
  ${PROJECT_NAME}_master
  ${PROJECT_NAME}_listener_test

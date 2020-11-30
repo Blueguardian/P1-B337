@@ -16,15 +16,13 @@
 
 
 
-bool base_state;
-ros::Publisher marker_pub;
-ros::Publisher take_picture;
+bool base_state = 0;
+bool base_fail;
 
 typedef actionlib::SimpleActionClient<move_base_msgs::MoveBaseAction> MoveBaseClient;
 double coordx;
 double coordy;
 double coordz;
-MoveBaseClient ac("move_base", true);
 void move_to_coord1(const std_msgs::Float32::ConstPtr& msgx); //Prints messeges containing the received coordinates
 void move_to_coord2(const std_msgs::Float32::ConstPtr& msgy); //Prints messeges containing the received coordinates
 void move_to_coord3(const std_msgs::Float32::ConstPtr& msgz); //Prints messeges containing the received coordinates
@@ -50,14 +48,20 @@ int main(int argc, char** argv){
   ros::Subscriber user_input213 = nh2.subscribe("user_input3", 1, move_to_coord3); // Subscribes to the user_input topic and when it receives a messege it runs the callback function
   ros::Publisher base_state_pub = nh2.advertise<std_msgs::Bool>("base_state", 5); //Creating a publisher for publishing the state of the MoveBaseClient
   ros::Subscriber odom = nh2.subscribe<nav_msgs::Odometry>("/odom", 10, odom_callback);
-  marker_pub = nh2.advertise<visualization_msgs::MarkerArray>("busroute_markers", 1);
-  take_picture = nh2.advertise<std_msgs::Bool>("take_picture", 1);
+  ros::Publisher take_picture = nh2.advertise<std_msgs::Bool>("take_picture", 1);
+  
+  
 
   std::cout<<"x-coordinate stored:"<<coordx<<std::endl;  //Printing out the messege content that we copied
   std::cout<<"y-coordinate stored:"<<coordy<<std::endl;
   std::cout<<"z-coordinate stored:"<<coordz<<std::endl;
 
   ros::Rate loop(10);
+
+  std_msgs::Bool state_get;
+  state_get.data = base_state;
+
+  base_state_pub.publish(state_get);
 
 while(ros::ok()) //while(!= ros::Shutdown(); or the user has Ctrl+C out of the program.)
   {
@@ -75,14 +79,17 @@ while(ros::ok()) //while(!= ros::Shutdown(); or the user has Ctrl+C out of the p
   goal.point.y = coordy;
   goal.point.z = coordz;  
 
-  std_msgs::Bool state_get;
-  state_get.data = base_state;
+  if(base_state == false && base_fail == false)
+  {
+    std_msgs::Bool msg;
+    msg.data = true;
+    take_picture.publish(msg);
+  }
 
-  base_state_pub.publish(state_get);
 
   send_goal(goal);
 
-  ac.waitForResult();
+
 
   loop.sleep(); 
   ros::spin();
@@ -96,43 +103,50 @@ void _goal_reached_cb(const actionlib::SimpleClientGoalState& state, const move_
   {
     ROS_INFO("The goal has succesfully been reached!");
     base_state = false;
-    std_msgs::Bool msg;
-    take_picture.publish(msg);
+    base_fail = false;
+
   }
   else if(state == state.ACTIVE)
   {
     ROS_INFO("The robot is currently en route!");
     base_state = true;
+    base_fail = false;
   }
   else if(state == state.ABORTED)
   {
     ROS_INFO("The goal has been aborted!");
     base_state = false;
+    base_fail = true;
   }
   else if(state == state.LOST)
   {
     ROS_INFO("The goal has been lost!");
     base_state = false;
+    base_fail = true;
   }
   else if(state == state.PENDING)
   {
     ROS_INFO("The goal is currently pending!");
     base_state = true;
+    base_fail = false;
   }
   else if (state == state.REJECTED)
   {
     ROS_INFO("The goal has been rejected!");
     base_state = false;
+    base_fail = true;
   }
   else if(state == state.RECALLED)
   {
     ROS_INFO("The goal has been recalled!");
     base_state = false;
+    base_fail = true;
   }
   else
   {
     ROS_INFO("Something went wrong!");
     base_state = false;
+    base_fail = true;
   }
   
   
@@ -183,6 +197,7 @@ void odom_callback(const nav_msgs::Odometry::ConstPtr& odom_msg)
 
 void send_goal(const geometry_msgs::PointStamped& goal_point)
 {
+  MoveBaseClient ac("move_base", true);
   move_base_msgs::MoveBaseGoal goal;
   goal.target_pose.header.frame_id = goal_point.header.frame_id;
   goal.target_pose.pose.position.x = goal_point.point.x;
@@ -190,12 +205,15 @@ void send_goal(const geometry_msgs::PointStamped& goal_point)
   goal.target_pose.pose.position.z = 1;
   goal.target_pose.pose.orientation.w = goal_point.point.z;
   ac.sendGoal(goal, boost::bind(&_goal_reached_cb, _1, _2));
-  send_markers(goal);
+ // send_markers(goal);
   std::cout << "Sending goal.." << std::endl;
+  ac.waitForResult();
 }
 
-void send_markers(move_base_msgs::MoveBaseGoal goal)
+/* void send_markers(move_base_msgs::MoveBaseGoal goal)
 {
+    ros::Publisher marker_pub;
+    marker_pub = nh2.advertise<visualization_msgs::MarkerArray>("busroute_markers", 1);
     visualization_msgs::Marker marker;
     visualization_msgs::MarkerArray marker_array;
     marker.header.stamp = ros::Time::now();
@@ -221,3 +239,4 @@ void send_markers(move_base_msgs::MoveBaseGoal goal)
     marker_array.markers.push_back(marker);
     marker_pub.publish(marker_array);
     }
+    */
