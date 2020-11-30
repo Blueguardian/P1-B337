@@ -4,7 +4,7 @@
    
    <!--<include file="$(find turtlebot_navigation)/launch/gmapping_demo.launch" />/-->
 
-   <node name="$(anon rviz)" pkg="rviz" type="rviz" args="-d $(find p1-b337)/config/museum.rviz"/></node>
+   <node name="$(anon rviz)" pkg="rviz" type="rviz" args="-d $(find p1-b337)/config/museum.rviz"></node>
    <node pkg="p1-b337" type="master" name="master" output="screen"></node>
    ros::Duration(2.0).sleep();
    <node pkg="p1-b337" type="exhibit_recorder" name="exhibit_recorder" output="screen"></node>
