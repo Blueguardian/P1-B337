@@ -60,7 +60,7 @@ while(!ac.waitForServer(ros::Duration(5.0))){ //wait for the action server to co
 
 while(ros::ok()) //while(!= ros::Shutdown(); or the user has Ctrl+C out of the program.)
   {
-  while(coordx != 0 || coordy != 0)
+  while(coordx != 0 && coordy != 0)
   {
   geometry_msgs::PointStamped goal; //Creates a new Goal of type MoveBaseGoal, for sending information to the move_base.
 
