@@ -85,7 +85,7 @@ while(ros::ok()) //while(!= ros::Shutdown(); or the user has Ctrl+C out of the p
 
   loop.sleep(); 
   }
-  ros::spin();
+  ros::spinOnce();
   }
  return 0; //Program run succesfully.
 }

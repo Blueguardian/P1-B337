@@ -94,8 +94,8 @@ int main(int argc, char *argv[]) //main function
 
                     double z_coord = coordarray[iter].z;
 
-                    double dif_x = 1.5*cos(z_coord);
-                    double dif_y = 1.5*sin(z_coord);
+                    double dif_x = 0.5*cos(z_coord);
+                    double dif_y = 0.5*sin(z_coord);
                     double x_coord = (coordarray[iter].x-dif_x); //Assigning the coordinates to variables
                     double y_coord = (coordarray[iter].y-dif_y);
 
@@ -113,8 +113,11 @@ int main(int argc, char *argv[]) //main function
                     publish_z.publish(msg_z);
 
                     loop.sleep(); //Sleep for 10 milliseconds before trying again
-                }    
-        }
+                    base_state = true;
+                }
+            loop.sleep();    
+        }   
+
     }
 return 0; //Program ran succesfully
 }
@@ -232,7 +235,7 @@ void insertCoord(point (*array), double room_length, double room_width, int nume
         array[i].z = z;
         while(z > 360 || z < 0) //validation check
         {
-            std::cout << "Incorrect value, please try again \n Orientation of the" << i << ". exhibit: ";
+            std::cout << "Incorrect value, please try again \n Orientation of the " << i << ". exhibit: ";
             std::cin >> z;
             array[i].z = z;
         }
