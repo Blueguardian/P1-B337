@@ -54,12 +54,9 @@ while(!ac.waitForServer(ros::Duration(5.0))){ //wait for the action server to co
   std::cout<<"y-coordinate stored:"<<coordy<<std::endl;
   std::cout<<"z-coordinate stored:"<<coordz<<std::endl;
 
-  ros::Rate loop(10);
+  ros::Rate loop(1);
 
-  std_msgs::Bool state_get;
-  state_get.data = base_state;
 
-  base_state_pub.publish(state_get);
 
 while(ros::ok()) //while(!= ros::Shutdown(); or the user has Ctrl+C out of the program.)
   {
@@ -81,7 +78,10 @@ while(ros::ok()) //while(!= ros::Shutdown(); or the user has Ctrl+C out of the p
 
   send_goal(goal);
 
+  std_msgs::Bool state_get;
+  state_get.data = base_state;
 
+  base_state_pub.publish(state_get);
 
   loop.sleep(); 
   }

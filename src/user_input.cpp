@@ -37,13 +37,13 @@ int main(int argc, char *argv[]) //main function
 {
     ros::init(argc, argv, "user_input"); //initializing ros
     ros::NodeHandle nh1; //creating a nodehandle for the node.
-    ros::Rate loop(50); //creating a loop rate for pauses (50 milliseconds)
+    ros::Rate loop(0.1); //creating a loop rate for pauses (50 milliseconds)
 
     ros::Publisher reset_odom = nh1.advertise<std_msgs::Empty>("move_base/commands/reset_odometry", 1); //Creating a publisher for resetting the odometry
     ros::Publisher publish_x = nh1.advertise<std_msgs::Float32>("user_input1", 1); //creating a publisher for the user_input to publish it later
     ros::Publisher publish_y = nh1.advertise<std_msgs::Float32>("user_input2", 1); //creating a publisher for the user_input to publish it later
     ros::Publisher publish_z = nh1.advertise<std_msgs::Float32>("user_input3", 1); //creating a publisher for the user_input to publish it later
-    ros::Subscriber base_state = nh1.subscribe("base_state", 5, base_state_get); //Creating a subscriber to get the current state of the move_base //Needs to be looked over
+    ros::Subscriber base_state_sub = nh1.subscribe("base_state", 5, base_state_get); //Creating a subscriber to get the current state of the move_base //Needs to be looked over
     
     std_msgs::Empty odom_res;
     reset_odom.publish(odom_res); //Sending msg to reset odometry
@@ -87,8 +87,8 @@ int main(int argc, char *argv[]) //main function
 
         while(iter != room.num_exhibits) //While loop to keep looping until there are no more exhibits
         {   
-           //while(base_state == false) //While loop that only runs when the robot is finished with it's current task //Needs work
-           //    {
+           while(base_state == false) //While loop that only runs when the robot is finished with it's current task //Needs work
+              {
                     sortCoord(coordarray, iter, room.num_exhibits+1, x_coord, y_coord); //Sorting the coordinate array again until all points have been processed
 
                     double z_coord = coordarray[iter].z;
@@ -112,7 +112,7 @@ int main(int argc, char *argv[]) //main function
                     publish_z.publish(msg_z);
 
                     loop.sleep(); //Sleep for 10 milliseconds before trying again
-              //  }    
+                }    
         }
     }
 return 0; //Program ran succesfully
@@ -131,20 +131,6 @@ roomType insertRoom(double roomLength, double roomWidth)
 
     roomType newRoomType; //creating the roomTy0pe data type
     std::cout << "Welcome operator! \n You are currently operating the Museum X-300 scanner robot. \n The current room has been scanned. \n"; // Please input the room length and width in meters to continue. \n";
-   // std::cout << "Room length:";
-   // std::cin >> newRoomType.room_length; 
-   // while(newRoomType.room_length <= 0) //validation check
-   // {
-   //     std::cout << "Incorrect value, please try again \n Room length:"; 
-   //     std::cin >> newRoomType.room_length; 
-   // }
-   // std::cout << "Room width:"; 
-   // std::cin >> newRoomType.room_width; 
-   // while(newRoomType.room_width <= 0) //validation check
-   // {
-   //     std::cout << "Incorrect value, please try again \n Room width:"; 
-   //     std::cin >> newRoomType.room_width;
-   // }
     std::cout << "The room dimensions are: Length: " << roomLength << "m Width: " << roomWidth << "m. \n";
     std::cout << "Please input the number of exhibitions present in the room:";
     std::cin >> newRoomType.num_exhibits;
