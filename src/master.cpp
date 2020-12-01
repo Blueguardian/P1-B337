@@ -201,6 +201,7 @@ void send_goal(const geometry_msgs::PointStamped& goal_point)
   goal.target_pose.pose.position.y = goal_point.point.y;
   goal.target_pose.pose.position.z = 1;
   goal.target_pose.pose.orientation.w = goal_point.point.z;
+  goal.target_pose.pose.orientation.z = goal_point.point.z;
   ac.sendGoal(goal, boost::bind(&_goal_reached_cb, _1, _2));
   send_markers(goal);
   std::cout << "Sending goal.." << std::endl;
