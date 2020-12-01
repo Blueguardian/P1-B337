@@ -8,6 +8,7 @@
 #include <tf/transform_listener.h>
 #include <std_msgs/Empty.h>
 #include <math.h>
+#include <bits/stdc++.h>
 
 bool base_state; //Global variable to store data from the master function call.
 
