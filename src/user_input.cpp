@@ -134,6 +134,7 @@ roomType insertRoom(double roomLength, double roomWidth)
     std::cout << "The room dimensions are: Length: " << roomLength << "m Width: " << roomWidth << "m. \n";
     std::cout << "Please input the number of exhibitions present in the room:";
     std::cin >> newRoomType.num_exhibits;
+    newRoomType.num_exhibits = static_cast<int> (newRoomType.num_exhibits);
     while(newRoomType.num_exhibits <= 0) //validation check
     {
         std::cout << "There must be at least one exhibit, and the exhibit number cannot be negative! Please try again! \n Please input the number of exhibitions present in the room: ";
