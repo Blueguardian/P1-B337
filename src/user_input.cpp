@@ -76,6 +76,7 @@ int main(int argc, char *argv[]) //main function
     {
             std::cout << "Sorted coordset: [" << coordarray[i].x << ", " << coordarray[i].y << ", " << coordarray[i].z << "] \n";
     }
+
     while(ros::ok()) //Starting the ros loop
     {
         double x_coord = coordarray[0].x;

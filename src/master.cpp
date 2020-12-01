@@ -41,18 +41,15 @@ int main(int argc, char** argv){
 
   //This needs to run for the program to succesfully contact the move_base
   //The movebase server needs the following to start: A static map or a running gmapping node, a functioning amcl setup, to be run
- /* while(!ac.waitForServer(ros::Duration(5.0))){ //wait for the action server to come up
+while(!ac.waitForServer(ros::Duration(5.0))){ //wait for the action server to come up
     ROS_INFO("Waiting for the move_base action server to come up"); //Printing a fitting messege.
-  } */
+  }
   ros::Subscriber user_input123 = nh2.subscribe("user_input1", 1, move_to_coord1); // Subscribes to the user_input topic and when it receives a messege it runs the callback function
   ros::Subscriber user_input321 = nh2.subscribe("user_input2", 1, move_to_coord2); // Subscribes to the user_input topic and when it receives a messege it runs the callback function
   ros::Subscriber user_input213 = nh2.subscribe("user_input3", 1, move_to_coord3); // Subscribes to the user_input topic and when it receives a messege it runs the callback function
   ros::Publisher base_state_pub = nh2.advertise<std_msgs::Bool>("base_state", 5); //Creating a publisher for publishing the state of the MoveBaseClient
   ros::Subscriber odom = nh2.subscribe<nav_msgs::Odometry>("/odom", 10, odom_callback);
   
-  
-  
-
   std::cout<<"x-coordinate stored:"<<coordx<<std::endl;  //Printing out the messege content that we copied
   std::cout<<"y-coordinate stored:"<<coordy<<std::endl;
   std::cout<<"z-coordinate stored:"<<coordz<<std::endl;
@@ -65,6 +62,8 @@ int main(int argc, char** argv){
   base_state_pub.publish(state_get);
 
 while(ros::ok()) //while(!= ros::Shutdown(); or the user has Ctrl+C out of the program.)
+  {
+  while(coordx != 0 || coordy != 0)
   {
   geometry_msgs::PointStamped goal; //Creates a new Goal of type MoveBaseGoal, for sending information to the move_base.
 
@@ -85,6 +84,7 @@ while(ros::ok()) //while(!= ros::Shutdown(); or the user has Ctrl+C out of the p
 
 
   loop.sleep(); 
+  }
   ros::spin();
   }
  return 0; //Program run succesfully.
