@@ -94,19 +94,25 @@ int main(int argc, char *argv[]) //main function
               {
                     sortCoord(coordarray, iter, room.num_exhibits+1, x_coord, y_coord); //Sorting the coordinate array again until all points have been processed
 
-                    double z_coord = coordarray[iter].z;
+                    z_coord = coordarray[iter].z;
+
+                    std::cout << "Coordset before: [x: " << coordarray[iter].x << ", y: " << coordarray[iter].y << ", z: " << z_coord <<"]" << std::endl; //For testing purposes
 
                     double dif_x = 0.5*cos(z_coord);
                     double dif_y = 0.5*sin(z_coord);
 
+                    std::cout << "Differential distance: [x: " << dif_x << ", y: " << dif_y <<"]" << std::endl;//For testing purposes
+
                     if(z_coord<=M_PI && z_coord>=0){
-                    double x_coord = (coordarray[iter].x+dif_x); //Assigning the coordinates to variables
-                    double y_coord = (coordarray[iter].y+dif_y);
+                    x_coord = coordarray[iter].x+dif_x; //Assigning the coordinates to variables
+                    y_coord = coordarray[iter].y+dif_y;
                     }
                     else{    //The angle must be between Pi and 2*Pi
-                    double x_coord = (coordarray[iter].x-dif_x); //Assigning the coordinates to variables
-                    double y_coord = (coordarray[iter].y-dif_y);
+                    x_coord = (coordarray[iter].x-dif_x); //Assigning the coordinates to variables
+                    y_coord = (coordarray[iter].y-dif_y);
                     }
+
+                    std::cout << "Coordset before: [x: " << x_coord << ", y: " << y_coord << ", z: " << z_coord <<"]" << std::endl;//For testing purposes
 
                     std_msgs::Float32 msg_x;
                     std_msgs::Float32 msg_y;
@@ -116,6 +122,8 @@ int main(int argc, char *argv[]) //main function
                     msg_y.data = y_coord;
                     msg_z.data = rob_facing_angle(z_coord);
                     iter++; //increment the iterator to let the program know, that the coordinateset has been processed and needs no further processing
+
+                    std::cout << "message data for transfor: [x: " << msg_x.data << ", y: " << msg_y.data << ", z: " << msg_z.data << "]" << std::endl; //For testing purposes
 
                     publish_x.publish(msg_x); //Publish the next first coordinate
                     publish_y.publish(msg_y); //Publish the next second coordinate
