@@ -145,9 +145,9 @@ roomType insertRoom(double roomLength, double roomWidth)
     //beginning of function insertRoom()
 
     roomType newRoomType; //creating the roomTy0pe data type
-    std::cout << "Welcome operator! \n You are currently operating the Museum X-300 scanner robot. \n The current room has been scanned. \n"; // Please input the room length and width in meters to continue. \n";
-    std::cout << "The room dimensions are: Length: " << roomLength << "m Width: " << roomWidth << "m. \n";
-    std::cout << "Please input the number of exhibitions present in the room:";
+    ROS_INFO("Welcome operator! \n You are currently operating the Museum X-300 scanner robot. \n The current room has been scanned. \n");
+    ROS_INFO("The room has the following dimensions: [Length: %f, Width: %f] \n", roomLength, roomWidth);
+    ROS_INFO("Please input the number of exhibitions: ");
     std::cin >> newRoomType.num_exhibits;
     newRoomType.num_exhibits = static_cast<int> (newRoomType.num_exhibits);
     while(newRoomType.num_exhibits <= 0) //validation check
