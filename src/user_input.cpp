@@ -14,7 +14,6 @@ bool base_state; //Global variable to store data from the master function call.
 
 struct point
 {
-    public:
     double x = 0;
     double y = 0;
     double z = 0;
@@ -39,7 +38,7 @@ int main(int argc, char *argv[]) //main function
 {
     ros::init(argc, argv, "user_input"); //initializing ros
     ros::NodeHandle nh1; //creating a nodehandle for the node.
-    ros::Rate loop(0.1); //creating a loop rate for pauses (50 milliseconds)
+    ros::Rate loop(0.1); //creating a loop rate for pauses (10 seconds)
 
     ros::Publisher reset_odom = nh1.advertise<std_msgs::Empty>("move_base/commands/reset_odometry", 1); //Creating a publisher for resetting the odometry
     ros::Publisher publish_x = nh1.advertise<std_msgs::Float32>("user_input1", 1); //creating a publisher for the user_input to publish it later
@@ -108,7 +107,7 @@ int main(int argc, char *argv[]) //main function
                     double x_coord = (coordarray[iter].x-dif_x); //Assigning the coordinates to variables
                     double y_coord = (coordarray[iter].y-dif_y);
                     }
-                                   
+
                     std_msgs::Float32 msg_x;
                     std_msgs::Float32 msg_y;
                     std_msgs::Float32 msg_z;

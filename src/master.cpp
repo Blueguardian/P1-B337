@@ -13,6 +13,8 @@
 #include <nav_msgs/Odometry.h>
 #include <visualization_msgs/Marker.h>
 #include <visualization_msgs/MarkerArray.h>
+#include <tf2/LinearMath/Quaternion.h>
+
 
 ros::NodeHandle* ptrnh;
 
@@ -56,11 +58,9 @@ while(!ac.waitForServer(ros::Duration(5.0))){ //wait for the action server to co
 
   ros::Rate loop(1);
 
-
-
 while(ros::ok()) //while(!= ros::Shutdown(); or the user has Ctrl+C out of the program.)
   {
-  while(coordx != 0 && coordy != 0)
+  while((coordx > 0.01 || coordx < -0.01) && (coordy > 0.01 || coordy < -0.01))
   {
   geometry_msgs::PointStamped goal; //Creates a new Goal of type MoveBaseGoal, for sending information to the move_base.
 
@@ -196,12 +196,17 @@ void send_goal(const geometry_msgs::PointStamped& goal_point)
   MoveBaseClient ac("move_base", true);
   ros::Publisher take_picture = ptrnh->advertise<std_msgs::Bool>("take_picture", 1);
   move_base_msgs::MoveBaseGoal goal;
+  tf2::Quaternion rotation;
+  rotation.setRPY(0, 0, goal_point.point.z);
+  rotation.normalize();
   goal.target_pose.header.frame_id = goal_point.header.frame_id;
   goal.target_pose.pose.position.x = goal_point.point.x;
   goal.target_pose.pose.position.y = goal_point.point.y;
-  goal.target_pose.pose.position.z = 1;
-  goal.target_pose.pose.orientation.w = goal_point.point.z;
-  goal.target_pose.pose.orientation.z = goal_point.point.z;
+  // goal.target_pose.pose.position.z = 1; //Unknown if needed
+  goal.target_pose.pose.orientation.x = rotation.x();
+  goal.target_pose.pose.orientation.y = rotation.y();
+  goal.target_pose.pose.orientation.z = rotation.z();
+  goal.target_pose.pose.orientation.w = rotation.w();
   ac.sendGoal(goal, boost::bind(&_goal_reached_cb, _1, _2));
   send_markers(goal);
   std::cout << "Sending goal.." << std::endl;

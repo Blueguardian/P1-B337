@@ -15,6 +15,7 @@ find_package(catkin REQUIRED COMPONENTS
  std_msgs
  turtlesim
  tf
+ tf2
  geometry_msgs
  genmsg
  #message_generation
