@@ -46,8 +46,8 @@ int main(int argc, char *argv[]) //main function
     std_msgs::Empty odom_res;
     reset_odom.publish(odom_res); //Sending msg to reset odometry
 
-    double roomwidth = 64.9*0.05; //Room dimensions based on the static map
-    double roomlength = 101.8*0.05; //Room dimensions based on the static map
+    double roomwidth = 66*0.05; //Room dimensions based on the static map
+    double roomlength = 156*0.05; //Room dimensions based on the static map
 
     roomType room; //creating a variable of type roomType
     room = insertRoom(roomlength, roomwidth); //asking the user for the dimensions of the room and the number of exhibits
@@ -152,7 +152,7 @@ roomType insertRoom(double roomLength, double roomWidth)
     newRoomType.num_exhibits = static_cast<int> (newRoomType.num_exhibits);
     while(newRoomType.num_exhibits <= 0) //validation check
     {
-        std::cout << "There must be at least one exhibit, and the exhibit number cannot be negative! Please try again! \n Please input the number of exhibitions present in the room: ";
+        ROS_WARN("There must be at least one exhibit! Please try again! \n Please input the number of exhibitions present in the room: ");
         std::cin >> newRoomType.num_exhibits;
     }
     newRoomType.room_length = roomLength;
@@ -224,30 +224,30 @@ void insertCoord(point (*array), double room_length, double room_width, int nume
     double x, y, z;
     while(i < numexhi)
     {
-        std::cout << "Please input the length of the x-coordinate in meters for the " << i << ". exhibit: ";
+        ROS_INFO("Please input the length of the x-coordinate in meters for the %d. exhibit: ", i);
         std::cin >> x;
         array[i].x = x;
         while(x < -1*(room_length/2) || x > room_length/2) //validation check
         {
-            std::cout << "Incorrect value, please try again \n Length of x-coordinate in meters for the " << i << ". exhibit: ";
+            ROS_INFO("Incorrect value, please try again! \nPlease input the length of the x-coordinate in meters for the %d. exhibit: ", i);
             std::cin >> x;
             array[i].x = x;
         }
-        std::cout << "Please input the length of the y-coordinate in meters for the " << i << ". exhibit: ";
+        ROS_INFO("Please input the length of the y-coordinate in meters for the %d. exhibit: ", i);
         std::cin >> y;
         array[i].y = y;
         while(y < -1*(room_width/2) || y > room_width/2) //validation check
         {
-            std::cout << "Incorrect value, please try again \n Length of y-coordinate in meters for the " << i << ". exhibit: ";
+            ROS_INFO("Incorrect value, please try again! \nPlease input the length of the y-coordinate in meters for the %d. exhibit: ", i);
             std::cin >> y;
             array[i].y = y;
         }
-        std::cout << "Please input the orientation of the front of the " << i << ". exhibit in degrees: ";
+        ROS_INFO("Please input the orientation of the %d. exhibit in degrees", i);
         std::cin >> z;
         array[i].z = z;
         while(z > 360 || z < 0) //validation check
         {
-            std::cout << "Incorrect value, please try again \n Orientation of the " << i << ". exhibit: ";
+            ROS_INFO("Incorrect value, please try again! \nPlease input the orientation of the %d. exhibit", i);
             std::cin >> z;
             array[i].z = z;
         }
