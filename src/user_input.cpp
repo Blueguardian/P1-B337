@@ -14,9 +14,10 @@ bool base_state; //Global variable to store data from the master function call.
 
 struct point
 {
-    double x;
-    double y;
-    double z;
+    public:
+    double x = 0;
+    double y = 0;
+    double z = 0;
 };
 
 struct roomType //Creating a new datatype called roomType
@@ -61,11 +62,13 @@ int main(int argc, char *argv[]) //main function
     point1.z = 0;
     point coordarray[room.num_exhibits+1]; //defining an array of size  [room.num_exhibits][2] because it only moves in a 2 dimensional manner
     coordarray[0] = point1;
+
     insertCoord(coordarray, room.room_length, room.room_width, room.num_exhibits+1); //asks the user to input coordinates for each exhibit
-    degreeToRadian(coordarray, room.num_exhibits); //Converting degrees to radians
+
+    degreeToRadian(coordarray, room.num_exhibits+1); //Converting degrees to radians
 
     //For testing purposes
-    for(int i = 0; i < room.num_exhibits; i++) //printing the unsorted array for testing purposes
+    for(int i = 0; i < room.num_exhibits+1; i++) //printing the unsorted array for testing purposes
     {
             std::cout << "Unsorted coordset: [" << coordarray[i].x << ", " << coordarray[i].y << ", " << coordarray[i].z << "] \n";
     }
@@ -73,7 +76,7 @@ int main(int argc, char *argv[]) //main function
     sortCoord(coordarray, 0, room.num_exhibits+1, 0, 0); //sorts the array the first time
 
     //For testing purposes
-    for(int i = 0; i < room.num_exhibits; i++) //printing the sorted array for testing purposes
+    for(int i = 0; i < room.num_exhibits+1; i++) //printing the sorted array for testing purposes
     {
             std::cout << "Sorted coordset: [" << coordarray[i].x << ", " << coordarray[i].y << ", " << coordarray[i].z << "] \n";
     }
@@ -96,9 +99,16 @@ int main(int argc, char *argv[]) //main function
 
                     double dif_x = 0.5*cos(z_coord);
                     double dif_y = 0.5*sin(z_coord);
+
+                    if(z_coord<=M_PI && z_coord>=0){
+                    double x_coord = (coordarray[iter].x+dif_x); //Assigning the coordinates to variables
+                    double y_coord = (coordarray[iter].y+dif_y);
+                    }
+                    else{    //The angle must be between Pi and 2*Pi
                     double x_coord = (coordarray[iter].x-dif_x); //Assigning the coordinates to variables
                     double y_coord = (coordarray[iter].y-dif_y);
-
+                    }
+                                   
                     std_msgs::Float32 msg_x;
                     std_msgs::Float32 msg_y;
                     std_msgs::Float32 msg_z;
@@ -215,6 +225,7 @@ void insertCoord(point (*array), double room_length, double room_width, int nume
     {
         std::cout << "Please input the length of the x-coordinate in meters for the " << i << ". exhibit: ";
         std::cin >> x;
+        array[i].x = x;
         while(x < -1*(room_length/2) || x > room_length/2) //validation check
         {
             std::cout << "Incorrect value, please try again \n Length of x-coordinate in meters for the " << i << ". exhibit: ";
