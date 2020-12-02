@@ -1,10 +1,9 @@
 #include <ros/ros.h>
 #include <geometry_msgs/Twist.h>
-#include <iostream>
 #include <stdlib.h>
 #include <time.h>
 #include <std_msgs/Bool.h>
-#include <std_msgs/Float32.h>
+#include <std_msgs/Float32MultiArray.h>
 #include <tf/transform_listener.h>
 #include <std_msgs/Empty.h>
 #include <math.h>
@@ -41,9 +40,7 @@ int main(int argc, char *argv[]) //main function
     ros::Rate loop(0.1); //creating a loop rate for pauses (10 seconds)
 
     ros::Publisher reset_odom = nh1.advertise<std_msgs::Empty>("move_base/commands/reset_odometry", 1); //Creating a publisher for resetting the odometry
-    ros::Publisher publish_x = nh1.advertise<std_msgs::Float32>("user_input1", 1); //creating a publisher for the user_input to publish it later
-    ros::Publisher publish_y = nh1.advertise<std_msgs::Float32>("user_input2", 1); //creating a publisher for the user_input to publish it later
-    ros::Publisher publish_z = nh1.advertise<std_msgs::Float32>("user_input3", 1); //creating a publisher for the user_input to publish it later
+    ros::Publisher publish_point = nh1.advertise<std_msgs::Float32MultiArray>("user_input", 1); //creating a publisher for the user_input to publish it later
     ros::Subscriber base_state_sub = nh1.subscribe("base_state", 5, base_state_get); //Creating a subscriber to get the current state of the move_base //Needs to be looked over
     
     std_msgs::Empty odom_res;
@@ -69,7 +66,7 @@ int main(int argc, char *argv[]) //main function
     //For testing purposes
     for(int i = 0; i < room.num_exhibits+1; i++) //printing the unsorted array for testing purposes
     {
-            std::cout << "Unsorted coordset: [" << coordarray[i].x << ", " << coordarray[i].y << ", " << coordarray[i].z << "] \n";
+        ROS_INFO("Unsorted coordset: [x: %f, y: %f, z: %f]", coordarray[i].x, coordarray[i].y, coordarray[i].z);
     }
 
     sortCoord(coordarray, 0, room.num_exhibits+1, 0, 0); //sorts the array the first time
@@ -77,7 +74,7 @@ int main(int argc, char *argv[]) //main function
     //For testing purposes
     for(int i = 0; i < room.num_exhibits+1; i++) //printing the sorted array for testing purposes
     {
-            std::cout << "Sorted coordset: [" << coordarray[i].x << ", " << coordarray[i].y << ", " << coordarray[i].z << "] \n";
+        ROS_INFO("Unsorted coordset: [x: %f, y: %f, z: %f]", coordarray[i].x, coordarray[i].y, coordarray[i].z);
     }
 
     while(ros::ok()) //Starting the ros loop
@@ -96,12 +93,12 @@ int main(int argc, char *argv[]) //main function
 
                     z_coord = coordarray[iter].z;
 
-                    std::cout << "Coordset before: [x: " << coordarray[iter].x << ", y: " << coordarray[iter].y << ", z: " << z_coord <<"]" << std::endl; //For testing purposes
+                    ROS_INFO("Coordset before change: [x: %f, y: %f, z: %f", coordarray[iter].x, coordarray[iter].y, coordarray[iter].z);
 
                     double dif_x = 0.5*cos(z_coord);
                     double dif_y = 0.5*sin(z_coord);
 
-                    std::cout << "Differential distance: [x: " << dif_x << ", y: " << dif_y <<"]" << std::endl;//For testing purposes
+                    ROS_INFO("Differentials: [x_dif: %f, y_dif: %f]", dif_x, dif_y);
 
                     if(z_coord<=M_PI && z_coord>=0){
                     x_coord = coordarray[iter].x+dif_x; //Assigning the coordinates to variables
@@ -112,23 +109,20 @@ int main(int argc, char *argv[]) //main function
                     y_coord = (coordarray[iter].y-dif_y);
                     }
 
-                    std::cout << "Coordset before: [x: " << x_coord << ", y: " << y_coord << ", z: " << z_coord <<"]" << std::endl;//For testing purposes
+                    z_coord = rob_facing_angle(z_coord);
+                    ROS_INFO("Coordset before sending: [x: %f, y: %f, z: %f", coordarray[iter].x, coordarray[iter].y, coordarray[iter].z);
 
-                    std_msgs::Float32 msg_x;
-                    std_msgs::Float32 msg_y;
-                    std_msgs::Float32 msg_z;
+                    std_msgs::Float32MultiArray msgArray;
+                    msgArray.data.resize(3);
+                    msgArray.data[0] = x_coord;
+                    msgArray.data[1] = y_coord;
+                    msgArray.data[2] = z_coord;
 
-                    msg_x.data = x_coord; //assigning the coordinates to the messege.
-                    msg_y.data = y_coord;
-                    msg_z.data = rob_facing_angle(z_coord);
                     iter++; //increment the iterator to let the program know, that the coordinateset has been processed and needs no further processing
 
-                    std::cout << "message data for transfor: [x: " << msg_x.data << ", y: " << msg_y.data << ", z: " << msg_z.data << "]" << std::endl; //For testing purposes
+                    ROS_INFO("Message data for transfer: [x: %f, y: %f, z: %f]", msgArray.data[0], msgArray.data[1], msgArray.data[2]);
 
-                    publish_x.publish(msg_x); //Publish the next first coordinate
-                    publish_y.publish(msg_y); //Publish the next second coordinate
-                    publish_z.publish(msg_z);
-
+                    publish_point.publish(msgArray); //Publish the next first coordinate
                     loop.sleep(); //Sleep for 10 milliseconds before trying again
                     base_state = true;
                 }
