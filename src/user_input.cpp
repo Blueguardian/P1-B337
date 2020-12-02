@@ -46,8 +46,8 @@ int main(int argc, char *argv[]) //main function
     std_msgs::Empty odom_res;
     reset_odom.publish(odom_res); //Sending msg to reset odometry
 
-    double roomwidth = 64.9*0.05; //Room dimensions based on the static map
-    double roomlength = 101.8*0.05; //Room dimensions based on the static map
+    double roomwidth = 66*0.05; //Room dimensions based on the static map
+    double roomlength = 156*0.05; //Room dimensions based on the static map
 
     roomType room; //creating a variable of type roomType
     room = insertRoom(roomlength, roomwidth); //asking the user for the dimensions of the room and the number of exhibits
