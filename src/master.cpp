@@ -171,7 +171,7 @@ void send_markers(move_base_msgs::MoveBaseGoal goal)
   marker.header.frame_id = goal.target_pose.header.frame_id;
   marker.id = 1;
   marker.pose.position = goal.target_pose.pose.position;
-  marker.pose.position.z += marker.scale.z;
+  marker.pose.position.z += marker.scale.x;
   marker_array.markers.push_back(marker);
   ROS_INFO("Sending marker"); //For testing purposes.
   marker_pub.publish(marker_array);
