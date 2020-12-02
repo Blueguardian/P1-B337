@@ -126,7 +126,7 @@ void move_to_coord1(const std_msgs::Float32MultiArray::ConstPtr &msg)
 
 void send_goal(const geometry_msgs::PointStamped &goal_point)
 {
-  MoveBaseClient ac("odom", true);
+  MoveBaseClient ac("move_base", true);
   ros::Publisher take_picture = ptrnh->advertise<std_msgs::Bool>("take_picture", 1);
   move_base_msgs::MoveBaseGoal goal;
   tf2::Quaternion rotation;
