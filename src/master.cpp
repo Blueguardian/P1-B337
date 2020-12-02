@@ -78,6 +78,8 @@ void _goal_reached_cb(const actionlib::SimpleClientGoalState &state, const move_
     std_msgs::Bool msg;
     msg.data = true;
     take_picture.publish(msg);
+    msg.data = false;
+    take_picture.publish(msg);
   }
   else if (state == state.ACTIVE)
   {
@@ -127,7 +129,6 @@ void move_to_coord1(const std_msgs::Float32MultiArray::ConstPtr &msg)
 void send_goal(const geometry_msgs::PointStamped &goal_point)
 {
   MoveBaseClient ac("move_base", true);
-  ros::Publisher take_picture = ptrnh->advertise<std_msgs::Bool>("take_picture", 1);
   move_base_msgs::MoveBaseGoal goal;
   tf2::Quaternion rotation;
   rotation.setRPY(0, 0, goal_point.point.z);
