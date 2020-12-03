@@ -6,16 +6,16 @@
                 "limitSymbolsToIncludedHeaders": true
             },
             "includePath": [
-                "/opt/ros/kinetic/include/**",
-
+                "/home/mogens/Robotics/ROB_space/devel/include/**",
+                "/opt/ros/noetic/include/**",
+                "/home/mogens/Robotics/ROB_space/src/ROB337-P1/include/**",
                 "/usr/include/**"
             ],
             "name": "ROS",
             "intelliSenseMode": "gcc-x64",
             "compilerPath": "/usr/bin/gcc",
-          
-            "cStandard": "gnu11",
-            "cppStandard": "c++17"
+            "cStandard": "gnu17",
+            "cppStandard": "gnu++14"
         }
     ],
     "version": 4
