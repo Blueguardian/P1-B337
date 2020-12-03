@@ -114,8 +114,8 @@ int main(int argc, char *argv[]) //main function
 
                     std_msgs::Float32MultiArray msgArray;
                     msgArray.data.resize(3);
-                    msgArray.data[0] = x_coord/0.05;
-                    msgArray.data[1] = y_coord/0.05;
+                    msgArray.data[0] = x_coord;
+                    msgArray.data[1] = y_coord;
                     msgArray.data[2] = z_coord;
 
                     iter++; //increment the iterator to let the program know, that the coordinateset has been processed and needs no further processing
