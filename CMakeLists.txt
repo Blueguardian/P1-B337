@@ -15,6 +15,7 @@ find_package(catkin REQUIRED COMPONENTS
  std_msgs
  turtlesim
  tf
+ tf2
  geometry_msgs
  genmsg
  #message_generation
@@ -64,16 +65,10 @@ find_package(catkin REQUIRED COMPONENTS
 ##   * add every package in MSG_DEP_SET to generate_messages(DEPENDENCIES ...)
 
 ## Generate messages in the 'msg' folder
- #add_message_files(   #FILES
-   #coord.msg
- #)
+##add_message_files(FILES Num.msg)
 
 ## Generate services in the 'srv' folder
-# add_service_files(
-#   FILES
-#   Service1.srv
-#   Service2.srv
-# )
+##add_service_files(FILES AddTwoInts.srv)
 
 ## Generate actions in the 'action' folder
 # add_action_files(
@@ -83,10 +78,11 @@ find_package(catkin REQUIRED COMPONENTS
 # )
 
 ## Generate added messages and services with any dependencies listed here
- #generate_messages(
- #     DEPENDENCIES
- #     std_msgs
- #)
+#generate_messages(
+#DEPENDENCIES
+##   geometry_msgs
+#std_msgs  # Or other packages containing msgs
+#)
 
 ################################################
 ## Declare ROS dynamic reconfigure parameters ##
@@ -123,7 +119,9 @@ catkin_package(
 #  LIBRARIES turtlesim_games
   CATKIN_DEPENDS message_runtime
 #  DEPENDS system_lib
-  
+#CATKIN_DEPENDS geometry_msgs roscpp std_msgs message_runtime
+#CATKIN_DEPENDS message_runtime
+
 )
 
 ###########
@@ -151,20 +149,29 @@ ${catkin_INCLUDE_DIRS}
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
 
+add_executable(${PROJECT_NAME}_pointCloud_msgs src/pointCloud_msgs.cpp)
+add_executable(${PROJECT_NAME}_scan_msgs src/scan_msgs.cpp)
+#add_executable(${PORJECT_NAME}_tf_output src/tf_output.cpp)
+#add_executable(${PROJECT_NAME}_tf_listener src/tf_listener.cpp)
 add_executable(${PROJECT_NAME}_user_input src/user_input.cpp)
 add_executable(${PROJECT_NAME}_master src/master.cpp)
 add_executable(${PROJECT_NAME}_listener_test test_files/listener_test.cpp)
 add_executable(${PROJECT_NAME}_exhibit_recorder src/exhibit_recorder.cpp)
+
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
 ## target back to the shorter version for ease of user use
 ## e.g. "rosrun someones_pkg node" instead of "rosrun someones_pkg someones_pkg_node"
 
+set_target_properties(${PROJECT_NAME}_pointCloud_msgs PROPERTIES OUTPUT_NAME pointCloud_msgs PREFIX "")
+set_target_properties(${PROJECT_NAME}_scan_msgs PROPERTIES OUTPUT_NAME scan_msgs PREFIX "")
 set_target_properties(${PROJECT_NAME}_user_input PROPERTIES OUTPUT_NAME user_input PREFIX "")
 set_target_properties(${PROJECT_NAME}_master PROPERTIES OUTPUT_NAME master PREFIX "")
 set_target_properties(${PROJECT_NAME}_listener_test PROPERTIES OUTPUT_NAME listener_test PREFIX "")
 set_target_properties(${PROJECT_NAME}_exhibit_recorder PROPERTIES OUTPUT_NAME exhibit_recorder PREFIX "")
+#set_target_properties(${PROJECT_NAME}_tf_output PROPERTIES OUTPUT_NAME tf_output PREFIX "")
+#set_target_properties(${PROJECT_NAME}_tf_listener PROPERTIES OUTPUT_NAME tf_listener PREFIX "")
 
 
 
@@ -175,6 +182,14 @@ set_target_properties(${PROJECT_NAME}_exhibit_recorder PROPERTIES OUTPUT_NAME ex
 
 ## Specify libraries to link a library or executable target against
 
+
+##Motion planning executable
+target_link_libraries(${PROJECT_NAME}_pointCloud_msgs
+   ${catkin_LIBRARIES}
+)
+target_link_libraries(${PROJECT_NAME}_scan_msgs
+   ${catkin_LIBRARIES}
+)
 target_link_libraries(${PROJECT_NAME}_user_input
    ${catkin_LIBRARIES}
 )
@@ -187,7 +202,12 @@ ${catkin_LIBRARIES}
 target_link_libraries(${PROJECT_NAME}_exhibit_recorder
 ${catkin_LIBRARIES} ${OpenCV_LIBS}
 )
-
+#target_link_libraries(${PROJECT_NAME}_tf_output
+#${catkin_LIBRARIES}
+#)
+#target_link_libraries(${PROJECT_NAME}_tf_listener
+#${catkin_LIBRARIES}
+#)
 #############
 ## Install ##
 #############
@@ -205,6 +225,10 @@ ${catkin_LIBRARIES} ${OpenCV_LIBS}
 ## Mark executables for installation
 ## See http://docs.ros.org/melodic/api/catkin/html/howto/format1/building_executables.html
 install(TARGETS
+ ${PROJECT_NAME}_pointCloud_msgs
+ ${PROJECT_NAME}_scan_msgs
+ #${PROJECT_NAME}_tf_output
+ #${PROJECT_NAME}_tf_listener
  ${PROJECT_NAME}_user_input
  ${PROJECT_NAME}_master
  ${PROJECT_NAME}_listener_test

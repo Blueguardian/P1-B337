@@ -75,6 +75,21 @@
 
 
 
+  <!-- Nedenstå to linjer bruges ved .msg filer -->
+    <build_depend>sensor_msgs</build_depend>    
+    <exec_depend>sensor_msgs</exec_depend>   
+      <build_depend>roscpp</build_depend>    
+    <exec_depend>roscpp</exec_depend>   
+      <build_depend>std_msgs</build_depend>    
+    <exec_depend>std_msgss</exec_depend>   
+      <build_depend>sensor_msgs</build_depend>    
+    <exec_depend>sensor_msgs</exec_depend>         
+
+    <buildtool_depend>catkin</buildtool_depend>
+
+
+ 
+
   <!-- The export tag contains other, unspecified, tags -->
   <export>
     <!-- Other tools can request additional information be placed here -->
