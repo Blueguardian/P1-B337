@@ -25,11 +25,12 @@
    <arg name="custom_gmapping_launch_file" default="$(find turtlebot_navigation)/launch/includes/gmapping/$(arg 3d_sensor)_gmapping.launch.xml"/>
    <include file="$(find turtlebot_navigation)/launch/includes/move_base.launch.xml"/>
    <param name="controller_frequency" value="10.0"/>
-   <!--<rosparam file="$(find p1-b337)/param/costmap_common_param.yaml" command="load" ns="global_costmap"/>
+   <rosparam file="$(find p1-b337)/param/costmap_common_param.yaml" command="load" ns="global_costmap"/>
    <rosparam file="$(find p1-b337)/param/costmap_common_param.yaml" command="load" ns="local_costmap"/>
+   <rosparam file="$(find p1-b337)/param/dwa_costmap_param.yaml" command="load"/>
    <rosparam file="$(find p1-b337)/param/local_costmap_param.yaml" command="load"/>
    <rosparam file="$(find p1-b337)/param/global_costmap_param.yaml" command="load"/>
-   <rosparam file="$(find p1-b337)/param/trajectory_planner.yaml" command="load"/>-->
+   <!--<rosparam file="$(find p1-b337)/param/trajectory_planner.yaml" command="load"/>-->
    <!--<node pkg="tf" type="static_transform_publisher" name="base_link_broadcaster" args="0 0 0 0 0 0 odom base_link 100"></node>
    <node pkg="tf" type="static_transform_publisher" name="base_footprint_broadcaster" args="0 0 0 0 0 0 base_link base_footprint 100"></node>-->
 </launch>
