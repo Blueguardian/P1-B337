@@ -39,12 +39,12 @@ int main(int argc, char *argv[]) //main function
     ros::NodeHandle nh1; //creating a nodehandle for the node.
     ros::Rate loop(0.1); //creating a loop rate for pauses (10 seconds)
 
-    ros::Publisher reset_odom = nh1.advertise<std_msgs::Empty>("move_base/commands/reset_odometry", 1); //Creating a publisher for resetting the odometry
+    //ros::Publisher reset_odom = nh1.advertise<std_msgs::Empty>("move_base/commands/reset_odometry", 1); //Creating a publisher for resetting the odometry
     ros::Publisher publish_point = nh1.advertise<std_msgs::Float32MultiArray>("user_input", 1); //creating a publisher for the user_input to publish it later
     ros::Subscriber base_state_sub = nh1.subscribe("base_state", 5, base_state_get); //Creating a subscriber to get the current state of the move_base //Needs to be looked over
     
-    std_msgs::Empty odom_res;
-    reset_odom.publish(odom_res); //Sending msg to reset odometry
+    //std_msgs::Empty odom_res;
+    //reset_odom.publish(odom_res); //Sending msg to reset odometry
 
     double roomwidth = 66*0.05; //Room dimensions based on the static map
     double roomlength = 156*0.05; //Room dimensions based on the static map

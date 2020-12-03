@@ -39,6 +39,7 @@ void imageCallback(const sensor_msgs::ImageConstPtr& msg) //Callback function fo
 
   try
   {
+    ROS_INFO("Trying to show picture..");
     cv::imshow("view", cv_bridge::toCvShare(msg, "bgr8")->image); //Try to show the image on the screen
     cv::waitKey(30); //Wait
   }
@@ -50,6 +51,8 @@ void imageCallback(const sensor_msgs::ImageConstPtr& msg) //Callback function fo
 
 void takepic_cd(const std_msgs::Bool::ConstPtr& pic) //Callback function for taking a picture
 {
+  if(pic == false){
   ROS_INFO("Taking picture.."); //Tell the user that the image is being processed on the screen
   take_picture_check = true; //Tell it to take the picture
+  }
 }
