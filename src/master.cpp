@@ -78,6 +78,8 @@ void _goal_reached_cb(const actionlib::SimpleClientGoalState &state, const move_
     std_msgs::Bool msg;
     msg.data = true;
     take_picture.publish(msg);
+    msg.data = false;
+    take_picture.publish(msg);
   }
   else if (state == state.ACTIVE)
   {
@@ -126,8 +128,7 @@ void move_to_coord1(const std_msgs::Float32MultiArray::ConstPtr &msg)
 
 void send_goal(const geometry_msgs::PointStamped &goal_point)
 {
-  MoveBaseClient ac("odom", true);
-  ros::Publisher take_picture = ptrnh->advertise<std_msgs::Bool>("take_picture", 1);
+  MoveBaseClient ac("move_base", true);
   move_base_msgs::MoveBaseGoal goal;
   tf2::Quaternion rotation;
   rotation.setRPY(0, 0, goal_point.point.z);
@@ -171,7 +172,7 @@ void send_markers(move_base_msgs::MoveBaseGoal goal)
   marker.header.frame_id = goal.target_pose.header.frame_id;
   marker.id = 1;
   marker.pose.position = goal.target_pose.pose.position;
-  marker.pose.position.z += marker.scale.z;
+  marker.pose.position.z += marker.scale.x;
   marker_array.markers.push_back(marker);
   ROS_INFO("Sending marker"); //For testing purposes.
   marker_pub.publish(marker_array);

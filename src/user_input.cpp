@@ -229,7 +229,7 @@ void insertCoord(point (*array), double room_length, double room_width, int nume
         array[i].x = x;
         while(x < -1*(room_length/2) || x > room_length/2) //validation check
         {
-            ROS_INFO("Incorrect value, please try again! \nPlease input the length of the x-coordinate in meters for the %d. exhibit: ", i);
+            ROS_WARN("Incorrect value, please try again! \nPlease input the length of the x-coordinate in meters for the %d. exhibit: ", i);
             std::cin >> x;
             array[i].x = x;
         }
@@ -238,7 +238,7 @@ void insertCoord(point (*array), double room_length, double room_width, int nume
         array[i].y = y;
         while(y < -1*(room_width/2) || y > room_width/2) //validation check
         {
-            ROS_INFO("Incorrect value, please try again! \nPlease input the length of the y-coordinate in meters for the %d. exhibit: ", i);
+            ROS_WARN("Incorrect value, please try again! \nPlease input the length of the y-coordinate in meters for the %d. exhibit: ", i);
             std::cin >> y;
             array[i].y = y;
         }
@@ -247,7 +247,7 @@ void insertCoord(point (*array), double room_length, double room_width, int nume
         array[i].z = z;
         while(z > 360 || z < 0) //validation check
         {
-            ROS_INFO("Incorrect value, please try again! \nPlease input the orientation of the %d. exhibit", i);
+            ROS_WARN("Incorrect value, please try again! \nPlease input the orientation of the %d. exhibit", i);
             std::cin >> z;
             array[i].z = z;
         }
