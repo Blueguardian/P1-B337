@@ -11,4 +11,4 @@
    <node name="rviz" pkg="rviz" type="rviz" args="-d $(find p1-b337)/config/museum.rviz"></node>
    <!--<arg name="map_file" value="p1-b337/map/gmapping_01.yaml"></arg>-->
    <!--<node name="map_server" pkg="map_server" type="map_server" args="$(find p1-b337)/map/gmapping_01.yaml"/>-->
-</launch> 
+</launch>
