@@ -33,10 +33,10 @@ int main(int argc, char **argv)
   ros::Publisher base_state_pub = nh2.advertise<std_msgs::Bool>("base_state", 5); //Creating a publisher for publishing the state of the MoveBaseClient
 
   MoveBaseClient ac("move_base", true); //Defining a client to send goals to the move_base server.
-  //while (!ac.waitForServer(ros::Duration(5.0)))
-  //{                                                                 //wait for the action server to come up
-  //  ROS_INFO("Waiting for the move_base action server to come up"); //Printing a fitting messege.
-  //}
+  while (!ac.waitForServer(ros::Duration(5.0)))
+  {                                                                 //wait for the action server to come up
+    ROS_INFO("Waiting for the move_base action server to come up"); //Printing a fitting messege.
+  }
 
   while (ros::ok()) //while(!= ros::Shutdown(); or the user has Ctrl+C out of the program.)
   {
@@ -60,6 +60,11 @@ int main(int argc, char **argv)
         state_get.data = base_state;
 
         base_state_pub.publish(state_get);
+
+        ac.waitForResult();
+        
+        coordx = 0;
+        coordy = 0;
 
         loop.sleep();
     }

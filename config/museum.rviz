@@ -272,6 +272,17 @@ Visualization Manager:
       Use Fixed Frame: true
       Use rainbow: true
       Value: true
+    - Class: rviz/Image
+      Enabled: false
+      Image Topic: /camera/rgb/image_rect_color
+      Max Value: 1
+      Median window: 5
+      Min Value: 0
+      Name: Image
+      Normalize Range: true
+      Queue Size: 2
+      Transport Hint: raw
+      Value: false
     - Class: rviz/MarkerArray
       Enabled: true
       Marker Topic: /busroute_markers

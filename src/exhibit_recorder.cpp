@@ -15,14 +15,15 @@ int main(int argc, char **argv)
 {
   ros::init(argc, argv, "exhibit_recorder");
   ros::NodeHandle nh;
-  ros::Subscriber take_picture = nh.subscribe<std_msgs::Bool>("take_picture", 1, takepic_cd); //Subscribe to the main function, to know when to take a picture
-  
-  while(take_picture_check == true)
-  {
   cv::namedWindow("view"); //Create a window for the picture
   cv::startWindowThread(); //Startup the window
+  ros::Subscriber take_picture = nh.subscribe<std_msgs::Bool>("take_picture", 1, takepic_cd); //Subscribe to the main function, to know when to take a picture
+  
+  while(ros::ok())
+  if(take_picture_check == true)
+  {
   image_transport::ImageTransport it(nh); //Conversion function
-  image_transport::Subscriber sub = it.subscribe("/camera/rgb/image_raw", 1, imageCallback); //Subscribe to the camera
+  image_transport::Subscriber sub = it.subscribe("/camera/rgb/image_rect_color", 1, imageCallback); //Subscribe to the camera
   ros::Duration(30); //Wait this long before closing again
   cv::destroyWindow("view"); //Shutdown the window
   take_picture_check = false; //Reset
