@@ -78,6 +78,8 @@ void _goal_reached_cb(const actionlib::SimpleClientGoalState &state, const move_
     std_msgs::Bool msg;
     msg.data = true;
     take_picture.publish(msg);
+    ros::Rate sleep(0.7);
+    sleep.sleep();
     msg.data = false;
     take_picture.publish(msg);
   }
@@ -144,7 +146,10 @@ void send_goal(const geometry_msgs::PointStamped &goal_point)
   ac.sendGoal(goal, boost::bind(&_goal_reached_cb, _1, _2));
   send_markers(goal);
   ROS_INFO("Sending goal.."); //For testing and visualization purposes
-  ac.waitForResult();
+  //ac.waitForResult();
+  ros::Rate loop(0.1);
+  loop.sleep();
+
 }
 
 void send_markers(move_base_msgs::MoveBaseGoal goal)
