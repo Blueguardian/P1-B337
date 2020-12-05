@@ -1,8 +1,8 @@
 <launch>
 
-   <node pkg="p1-b337-rviz" type="main_rviz" name="main_rviz"></node>
+   <node pkg="p1-b337" type="main_rviz" name="main_rviz"></node>
    ros::Duration(2.0).sleep();
-   <node pkg="p1-b337-rviz" type="exhibit_recorder" name="exhibit_recorder" output="screen"></node>
+   <node pkg="p1-b338" type="exhibit_recorder_rviz" name="exhibit_recorder_rviz" output="screen"></node>
    ros::Duration(2.0).sleep();
-  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find p1-b337-rviz)/config/museum.rviz"></node>
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find p1-b337)/rviz-based_with_map/config/museum.rviz"></node>
 </launch> 
