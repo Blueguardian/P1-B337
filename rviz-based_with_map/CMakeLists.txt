@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0.2)
-project(p1-b337)
+project(p1-b337-rviz)
 
 
 
@@ -149,18 +149,17 @@ ${catkin_INCLUDE_DIRS}
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
 
-#add_executable(${PROJECT_NAME}_user_input user-interface-based_with_map/src/user_input.cpp)
-#add_executable(${PROJECT_NAME}_master user-interface-based_with_map/src/master.cpp)
-#add_executable(${PROJECT_NAME}_exhibit_recorder user-interface-based_with_map/src/exhibit_recorder.cpp)
+add_executable(${PROJECT_NAME}_exhibit_recorder_rviz src/exhibit_recorder_rviz.cpp)
+add_executable(${PROJECT_NAME}_main_rviz src/main_rviz.cpp)
+
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
 ## target back to the shorter version for ease of user use
 ## e.g. "rosrun someones_pkg node" instead of "rosrun someones_pkg someones_pkg_node"
 
-#set_target_properties(${PROJECT_NAME}_user_input PROPERTIES OUTPUT_NAME user_input PREFIX "")
-#set_target_properties(${PROJECT_NAME}_master PROPERTIES OUTPUT_NAME master PREFIX "")
-#set_target_properties(${PROJECT_NAME}_exhibit_recorder PROPERTIES OUTPUT_NAME exhibit_recorder PREFIX "")
+set_target_properties(${PROJECT_NAME}_exhibit_recorder_rviz PROPERTIES OUTPUT_NAME exhibit_recorder PREFIX "")
+set_target_properties(${PROJECT_NAME}_main_rviz PROPERTIES OUTPUT_NAME exhibit_recorder PREFIX "")
 
 ## Add cmake target dependencies of the executable
 ## same as for the library above
@@ -171,15 +170,12 @@ ${catkin_INCLUDE_DIRS}
 
 
 ##Motion planning executable
-#target_link_libraries(${PROJECT_NAME}_user_input
-#   ${catkin_LIBRARIES}
-#)
-#target_link_libraries(${PROJECT_NAME}_master
-#  ${catkin_LIBRARIES}
-#)
-#target_link_libraries(${PROJECT_NAME}_exhibit_recorder
-#${catkin_LIBRARIES} ${OpenCV_LIBS}
-#)
+target_link_libraries(${PROJECT_NAME}_exhibit_recorder_rviz
+${catkin_LIBRARIES} ${OpenCV_LIBS}
+)
+target_link_libraries(${PROJECT_NAME}_main_rviz
+${catkin_LIBRARIES} ${OpenCV_LIBS}
+)
 #target_link_libraries(${PROJECT_NAME}_tf_output
 #${catkin_LIBRARIES}
 #)
@@ -203,9 +199,8 @@ ${catkin_INCLUDE_DIRS}
 ## Mark executables for installation
 ## See http://docs.ros.org/melodic/api/catkin/html/howto/format1/building_executables.html
 install(TARGETS
-# ${PROJECT_NAME}_user_input
-# ${PROJECT_NAME}_master
-# ${PROJECT_NAME}_exhibit_recorder
+ ${PROJECT_NAME}_exhibit_recorder_rviz
+ ${PROJECT_NAME}_main_rviz
    RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
  )
 

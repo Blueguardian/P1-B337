@@ -18,8 +18,8 @@ typedef actionlib::SimpleActionClient<move_base_msgs::MoveBaseAction> MoveBaseCl
 double coordx = 0;
 double coordy = 0;
 double coordz = 0;
-void move_to_coord1(const std_msgs::Float32MultiArray::ConstPtr &msg);                                                        //Prints messeges containing the received coordinates                                                             //Prints messeges containing the received coordinates
-void _goal_reached_cb(const actionlib::SimpleClientGoalState &state, const move_base_msgs::MoveBaseResult::ConstPtr &result); //Goal has been reached                                                             //Odometry callback function
+void user_interface_cb(const std_msgs::Float32MultiArray::ConstPtr &msg);                                                        //Prints messeges containing the received coordinates                                                             //Prints messeges containing the received coordinates
+void goal_reached_cb(const actionlib::SimpleClientGoalState &state, const move_base_msgs::MoveBaseResult::ConstPtr &result); //Goal has been reached                                                             //Odometry callback function
 void send_goal(const geometry_msgs::PointStamped &goal_point);                                                                //Send goal to move_base server
 void send_markers(move_base_msgs::MoveBaseGoal goal);                                                                         //Send markers to the visualization software
 
@@ -29,7 +29,7 @@ int main(int argc, char **argv)
   ros::NodeHandle nh2;
   ros::Rate loop(1);
   ptrnh = &nh2;
-  ros::Subscriber user_input = nh2.subscribe("user_input", 1, move_to_coord1);    // Subscribes to the user_input topic and when it receives a messege it runs the callback function
+  ros::Subscriber user_input = nh2.subscribe("user_input", 1, user_interface_cb);    // Subscribes to the user_input topic and when it receives a messege it runs the callback function
   ros::Publisher base_state_pub = nh2.advertise<std_msgs::Bool>("base_state", 5); //Creating a publisher for publishing the state of the MoveBaseClient
 
   MoveBaseClient ac("move_base", true); //Defining a client to send goals to the move_base server.
@@ -125,7 +125,7 @@ void _goal_reached_cb(const actionlib::SimpleClientGoalState &state, const move_
   }
 }
 
-void move_to_coord1(const std_msgs::Float32MultiArray::ConstPtr &msg)
+void user_interface_cb(const std_msgs::Float32MultiArray::ConstPtr &msg)
 {
   coordx = msg->data[0];
   coordy = msg->data[1];

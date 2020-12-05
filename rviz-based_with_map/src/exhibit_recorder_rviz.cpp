@@ -7,25 +7,24 @@
 #include <std_msgs/Bool.h>
 
 bool take_picture_check;
+ros::NodeHandle* nhptr;
 
 void imageCallback(const sensor_msgs::ImageConstPtr& msg);
-void takepic_cd(const std_msgs::Bool::ConstPtr& pic);
+void takepic_cb(const std_msgs::Bool::ConstPtr& pic);
 
 int main(int argc, char **argv)
 {
   ros::init(argc, argv, "exhibit_recorder");
   ros::NodeHandle nh;
-  cv::namedWindow("view"); //Create a window for the picture
-  cv::startWindowThread(); //Startup the window
-  ros::Subscriber take_picture = nh.subscribe<std_msgs::Bool>("take_picture", 1, takepic_cd); //Subscribe to the main function, to know when to take a picture
-  
+  nhptr = &nh;
+  image_transport::ImageTransport it(nh); //Conversion function
+
+  image_transport::Subscriber sub = it.subscribe("/camera/rgb/image_raw", 1, imageCallback); //Subscribe to the camera
+  ros::Subscriber take_picture = nh.subscribe<std_msgs::Bool>("take_picture", 1, takepic_cb); //Subscribe to the main function, to know when to take a picture
   while(ros::ok())
   if(take_picture_check == true)
   {
-  image_transport::ImageTransport it(nh); //Conversion function
-  image_transport::Subscriber sub = it.subscribe("/camera/rgb/image_rect_color", 1, imageCallback); //Subscribe to the camera
-  ros::Duration(30); //Wait this long before closing again
-  cv::destroyWindow("view"); //Shutdown the window
+  ros::Duration(10); //Wait this long before closing again
   take_picture_check = false; //Reset
   }
   ros::spin();
@@ -41,7 +40,7 @@ void imageCallback(const sensor_msgs::ImageConstPtr& msg) //Callback function fo
   try
   {
     ROS_INFO("Trying to show picture..");
-    cv::imshow("view", cv_bridge::toCvShare(msg, "bgr8")->image); //Try to show the image on the screen
+    ros::Publisher image_pub = nhptr->advertise<sensor_msgs::Image>("image_view", 1);
     cv::waitKey(30); //Wait
   }
   catch (cv_bridge::Exception& e) //If the picture cannot be converted to bgr8 and shown on the screen
@@ -50,7 +49,7 @@ void imageCallback(const sensor_msgs::ImageConstPtr& msg) //Callback function fo
   }
 }
 
-void takepic_cd(const std_msgs::Bool::ConstPtr& pic) //Callback function for taking a picture
+void takepic_cb(const std_msgs::Bool::ConstPtr& pic) //Callback function for taking a picture
 {
   if(pic == false){
   ROS_INFO("Taking picture.."); //Tell the user that the image is being processed on the screen
