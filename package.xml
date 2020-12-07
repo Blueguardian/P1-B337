@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <package format="2">
 
-  <name>p1-b337</name>
+  <name>p1-b337-rviz</name>
   <version>0.0.0</version>
-  <description>The p1-b337 package</description>
+  <description>The p1-b337-rviz package</description>
 
 
   <!-- One maintainer tag required, multiple allowed, one person per tag -->
@@ -28,7 +28,7 @@
   <!-- Authors do not have to be maintainers, but could be -->
   <!-- Example: -->
   <!-- <author email="jane.doe@example.com">Jane Doe</author> -->
-
+ ${PROJECT_NAME}_listener_test
 
   <!-- The *depend tags are used to specify dependencies -->
   <!-- Dependencies can be catkin packages or system dependencies -->
