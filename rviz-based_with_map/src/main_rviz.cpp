@@ -14,7 +14,7 @@
 ros::NodeHandle *ptrnh;
 
 typedef actionlib::SimpleActionClient<move_base_msgs::MoveBaseAction> MoveBaseClient;
-void userInterface_cb(const geometry_msgs::PointStamped::ConstPtr& msg);                                                        //Prints messeges containing the received coordinates                                                             //Prints messeges containing the received coordinates
+void userInterface_cb(const geometry_msgs::PointStamped::ConstPtr &msg);                                                        //Prints messeges containing the received coordinates                                                             //Prints messeges containing the received coordinates
 void goal_reached_cb(const actionlib::SimpleClientGoalState &state, const move_base_msgs::MoveBaseResult::ConstPtr &result); //Goal has been reached                                                             //Odometry callback function
 void send_goal(move_base_msgs::MoveBaseGoal goal_point);                                                                //Send goal to move_base server
 void send_marker(move_base_msgs::MoveBaseGoal goal); 
@@ -87,7 +87,7 @@ void _goal_reached_cb(const actionlib::SimpleClientGoalState &state, const move_
   }
 }
 
-void userInterface_cb(const geometry_msgs::PointStamped::ConstPtr& msg)
+void userInterface_cb(const geometry_msgs::PointStamped::ConstPtr &msg)
 {
   ROS_INFO("Stored coordinates: [x: %f, y: %f, z: %f]", msg->point.x, msg->point.x, msg->point.z); //For testing and errorhandling
   move_base_msgs::MoveBaseGoal goal_target;
